@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-
+   distDir: "build",
   experimental: {
     serverActions: {
       bodySizeLimit: "250mb",
