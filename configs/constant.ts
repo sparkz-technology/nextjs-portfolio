@@ -1,0 +1,16 @@
+export const constant = {
+  NODE_ENV: process.env.NODE_ENV || "development",
+  MONGODB_URI: process.env.MONGODB_URI!,
+  JWT_SECRET: process.env.JWT_SECRET!,
+  REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET!,
+  GITHUB_ID: process.env.GITHUB_ID!,
+  GITHUB_SECRET: process.env.GITHUB_SECRET!,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET!,
+  EMAIL: process.env.EMAIL!,
+  PASSWORD: process.env.PASSWORD!,
+  EMAIL_TO: process.env.EMAIL_TO!,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY!,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET!,
+  CLOUDINARY_URL: process.env.CLOUDINARY_URL!,
+};

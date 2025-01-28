@@ -1,0 +1,251 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Authenticator {
+  id                   String  @id @default(uuid()) @map("_id")
+  credentialID         String
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([credentialID]) // Ensures credentialID is unique across the collection
+  @@index([userId, credentialID]) // Index for better querying by userId and credentialID
+}
+
+model Account {
+  id                       String  @id @default(uuid()) @map("_id")
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid()) @map("_id")
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model GuestSignature {
+  id           String               @id @default(uuid()) @map("_id")
+  userId       String
+  message      String
+  signatureUrl String
+  visibility   Boolean              @default(true)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  deletedAt    DateTime?
+  isDeleted    Boolean              @default(false)
+  user         User                 @relation(fields: [userId], references: [id])
+  likes        GuestSignatureLike[]
+}
+
+model User {
+  id              String               @id @default(uuid()) @map("_id")
+  name            String?
+  initials        String?
+  url             String?
+  location        String?
+  locationLink    String?
+  avatarUrl       String?
+  description     String?
+  summary         String?
+  email           String               @unique
+  username        String               @unique
+  role            String               @default("USER")
+  emailVerified   DateTime?
+  image           String?
+  Account         Account[]
+  Session         Session[]
+  GuestSignature  GuestSignature[]
+  Skill           Skill[]
+  WorkExperience  WorkExperience[]
+  Education       Education[]
+  Project         Project[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  Message         Message[]
+  likedSignatures GuestSignatureLike[]
+  Authenticator   Authenticator[]
+  contactId       String?
+  Contact         Contact?
+}
+
+model GuestSignatureLike {
+  id               String         @id @default(uuid()) @map("_id")
+  userId           String
+  guestSignatureId String
+  createdAt        DateTime       @default(now())
+  user             User           @relation(fields: [userId], references: [id])
+  guestSignature   GuestSignature @relation(fields: [guestSignatureId], references: [id])
+
+  @@unique([userId, guestSignatureId])
+}
+
+model Contact {
+  id     String       @id @default(uuid()) @map("_id")
+  email  String
+  tel    String
+  social SocialLink[]
+  User   User         @relation(fields: [userId], references: [id])
+  userId String       @unique
+}
+
+model SocialLink {
+  id        String   @id @default(uuid()) @map("_id")
+  name      String
+  url       String
+  icon      Icon     @relation(fields: [iconId], references: [id])
+  iconId    String
+  navbar    Boolean
+  contactId String
+  Contact   Contact? @relation(fields: [contactId], references: [id])
+}
+
+model Skill {
+  id            String   @id @default(uuid()) @map("_id")
+  userId        String
+  name          String
+  visibility    Boolean  @default(true)
+  sequenceValue Int      @default(0)
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, name])
+}
+
+model WorkExperience {
+  id            String   @id @default(uuid()) @map("_id")
+  company       String
+  link          String
+  location      String
+  title         String
+  logoUrl       String
+  startDate     String
+  endDate       String
+  description   String
+  userId        String
+  visibility    Boolean  @default(true)
+  sequenceValue Int      @default(0)
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Education {
+  id            String   @id @default(uuid()) @map("_id")
+  school        String
+  link          String
+  degree        String
+  logoUrl       String
+  startDate     String
+  endDate       String
+  visibility    Boolean  @default(true)
+  sequenceValue Int      @default(0)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Project {
+  id            String        @id @default(uuid()) @map("_id")
+  title         String
+  href          String
+  startDate     String
+  endDate       String
+  visibility    Boolean       @default(true)
+  active        Boolean
+  description   String
+  sequenceValue Int           @default(0)
+  technologies  String[]
+  projectLinks  ProjectLink[]
+  image         String
+  video         String
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Icon {
+  id          String        @id @default(uuid()) @map("_id")
+  name        String        @unique
+  value       String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ProjectLink ProjectLink[]
+  SocialLink  SocialLink[]
+}
+
+model ProjectLink {
+  id        String   @id @default(uuid()) @map("_id")
+  type      String
+  href      String
+  icon      Icon     @relation(fields: [iconId], references: [id])
+  iconId    String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(uuid()) @map("_id")
+  email     String
+  name      String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  isRead    Boolean  @default(false)
+}
+
+model Asset {
+  id        String   @id @default(uuid()) @map("_id")
+  name      String
+  type      String
+  url       String
+  publicId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Visit {
+  id            String   @id @default(uuid()) @map("_id")
+  date          DateTime @default(now()) // Store the date of the visit
+  desktopVisits Int      @default(0) // Track desktop visits
+  mobileVisits  Int      @default(0) // Track mobile visits
+  visitors      String[] @default([]) // Store persistent visitor IDs
+
+  @@unique([date]) // Ensure one record per day
+}
