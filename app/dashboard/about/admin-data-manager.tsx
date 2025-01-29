@@ -419,7 +419,7 @@ export function AdminDataManager({
             )}
           </Formik>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-8 mb-20">
             <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
               <Avatar className="w-32 h-32">
                 <AvatarImage src={initialValues.avatarUrl} alt={initialValues.name} />
