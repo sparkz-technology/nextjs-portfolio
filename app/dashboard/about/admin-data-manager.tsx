@@ -203,7 +203,7 @@ export function AdminDataManager({
         {formState.isEditing ? (
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
             {({ setFieldValue, values }) => (
-              <Form id="admin-data-form" className="space-y-8">
+              <Form id="admin-data-form" className="space-y-8 mb-20">
                 <Tabs defaultValue="basic" className="w-full">
                   <TabsList className="w-full flex justify-start mb-6 overflow-x-auto">
                     <TabsTrigger value="basic" className="flex items-center justify-center ">
