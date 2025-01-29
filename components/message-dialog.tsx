@@ -251,7 +251,7 @@ export function MessageDialog() {
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.5, rotate: 180 }}
               transition={{ duration: 0.5, type: "spring" }}
-              className="fixed bottom-4 right-4 z-10"
+              className="fixed sm:bottom-4 right-4 z-10 bottom-[6rem]"
             >
               <DialogTrigger asChild>
                 <Button
