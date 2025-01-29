@@ -56,7 +56,7 @@ export async function generateMetadata(): Promise<Metadata> {
         card: "summary_large_image",
       },
       verification: {
-        google: "HCLjTmFt3eA4yHBndUod8nU1iqR00FFtgoe_nNODksU",
+        google: "FKMDniF5WlVDC0ppv7xI4TDqbcqLiZjjUH38NJD6B4Q",
         yandex: "",
       },
     }
