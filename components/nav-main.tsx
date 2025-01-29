@@ -12,9 +12,11 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function NavMain({
   items,
@@ -31,6 +33,10 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+  const { toggleSidebar } = useSidebar();
+  const isMobile = useIsMobile();
+
+  const handleToggleSidebar = () => isMobile && toggleSidebar();
 
   return (
     <SidebarGroup>
@@ -40,7 +46,7 @@ export function NavMain({
             <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <Link passHref href={item.url}>
+                  <Link passHref href={item.url} onClick={handleToggleSidebar}>
                     <SidebarMenuButton tooltip={item.title} isActive={pathname === item.url}>
                       {item.icon && createElement(item.icon)}
                       <span>{item.title}</span>
@@ -52,9 +58,9 @@ export function NavMain({
                     {item.items.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
+                          <Link href={subItem.url}>
                             <span>{subItem.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
@@ -64,7 +70,7 @@ export function NavMain({
             </Collapsible>
           ) : (
             <SidebarMenuItem key={item.title}>
-              <Link passHref href={item.url}>
+              <Link passHref href={item.url} onClick={handleToggleSidebar}>
                 <SidebarMenuButton tooltip={item.title} isActive={pathname === item.url}>
                   {item.icon && createElement(item.icon)}
                   <span>{item.title}</span>
