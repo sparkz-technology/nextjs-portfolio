@@ -186,7 +186,7 @@ export function AdminDataManager({
 
   return (
     <Card className="w-full mx-auto">
-      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-2 space-y-4 sm:space-y-0">
+      <CardHeader className="flex flex-row items-start sm:items-center justify-between pb-2 space-y-4 sm:space-y-0">
         <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-100">About</CardTitle>
         <div className="flex items-center space-x-4">
           {formState.isEditing && (
