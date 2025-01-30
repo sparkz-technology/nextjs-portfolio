@@ -77,7 +77,7 @@ export default async function Page() {
             <BlurFade delay={BLUR_FADE_DELAY * 5}>
               <h2 className="text-xl font-bold">Work Experience</h2>
             </BlurFade>
-            {DATA.WorkExperience.map((work, id) => (
+            {DATA.WorkExperience.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((work, id) => (
               <BlurFade key={work.company} delay={BLUR_FADE_DELAY * 6 + id * 0.05}>
                 <ResumeCard
                   key={work.id}
@@ -99,7 +99,7 @@ export default async function Page() {
             <BlurFade delay={BLUR_FADE_DELAY * 7}>
               <h2 className="text-xl font-bold">Education</h2>
             </BlurFade>
-            {DATA.Education.map((education, id) => (
+            {DATA.Education.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((education, id) => (
               <BlurFade key={education.id} delay={BLUR_FADE_DELAY * 8 + id * 0.05}>
                 <ResumeCard
                   key={education.id}
@@ -120,7 +120,7 @@ export default async function Page() {
               <h2 className="text-xl font-bold">Skills</h2>
             </BlurFade>
             <div className="flex flex-wrap gap-1">
-              {DATA.Skill.map((skill, id) => (
+              {DATA.Skill.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((skill, id) => (
                 <BlurFade key={skill.id} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
                   <Badge key={skill.id} className="capitalize ">{skill.name}</Badge>
                 </BlurFade>
@@ -145,7 +145,7 @@ export default async function Page() {
               </div>
             </BlurFade>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-              {DATA.Project.map((project, id) => (
+              {DATA.Project.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((project, id) => (
                 <BlurFade key={project.id} delay={BLUR_FADE_DELAY * 12 + id * 0.05}>
                   <ProjectCard
                     href={project.href}
