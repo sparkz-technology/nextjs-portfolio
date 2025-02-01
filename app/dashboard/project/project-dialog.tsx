@@ -90,8 +90,8 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
     id: data?.id ?? "",
     title: data?.title ?? "",
     href: data?.href ?? "",
-    startDate: data?.startDate ?? "",
-    endDate: data?.endDate ?? "",
+    startDate: dayjs(`1-${data?.startDate}`, "D-MMM-YY").format("YYYY-MM-DD") ?? "",
+    endDate: dayjs(`1-${data?.endDate}`, "D-MMM-YY").format("YYYY-MM-DD") ?? "",
     description: data?.description ?? "",
     active: data?.active ?? false,
     technologies: Array.isArray(data?.technologies) ? data.technologies.join(",") : data?.technologies ?? "",
@@ -146,7 +146,7 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
       const payload = {
         ...formvalues,
         id: data?.id,
-        startDate: formvalues.endDate ? format(formvalues.endDate, "MMM-yy") : "",
+        startDate: formvalues.startDate ? format(formvalues.startDate, "MMM-yy") : "",
         endDate: formvalues.endDate
           ? isToday(formvalues.endDate)
             ? "Present"
