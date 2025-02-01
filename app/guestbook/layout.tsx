@@ -50,10 +50,10 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    title: `Guestbook | ${DATA.name}`,
+    title: `Guestbook`,
     description: "Leave a message in my portfolio's guestbook. Share your thoughts, feedback, or just say hello!",
     openGraph: {
-      title: `Guestbook | ${DATA.name}`,
+      title: `Guestbook`,
       description: "Leave a message in my portfolio's guestbook. Share your thoughts, feedback, or just say hello!",
       url: `${DATA.url}/guestbook`,
       siteName: DATA.name!,
