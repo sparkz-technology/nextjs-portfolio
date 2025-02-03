@@ -29,7 +29,6 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "250mb",
     },
-    useLightningcss: true,
     optimizePackageImports: [
       "@radix-ui/react-avatar",
       "@radix-ui/react-checkbox",
