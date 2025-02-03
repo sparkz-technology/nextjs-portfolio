@@ -1,7 +1,8 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  reactStrictMode: true,
+  swcMinify: true,
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -22,48 +23,81 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
+    domains: ["res.cloudinary.com"],
   },
-   distDir: "build",
+  distDir: "build",
   experimental: {
     serverActions: {
       bodySizeLimit: "250mb",
     },
     useLightningcss: true,
     optimizePackageImports: [
-      '@radix-ui/react-avatar',
-      '@radix-ui/react-checkbox',
-      '@radix-ui/react-collapsible',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-icons',
-      '@radix-ui/react-label',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-scroll-area',
-      '@radix-ui/react-select',
-      '@radix-ui/react-separator',
-      '@radix-ui/react-slider',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-switch',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-toast',
-      '@radix-ui/react-toggle',
-      '@radix-ui/react-tooltip',
-      '@radix-ui/react-visually-hidden',
-      '@tanstack/react-table',
-      'date-fns',
-      'framer-motion',
-      'lucide-react',
-      'react-day-picker',
-      'react-icons',
-      'recharts',
-      'zustand'
+      "@radix-ui/react-avatar",
+      "@radix-ui/react-checkbox",
+      "@radix-ui/react-collapsible",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-icons",
+      "@radix-ui/react-label",
+      "@radix-ui/react-popover",
+      "@radix-ui/react-scroll-area",
+      "@radix-ui/react-select",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slider",
+      "@radix-ui/react-slot",
+      "@radix-ui/react-switch",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-toast",
+      "@radix-ui/react-toggle",
+      "@radix-ui/react-tooltip",
+      "@radix-ui/react-visually-hidden",
+      "@tanstack/react-table",
+      "date-fns",
+      "framer-motion",
+      "lucide-react",
+      "react-day-picker",
+      "react-icons",
+      "recharts",
+      "zustand",
     ],
+    serverComponentsExternalPackages: ["@prisma/client"],
   },
   productionBrowserSourceMaps: true,
   bundlePagesRouterDependencies: true,
   generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
-};
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      }
+    }
+    return config
+  },
+  headers: async () => [
+    {
+      source: "/(.*)",
+      headers: [
+        {
+          key: "X-Content-Type-Options",
+          value: "nosniff",
+        },
+        {
+          key: "X-Frame-Options",
+          value: "DENY",
+        },
+        {
+          key: "X-XSS-Protection",
+          value: "1; mode=block",
+        },
+      ],
+    },
+  ],
+}
 
-export default nextConfig;
+export default nextConfig
+
