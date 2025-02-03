@@ -28,8 +28,42 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "250mb",
     },
+    useLightningcss: true,
+    optimizePackageImports: [
+      '@radix-ui/react-avatar',
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-collapsible',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-icons',
+      '@radix-ui/react-label',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-scroll-area',
+      '@radix-ui/react-select',
+      '@radix-ui/react-separator',
+      '@radix-ui/react-slider',
+      '@radix-ui/react-slot',
+      '@radix-ui/react-switch',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-toast',
+      '@radix-ui/react-toggle',
+      '@radix-ui/react-tooltip',
+      '@radix-ui/react-visually-hidden',
+      '@tanstack/react-table',
+      'date-fns',
+      'framer-motion',
+      'lucide-react',
+      'react-day-picker',
+      'react-icons',
+      'recharts',
+      'zustand'
+    ],
   },
   productionBrowserSourceMaps: true,
+  bundlePagesRouterDependencies: true,
+  generateBuildId: async () => {
+    return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
+  },
 };
 
 export default nextConfig;
