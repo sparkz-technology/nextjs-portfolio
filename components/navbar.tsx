@@ -36,7 +36,7 @@ export default async function Navbar() {
             <DockIcon key={item.href}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href={item.href} className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-12")} aria-label={social.name}>
+                  <Link href={item.href} className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-12")} aria-label={item.label}>
                     <item.icon className="size-4" />
                   </Link>
                 </TooltipTrigger>
