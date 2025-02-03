@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "250mb",
     },
   },
+  productionBrowserSourceMaps: true,
 };
 
 export default nextConfig;
