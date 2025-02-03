@@ -50,7 +50,6 @@ const nextConfig: NextConfig = {
       "@radix-ui/react-toggle",
       "@radix-ui/react-tooltip",
       "@radix-ui/react-visually-hidden",
-      "@tanstack/react-table",
       "date-fns",
       "framer-motion",
       "lucide-react",
@@ -74,6 +73,12 @@ const nextConfig: NextConfig = {
         tls: false,
       }
     }
+    config.module.rules.push({
+      test: /\.m?js/,
+      resolve: {
+        fullySpecified: false,
+      },
+    })
     return config
   },
   headers: async () => [
