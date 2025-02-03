@@ -25,7 +25,7 @@ const AvatarImage = React.forwardRef<
 >(({ className, src, alt, width = 40, height = 40, ...props }, ref) => (
   <AvatarPrimitive.Image ref={ref} asChild {...props}>
     <Image
-      src={src || "/placeholder.svg"}
+      src={src}
       alt={alt}
       width={width}
       height={height}
