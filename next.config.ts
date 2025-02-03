@@ -2,7 +2,6 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -60,10 +59,9 @@ const nextConfig: NextConfig = {
       "recharts",
       "zustand",
     ],
-    serverComponentsExternalPackages: ["@prisma/client"],
   },
+  serverExternalPackages: ["@prisma/client"],
   productionBrowserSourceMaps: true,
-  bundlePagesRouterDependencies: true,
   generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
