@@ -63,17 +63,12 @@ const nextConfig: NextConfig = {
   generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
-  webpack: (config, { isServer }) => {
+ webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
+      }
     }
-    config.module.rules.push({
-      test: /\.m?js/,
-      resolve: {
-        fullySpecified: false,
-      },
-    })
     return config
   },
   headers: async () => [
