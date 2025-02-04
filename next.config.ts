@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
         hostname: "**",
       },
     ],
@@ -27,7 +31,7 @@ const nextConfig: NextConfig = {
   distDir: "build",
   experimental: {
     serverActions: {
-      bodySizeLimit: "250mb",
+      bodySizeLimit: "10mb",
     },
     optimizePackageImports: [
       "@radix-ui/react-avatar",
@@ -57,6 +61,7 @@ const nextConfig: NextConfig = {
       "recharts",
       "zustand",
     ],
+    reactCompiler: true,
   },
   serverExternalPackages: ["@prisma/client"],
   productionBrowserSourceMaps: true,
@@ -82,12 +87,12 @@ const nextConfig: NextConfig = {
         },
       ],
     },
-     {
-      source: '/static/(.*)',
+    {
+      source: "/static/(.*)",
       headers: [
         {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
         },
       ],
     },
