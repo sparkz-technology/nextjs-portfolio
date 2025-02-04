@@ -67,10 +67,6 @@ const nextConfig: NextConfig = {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        fs: true,
-        net: true,
-        tls: true,
-      }
     }
     config.module.rules.push({
       test: /\.m?js/,
