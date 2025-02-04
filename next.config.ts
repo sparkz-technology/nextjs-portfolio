@@ -63,14 +63,7 @@ const nextConfig: NextConfig = {
   generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
- webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-      }
-    }
-    return config
-  },
+  compress: true,
   headers: async () => [
     {
       source: "/(.*)",
@@ -86,6 +79,15 @@ const nextConfig: NextConfig = {
         {
           key: "X-XSS-Protection",
           value: "1; mode=block",
+        },
+      ],
+    },
+     {
+      source: '/static/(.*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
         },
       ],
     },
