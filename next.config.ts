@@ -69,6 +69,8 @@ const nextConfig: NextConfig = {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
   compress: true,
+  swcMinify: true,
+  output: "standalone",
   headers: async () => [
     {
       source: "/(.*)",
