@@ -67,9 +67,9 @@ const nextConfig: NextConfig = {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
+        fs: true,
+        net: true,
+        tls: true,
       }
     }
     config.module.rules.push({
