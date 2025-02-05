@@ -134,13 +134,6 @@ const nextConfig: NextConfig = {
     ],
     domains: ["res.cloudinary.com"],
   },
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.css$/,
-      use: ["postcss-loader"],
-    })
-    return config
-  },
     generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
