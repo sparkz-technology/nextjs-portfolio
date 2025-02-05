@@ -133,6 +133,12 @@ const nextConfig: NextConfig = {
     ],
     domains: ["res.cloudinary.com"],
   },
+    generateBuildId: async () => {
+    return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
+  },
+    experimental: {
+    nextScriptWorkers: true,
+    },
   distDir: "build",
 }
 export default nextConfig
