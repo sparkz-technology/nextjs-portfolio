@@ -1,4 +1,4 @@
-import { MessageDialog } from "@/components/message-dialog";
+// import { MessageDialog } from "@/components/message-dialog";
 import BlurFade from "@/components/motion/blur-fade";
 import BlurFadeText from "@/components/motion/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
@@ -178,7 +178,7 @@ export default async function Page() {
         </section>
         <section id="message">
           <div className="relative z-40">
-            <MessageDialog />
+{/*             <MessageDialog /> */}
           </div>
         </section>
       </main>
