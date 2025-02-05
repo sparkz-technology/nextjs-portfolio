@@ -9,7 +9,7 @@ import { prisma } from "@/lib/prisma";
 import Markdown from "react-markdown";
 import dynamic from "next/dynamic";
 
-const ProjectCard = dynamic(() => import("@/components/project-card"), { ssr: false })
+const ProjectCard = dynamic(() => import("@/components/project-card"))
 
 const BLUR_FADE_DELAY = 0.04;
 
