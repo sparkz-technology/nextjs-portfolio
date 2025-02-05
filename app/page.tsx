@@ -1,33 +1,35 @@
 import { MessageDialog } from "@/components/message-dialog";
 import BlurFade from "@/components/motion/blur-fade";
 import BlurFadeText from "@/components/motion/blur-fade-text";
-import { ProjectCard } from "@/components/project-card";
+// import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import Markdown from "react-markdown";
+import dynamic from "next/dynamic";
+
+const ProjectCard = dynamic(() => import("@/components/project-card"), { ssr: false })
 
 const BLUR_FADE_DELAY = 0.04;
+
 const getPageData = async () => {
   return await prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
     include: {
-      Skill: true,
-      WorkExperience: true,
-      Education: true,
+      Skill: { orderBy: { sequenceValue: "asc" } },
+      WorkExperience: { orderBy: { sequenceValue: "asc" } },
+      Education: { orderBy: { sequenceValue: "asc" } },
       Project: {
+        orderBy: { sequenceValue: "asc" },
         include: {
-          projectLinks: {
-            include: {
-              icon: true,
-            },
-          },
+          projectLinks: { include: { icon: true } },
         },
       },
     },
   });
 };
+
 
 export default async function Page() {
   const DATA = await getPageData();
@@ -77,7 +79,7 @@ export default async function Page() {
             <BlurFade delay={BLUR_FADE_DELAY * 5}>
               <h2 className="text-xl font-bold">Work Experience</h2>
             </BlurFade>
-            {DATA.WorkExperience.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((work, id) => (
+            {DATA.WorkExperience.map((work, id) => (
               <BlurFade key={work.company} delay={BLUR_FADE_DELAY * 6 + id * 0.05}>
                 <ResumeCard
                   key={work.id}
@@ -99,7 +101,7 @@ export default async function Page() {
             <BlurFade delay={BLUR_FADE_DELAY * 7}>
               <h2 className="text-xl font-bold">Education</h2>
             </BlurFade>
-            {DATA.Education.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((education, id) => (
+            {DATA.Education.map((education, id) => (
               <BlurFade key={education.id} delay={BLUR_FADE_DELAY * 8 + id * 0.05}>
                 <ResumeCard
                   key={education.id}
@@ -120,7 +122,7 @@ export default async function Page() {
               <h2 className="text-xl font-bold">Skills</h2>
             </BlurFade>
             <div className="flex flex-wrap gap-1">
-              {DATA.Skill.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((skill, id) => (
+              {DATA.Skill.map((skill, id) => (
                 <BlurFade key={skill.id} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
                   <Badge key={skill.id} className="capitalize ">{skill.name}</Badge>
                 </BlurFade>
@@ -145,7 +147,7 @@ export default async function Page() {
               </div>
             </BlurFade>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-              {DATA.Project.sort((a,b)=>a.sequenceValue - b.sequenceValue).map((project, id) => (
+              {DATA.Project.map((project, id) => (
                 <BlurFade key={project.id} delay={BLUR_FADE_DELAY * 12 + id * 0.05}>
                   <ProjectCard
                     href={project.href}
