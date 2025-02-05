@@ -3,9 +3,6 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: ["class"],
   mode: 'jit',
-  experimental: {
-    optimizeUniversalDefaults: true,
-  },
   content: [
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
