@@ -1,15 +1,12 @@
 import { MessageDialog } from "@/components/message-dialog";
 import BlurFade from "@/components/motion/blur-fade";
 import BlurFadeText from "@/components/motion/blur-fade-text";
-// import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import Markdown from "react-markdown";
-import dynamic from "next/dynamic";
-
-const ProjectCard = dynamic(() => import("@/components/project-card"))
 
 const BLUR_FADE_DELAY = 0.04;
 
