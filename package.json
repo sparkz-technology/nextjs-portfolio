@@ -68,6 +68,7 @@
     "uuid": "^11.0.3",
     "yup": "^1.4.0",
     "zustand": "^5.0.1",
+    "cssnano": "^7.0.6",
     "babel-plugin-react-compiler": "^19.0.0-beta-714736e-20250131"
   },
   "devDependencies": {
