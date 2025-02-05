@@ -108,6 +108,9 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress:true,
+  cacheHandler: "filesystem",
+  cacheMaxMemorySize: 1048576,
+  cacheDirectory: ".next/cache",
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
