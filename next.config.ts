@@ -153,6 +153,15 @@ const nextConfig: NextConfig = {
       ],
     },
     {
+      source: "/(.*)",
+      headers: [
+          {
+            key: "Accept-Encoding",
+            value: "gzip, compress, br", // Enable compression
+          },
+        ],
+      },
+    {
       source: "/static/(.*)",
       headers: [
         {
