@@ -17,6 +17,7 @@ const steps = [
   { id: "message", label: "Your Message" },
 ]
 
+  // @ts-expect-error - `props` is not compatible with `StepForm`
 const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
