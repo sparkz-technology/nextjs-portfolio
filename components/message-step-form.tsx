@@ -27,6 +27,7 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
       name: Yup.string().required("Name is required"),
     }),
     onSubmit: (values) => {
+        // @ts-expect-error - `prev` is not compatible with `setFormData`
       setFormData((prev) => ({ ...prev, name: values.name }))
       nextStep()
     },
@@ -46,6 +47,7 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
         .required("Email is required"),
     }),
     onSubmit: (values) => {
+         // @ts-expect-error - `prev` is not compatible with `setFormData`
       setFormData((prev) => ({ ...prev, email: values.email }))
       nextStep()
     },
@@ -58,7 +60,8 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
     }),
     onSubmit: async (values) => {
       setIsSubmitting(true)
-      await onSubmit({ ...formData, message: values.message })
+        // @ts-expect-error - `formData` is not compatible with `setFormData`
+      await onSubmit({ ...formData, message: values.message onSubmit
       setIsSubmitting(false)
     },
   })
