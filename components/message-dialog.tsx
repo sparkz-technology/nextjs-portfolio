@@ -373,7 +373,7 @@ export function MessageDialog() {
     setCurrentStep((prev) => (prev > 0 ? prev - 1 : prev))
   }, [])
 
-  const handleSubmit = useCallback(async (values) => {
+  const handleSubmit = useCallback(async (values:keyof typeof formData) => {
     try {
       const { message, success } = await sendEmailNotification(values)
       if (!success) {
