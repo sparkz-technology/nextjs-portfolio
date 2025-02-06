@@ -167,6 +167,7 @@ const nextConfig: NextConfig = {
   },
     experimental: {
     nextScriptWorkers: true,
+    reactCompiler: true,
     },
   distDir: "build",
 }
