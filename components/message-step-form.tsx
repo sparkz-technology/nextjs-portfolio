@@ -60,8 +60,8 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
     }),
     onSubmit: async (values) => {
       setIsSubmitting(true)
-        // @ts-expect-error - `formData` is not compatible with `setFormData`
-      await onSubmit({ ...formData, message: values.message onSubmit
+        // @ts-expect-error - `formData` is not compatible with `onSubmit`
+      await onSubmit({ ...formData, message: values.message })
       setIsSubmitting(false)
     },
   })
