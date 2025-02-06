@@ -339,6 +339,8 @@ const StepForm = dynamic(() => import("./message-step-form"), {
 import { sendEmailNotification } from "@/lib/action"
 import { sideCannonsConfetti } from "@/lib/utils"
 
+type SendEmailNotification = { name: string; email: string; message: string };
+
 const steps = [
   { id: "name", label: "Your Name" },
   { id: "email", label: "Your Email" },
@@ -372,8 +374,8 @@ export function MessageDialog() {
   const prevStep = useCallback(() => {
     setCurrentStep((prev) => (prev > 0 ? prev - 1 : prev))
   }, [])
-
-  const handleSubmit = useCallback(async (values:keyof typeof formData) => {
+  
+  const handleSubmit = useCallback(async (values: SendEmailNotification) => {
     try {
       const { message, success } = await sendEmailNotification(values)
       if (!success) {
