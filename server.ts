@@ -10,9 +10,17 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
   const server = express();
 
-  // ✅ Apply compression for all responses, including chunk files
+  // ✅ Apply compression for all responses (prioritizing Gzip)
   server.use(
     compression({
+      filter: (req, res) => {
+        // Only compress responses that should be compressed
+        if (req.headers["accept-encoding"]?.includes("gzip")) {
+          res.setHeader("Content-Encoding", "gzip"); // Force Gzip
+          return true;
+        }
+        return false;
+      },
       threshold: 0, // Compress all files, even small ones
     })
   );
