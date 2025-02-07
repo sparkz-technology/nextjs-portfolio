@@ -24,6 +24,7 @@ const getPageData = async () => {
         },
       },
     },
+    cacheStrategy: { ttl: 60 },
   });
 };
 
