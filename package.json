@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production node server.ts",
+    "start": "NODE_ENV=production ts-node server.ts",
     "lint": "next lint",
     "prisma-push": "npx prisma generate && npx prisma db push"
   },
