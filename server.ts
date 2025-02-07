@@ -1,27 +1,38 @@
-import express, { type Request, type Response } from "express"
-import next from "next"
-import { parse } from "url"
-import compression from "compression"
+import express, { Request, Response } from "express";
+import next from "next";
+import compression from "compression";
+import path from "path";
 
-const dev = process.env.NODE_ENV !== "production"
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
-  const server = express()
+  const server = express();
 
-  // Apply compression middleware
-  server.use(compression())
+  // ✅ Apply compression for all responses, including chunk files
+  server.use(
+    compression({
+      threshold: 0, // Compress all files, even small ones
+    })
+  );
 
+  // ✅ Serve Next.js static assets with compression
+  server.use(
+    "/_next/static",
+    express.static(path.join(__dirname, ".next/static"), {
+      immutable: true,
+      maxAge: "365d",
+    })
+  );
+
+  // ✅ Handle all other Next.js requests
   server.all("*", (req: Request, res: Response) => {
-    const parsedUrl = parse(req.url!, true)
-    return handle(req, res, parsedUrl)
-  })
+    return handle(req, res);
+  });
 
-  const port = process.env.PORT || 3000
-  server.listen(port, (err?: Error) => {
-    if (err) throw err
-    console.log(`> Ready on http://localhost:${port}`)
-  })
-})
-
+  const port = process.env.PORT || 3000;
+  server.listen(port, () => {
+    console.log(`> Ready on http://localhost:${port}`);
+  });
+});
