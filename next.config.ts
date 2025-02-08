@@ -3,7 +3,7 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
+  
   compress:false,
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
@@ -62,8 +62,7 @@ const nextConfig: NextConfig = {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
     experimental: {
-    
-    
+    reactCompiler: true,
     nextScriptWorkers: true,
     },
   distDir: "build",
