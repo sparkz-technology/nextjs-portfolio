@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
-import IconRenderer from "./icon-renderer";
 
 interface Props {
   title: string;
@@ -103,7 +102,6 @@ export function ProjectCard({ title, href, description, dates, tags, link, image
             {links?.map((link, idx) => (
               <Link href={link?.href} key={idx} target="_blank">
                 <Badge key={idx} className="flex gap-2 px-2 !py-0 text-[10px]">
-                  <IconRenderer iconName={link.icon?.value as string} />
                   {link.type}
                 </Badge>
               </Link>
