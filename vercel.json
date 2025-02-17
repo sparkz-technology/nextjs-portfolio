@@ -1,3 +1,18 @@
 {
-  "outputDirectory": "build"
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@vercel/next" }
+  ],
+  "functions": {
+    "api/**/*.ts": {  // For API Routes (TypeScript)
+      "runtime": "nodejs20.x" // Node.js 20
+    },
+    "middleware.ts": { // For Middleware (TypeScript) - if you have one
+      "runtime": "nodejs20.x"
+    },
+    "app/**/*.ts": { // Crucial for App Router (TypeScript)
+      "runtime": "nodejs20.x"
+    }
+  },
+    "outputDirectory": "build" // Keep this if you need it
 }
