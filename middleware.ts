@@ -51,12 +51,12 @@ export async function middleware(req: NextRequest) {
         maxAge: 60 * 60 * 24 * 365, // 1 year
       });
     }
-    const apiUrl = new URL("/api/user-visit", nextUrl.origin);
-    await fetch(apiUrl.toString(), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ visitorId, tempId: newTempId }),
-    });
+    // const apiUrl = new URL("/api/user-visit", nextUrl.origin);
+    // await fetch(apiUrl.toString(), {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ visitorId, tempId: newTempId }),
+    // });
   }
 
   return response;
