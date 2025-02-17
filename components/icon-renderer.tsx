@@ -19,7 +19,11 @@ interface IconRendererProps {
   iconName: string;
 }
 
-function IconRenderer({ iconName }: IconRendererProps) {
+function IconRenderer(props: IconRendererProps) {
+  if (props){
+  return null
+  }
+  const { iconName } = props
   const libraryPrefix = iconName.slice(0, 2).toLowerCase() as keyof typeof iconLibraryMap;
   const iconLibrary = iconLibraryMap[libraryPrefix];
 
