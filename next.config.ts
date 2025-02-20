@@ -64,6 +64,7 @@ const nextConfig: NextConfig = {
     experimental: {
     reactCompiler: true,
     nextScriptWorkers: true, 
+    runtime: 'nodejs', // or 'edge'
     },
   distDir: "build",
 }
