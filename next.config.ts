@@ -3,8 +3,6 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
-  compress:false,
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -61,10 +59,6 @@ const nextConfig: NextConfig = {
     generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
   },
-    experimental: {
-    reactCompiler: true,
-    nextScriptWorkers: true, 
-    },
   distDir: "build",
 }
 export default nextConfig
