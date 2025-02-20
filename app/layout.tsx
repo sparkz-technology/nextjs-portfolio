@@ -15,6 +15,10 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
+async function getBuildId() {
+  return process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || process.env.BUILD_ID || "development"
+}
+
 export async function getSiteMetadata() {
   return prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
@@ -24,7 +28,7 @@ export async function getSiteMetadata() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const DATA = await getSiteMetadata();
-
+  const buildId = await getBuildId()
   if (!DATA) {
     return{
       metadataBase: new URL(""),
@@ -32,7 +36,9 @@ export async function generateMetadata(): Promise<Metadata> {
         default: "Next.js Starter",
         template: "%s | Next.js Starter",
       },
-      buildId:process.env.NEXT_PUBLIC_BUILD_ID || "dev",
+      other: {
+      "build-id": buildId,
+      },
       description: "Next.js Starter",
       openGraph: {
         title: "Next.js Starter",
