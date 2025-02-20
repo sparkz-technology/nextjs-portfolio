@@ -22,7 +22,7 @@ async function getBuildId() {
 export async function getSiteMetadata() {
   return prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
-    cacheStrategy: { ttl: 60 },
+    // cacheStrategy: { ttl: 60 },
   });
 }
 
