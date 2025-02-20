@@ -76,6 +76,9 @@ export async function generateMetadata(): Promise<Metadata> {
       default: DATA.name!,
       template: `%s | ${DATA.name}`,
     },
+     other: {
+      "build-id": buildId,
+      },
     description: DATA.description,
     openGraph: {
       title: DATA.name!,
