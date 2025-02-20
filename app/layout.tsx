@@ -32,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
         default: "Next.js Starter",
         template: "%s | Next.js Starter",
       },
+      buildId:process.env.NEXT_PUBLIC_BUILD_ID || "dev",
       description: "Next.js Starter",
       openGraph: {
         title: "Next.js Starter",
