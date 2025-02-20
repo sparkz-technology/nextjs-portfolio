@@ -65,7 +65,6 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
     nextScriptWorkers: true, 
     },
-    runtime: 'edge', // or 'edge'
   distDir: "build",
 }
 export default nextConfig
