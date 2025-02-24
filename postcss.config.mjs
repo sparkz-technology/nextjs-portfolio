@@ -2,7 +2,6 @@
 const config = {
   plugins: {
     tailwindcss: {},
-     '@tailwindcss/typography': {}, 
     ...(process.env.NODE_ENV === 'production' ? { cssnano: { preset: [
               "default",
               {
