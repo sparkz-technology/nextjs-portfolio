@@ -55,8 +55,12 @@ export function ExpreienceDialog() {
     try {
       const payload = {
         ...values,
-        startDate: values.startDate ? format(values.startDate, "MMM-yy") : "",
-        endDate: values.endDate ? (isToday(values.endDate) ? "Present" : format(values.endDate, "MMM-yy")) : "",
+          startDate: formvalues.startDate ? format(formvalues.startDate,"dd/MM/yyyy") : "",
+          endDate: formvalues.endDate
+          ? isToday(formvalues.endDate)
+            ? "Present"
+            : format(formvalues.endDate,"dd/MM/yyyy")
+          : "",
       };
       if (isCreate) {
         const { success, message } = await createWorkExperienceAction(payload);
@@ -79,7 +83,10 @@ export function ExpreienceDialog() {
     }
   };
 
-  console.log(workExperienceData);
+const parseCustomDate = (dateStr: string): string => {
+    const date = parse(dateStr, "dd/MM/yyyy", new Date());
+    return isValid(date) ? format(date, "yyyy-MM-dd") : format(new Date(),"yyyy-MM-dd");
+};
 
   return (
     <Dialog open={type == "workExperience"} onOpenChange={closeDialog}>
@@ -100,11 +107,8 @@ export function ExpreienceDialog() {
             link: workExperienceData.link ?? "",
             location: workExperienceData.location ?? "",
             title: workExperienceData.title ?? "",
-            startDate: workExperienceData.startDate ?? "",
-            endDate:
-              workExperienceData.endDate == "Present"
-                ? format(new Date(), "yyyy-MM-dd")
-                : workExperienceData.endDate ?? "",
+            startDate:   data?.startDate ? parseCustomDate(data?.startDate) : "",
+            endDate:  data?.endDate ? parseCustomDate(data.endDate) :"", 
             description: workExperienceData.description ?? "",
             logoUrl: workExperienceData.logoUrl ?? "",
           }}
