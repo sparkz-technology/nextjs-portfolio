@@ -52,8 +52,12 @@ export function EducationDialog() {
     try {
       const payload = {
         ...values,
-        startDate: values.startDate ? format(values.startDate, "MMM-yy") : "",
-        endDate: values.endDate ? (isToday(values.endDate) ? "Present" : format(values.endDate, "MMM-yy")) : "",
+        startDate: formvalues.startDate ? format(formvalues.startDate,"dd/MM/yyyy") : "",
+          endDate: formvalues.endDate
+          ? isToday(formvalues.endDate)
+            ? "Present"
+            : format(formvalues.endDate,"dd/MM/yyyy")
+          : "",
       };
       if (isCreate) {
         const { success, message } = await createEducationAction(payload);
@@ -75,7 +79,10 @@ export function EducationDialog() {
       closeDialog();
     }
   };
-
+const parseCustomDate = (dateStr: string): string => {
+    const date = parse(dateStr, "dd/MM/yyyy", new Date());
+    return isValid(date) ? format(date, "yyyy-MM-dd") : format(new Date(),"yyyy-MM-dd");
+};
   return (
     <Dialog open={type == "education"} onOpenChange={closeDialog}>
       <Button onClick={() => openDialog("education")} variant="outline">
@@ -94,12 +101,8 @@ export function EducationDialog() {
             school: workExperienceData.school ?? "",
             link: workExperienceData.link ?? "",
             degree: workExperienceData.degree ?? "",
-            startDate: workExperienceData.startDate ?? "",
-            endDate:
-              workExperienceData.endDate == "Present"
-                ? format(new Date(), "yyyy-MM-dd")
-                : workExperienceData.endDate ?? "",
-            logoUrl: workExperienceData.logoUrl ?? "",
+            startDate:   data?.startDate ? parseCustomDate(data?.startDate) : "",
+            endDate:  data?.endDate ? parseCustomDate(data.endDate) :"", 
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
