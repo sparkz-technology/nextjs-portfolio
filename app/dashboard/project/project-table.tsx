@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react";
-import dayjs from "dayjs";
+import { parse, isValid, format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,11 +32,14 @@ interface ProjectTableProps {
   projectPageSize: number;
 }
 
-const parseCustomDate = (dateStr: string): string => {
-    const date = dayjs(dateStr, "DD/MM/YYYY", true);
-    return date.isValid() ? date.format("MMM-YY") : "Present";
-};
 
+const parseCustomDate = (dateStr: string): string => {
+    // Parse date in "dd/MM/yyyy" format
+    const date = parse(dateStr, "dd/MM/yyyy", new Date());
+
+    // Return formatted date if valid, otherwise use today's date
+    return isValid(date) ? format(date, "MMM-yy") : "Present";
+};
 
 export default function ProjectTable(props: ProjectTableProps) {
   const { openDialogWithData } = useProjectDialog();
