@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IWorkExperience } from "@/lib/type";
 import { toggleVisibilityByIdAction, updateSequenceAction } from "@/app/dashboard/experience/action";
+import { parseCustomDate } from "@/lib/utils"
 import { useWorkExperienceDialog } from "@/lib/zustand/use-dialog-store";
 
 interface WorkExprienceTableProps {
@@ -61,7 +62,7 @@ export default function WorkExprienceTable(props: WorkExprienceTableProps) {
       id: "timeLine",
       header: () => <span className="font-semibold text-sm uppercase">Time Line</span>,
       cell: ({ row }) => (
-        <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${row?.original?.startDate} - ${row?.original?.endDate}`}</span>
+        <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${parseCustomDate(row?.original?.startDate)} - ${parseCustomDate(row?.original?.endDate)}`}</span>
       ),
     },
     {
