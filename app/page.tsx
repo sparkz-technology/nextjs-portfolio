@@ -15,10 +15,20 @@ const getPageData = async () => {
   return await prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
     include: {
-      Skill: { orderBy: { sequenceValue: "asc" } },
-      WorkExperience: { orderBy: { sequenceValue: "asc" } },
-      Education: { orderBy: { sequenceValue: "asc" } },
+      Skill: { 
+        where: { visibility: true }, 
+        orderBy: { sequenceValue: "asc" } 
+      },
+      WorkExperience: { 
+        where: { visibility: true }, 
+        orderBy: { sequenceValue: "asc" } 
+      },
+      Education: { 
+        where: { visibility: true }, 
+        orderBy: { sequenceValue: "asc" } 
+      },
       Project: {
+        where: { visibility: true }, 
         orderBy: { sequenceValue: "asc" },
         include: {
           projectLinks: { include: { icon: true } },
