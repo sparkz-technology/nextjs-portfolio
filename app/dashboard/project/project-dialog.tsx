@@ -176,8 +176,8 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
         // @ts-expect-error - `updateProjectAction` is not compatible with `IProject`
         const { message, success } = await updateProjectAction(payload);
         if (!success) throw new Error(message);
+        toast.info("Project updated  successfully");
       }
-      toast.info("Project updated  successfully");
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
     } finally {
