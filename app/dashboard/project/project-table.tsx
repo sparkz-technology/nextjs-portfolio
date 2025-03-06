@@ -23,7 +23,7 @@ import IconRenderer from "@/components/icon-renderer";
 import { toast } from "sonner";
 import { toggleProjectVisibilityAction, updateProjectSequenceAction } from "./action";
 import { useProjectDialog } from "@/lib/zustand/use-dialog-store";
-import { parseCustomDate } from "@/lib/utils/"
+import { parseCustomDate } from "@/lib/utils"
 
 
 interface ProjectTableProps {
