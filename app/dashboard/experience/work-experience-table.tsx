@@ -149,7 +149,7 @@ export default function WorkExprienceTable(props: WorkExprienceTableProps) {
                   className="h-8 w-8 p-0"
                   data-id={row.original.id}
                   onClick={handleSequenceOrder}
-                  disabled={row.original.sequenceValue === props.totalCount}
+                  disabled={(row.original.sequenceValue + 1) === props.totalCount}
                   data-from={row.original.sequenceValue.toString()}
                   data-to={(row.original.sequenceValue + 1).toString()}
                 >
