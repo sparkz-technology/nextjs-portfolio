@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import dayjs from 'dayjs';
+import { parse, isValid } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -87,20 +88,17 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
   const [activeTab, setActiveTab] = useState("basic");
   const isCreate = !data?.hasOwnProperty("id");
   
-const isValidDate = (date: any): boolean => {
-    return date instanceof Date && !isNaN(date.getTime());
+const parseCustomDate = (dateStr: string): Date | null => {
+    const date = parse(dateStr, "dd/MM/yyyy", new Date());
+    return isValid(date) ? date : null;
 };
-
+  
   const initialValues = {
     id: data?.id ?? "",
     title: data?.title ?? "",
     href: data?.href ?? "",
-    startDate:   data?.startDate && isValidDate(new Date(data.startDate)) 
-    ? new Date(data.startDate) 
-    : new Date(),
-    endDate:  data?.endDate && isValidDate(new Date(data.endDate)) 
-    ? new Date(data.endDate) 
-    : new Date(),
+    startDate:   data?.startDate ? parseCustomDate(data?.startDate) : "",
+    endDate:  data?.endDate ? parseCustomDate(new Date(data.endDate)) :"", 
     description: data?.description ?? "",
     active: data?.active ?? false,
     technologies: Array.isArray(data?.technologies) ? data.technologies.join(",") : data?.technologies ?? "",
