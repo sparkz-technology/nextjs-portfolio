@@ -23,6 +23,7 @@ import IconRenderer from "@/components/icon-renderer";
 import { toast } from "sonner";
 import { toggleProjectVisibilityAction, updateProjectSequenceAction } from "./action";
 import { useProjectDialog } from "@/lib/zustand/use-dialog-store";
+import { parseCustomDate } from "@/lib/utils/"
 
 
 interface ProjectTableProps {
@@ -31,15 +32,6 @@ interface ProjectTableProps {
   totalCount: number;
   projectPageSize: number;
 }
-
-
-const parseCustomDate = (dateStr: string): string => {
-    // Parse date in "dd/MM/yyyy" format
-    const date = parse(dateStr, "dd/MM/yyyy", new Date());
-
-    // Return formatted date if valid, otherwise use today's date
-    return isValid(date) ? format(date, "MMM-yy") : "Present";
-};
 
 export default function ProjectTable(props: ProjectTableProps) {
   const { openDialogWithData } = useProjectDialog();
