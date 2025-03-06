@@ -98,7 +98,7 @@ export default async function Page() {
                   subtitle={work.title}
                   href={work.link}
                   badges={[]}
-                  period={`${work.startDate} - ${work.endDate ?? "Present"}`}
+                  period={`${parseCustomDate(project.startDate)} - ${parseCustomDate(project.endDate)}`}
                   description={work.description}
                 />
               </BlurFade>
@@ -119,7 +119,7 @@ export default async function Page() {
                   altText={education.school}
                   title={education.school}
                   subtitle={education.degree}
-                  period={`${education.startDate} - ${education.endDate}`}
+                  period={`${parseCustomDate(project.startDate)} - ${parseCustomDate(project.endDate)}`}
                 />
               </BlurFade>
             ))}
