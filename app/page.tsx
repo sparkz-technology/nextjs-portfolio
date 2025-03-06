@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import Markdown from "react-markdown";
+import { parseCustomDate } from "@/lib/utils"
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -152,7 +153,7 @@ export default async function Page() {
                     key={project.id}
                     title={project.title}
                     description={project.description}
-                    dates={`${project.startDate} - ${project.endDate}`}
+                    dates={`${parseCustomDate(project.startDate)} - ${parseCustomDate(project.endDate)}`}
                     tags={project.technologies}
                     image={project.image}
                     video={project.video}
