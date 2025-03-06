@@ -37,7 +37,7 @@ export const sideCannonsConfetti = async (seconds?: number, colors?: string[]) =
   frame();
 };
 
-export const parseCustomDateForTable = (dateStr: string): string => {
+export const parseCustomDate = (dateStr: string): string => {
     const date = parse(dateStr, "dd/MM/yyyy", new Date());
     return isValid(date) ? format(date, "MMM-yy") : "Present";
 };
