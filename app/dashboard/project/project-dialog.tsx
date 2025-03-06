@@ -86,15 +86,21 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
   const isCreate = !data?.hasOwnProperty("id");
+  
 const isValidDate = (date: any): boolean => {
-    return !isNaN(new Date(date).getTime());
+    return date instanceof Date && !isNaN(date.getTime());
 };
+
   const initialValues = {
     id: data?.id ?? "",
     title: data?.title ?? "",
     href: data?.href ?? "",
-    startDate:  isValidDate(data?.startDate) ? new Date(data.startDate) : new Date() ,
-    endDate:  isValidDate(data?.endDate) ? new Date(data.endDate) : new Date() ,
+    startDate:   data?.startDate && isValidDate(new Date(data.startDate)) 
+    ? new Date(data.startDate) 
+    : new Date(),
+    endDate:  data?.endDate && isValidDate(new Date(data.endDate)) 
+    ? new Date(data.endDate) 
+    : new Date(),
     description: data?.description ?? "",
     active: data?.active ?? false,
     technologies: Array.isArray(data?.technologies) ? data.technologies.join(",") : data?.technologies ?? "",
