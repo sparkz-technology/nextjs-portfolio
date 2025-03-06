@@ -88,17 +88,20 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
   const [activeTab, setActiveTab] = useState("basic");
   const isCreate = !data?.hasOwnProperty("id");
   
-const parseCustomDate = (dateStr: string): Date | null => {
+import { format, parse, isValid } from "date-fns";
+
+const parseCustomDate = (dateStr: string): string => {
     const date = parse(dateStr, "dd/MM/yyyy", new Date());
-    return isValid(date) ? date : null;
+    return isValid(date) ? format(date, "yyyy-MM-dd") : "";
 };
+
   
   const initialValues = {
     id: data?.id ?? "",
     title: data?.title ?? "",
     href: data?.href ?? "",
     startDate:   data?.startDate ? parseCustomDate(data?.startDate) : "",
-    endDate:  data?.endDate ? parseCustomDate(new Date(data.endDate)) :"", 
+    endDate:  data?.endDate ? parseCustomDate(data.endDate) :"", 
     description: data?.description ?? "",
     active: data?.active ?? false,
     technologies: Array.isArray(data?.technologies) ? data.technologies.join(",") : data?.technologies ?? "",
