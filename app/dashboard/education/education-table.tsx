@@ -134,7 +134,7 @@ export default function EducationTable(props: EducationTableProps) {
                   data-id={row.original.id}
                   data-from={row.original.sequenceValue.toString()}
                   data-to={(row.original.sequenceValue - 1).toString()}
-                  disabled={row.original.sequenceValue === 1}
+                  disabled={row.original.sequenceValue === 0}
                 >
                   <ArrowUp size={20} />
                 </Button>
