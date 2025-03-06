@@ -91,7 +91,7 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
 
 const parseCustomDate = (dateStr: string): string => {
     const date = parse(dateStr, "dd/MM/yyyy", new Date());
-    return isValid(date) ? format(date, "yyyy-MM-dd") : "";
+    return isValid(date) ? format(date, "yyyy-MM-dd") : format(new Date(),"yyyy-MM-dd");
 };
 
   
