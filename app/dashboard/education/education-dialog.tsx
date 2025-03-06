@@ -104,6 +104,7 @@ const parseCustomDate = (dateStr: string): string => {
             degree: workExperienceData.degree ?? "",
             startDate:   data?.startDate ? parseCustomDate(data?.startDate) : "",
             endDate:  data?.endDate ? parseCustomDate(data.endDate) :"", 
+            logoUrl:data?.logoUrl ?? "" ,
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
