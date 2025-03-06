@@ -147,11 +147,11 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
       const payload = {
         ...formvalues,
         id: data?.id,
-        startDate: formvalues.startDate ? format(formvalues.startDate, "MMM-yy") : "",
+        startDate: formvalues.startDate ? format(formvalues.startDate) : "",
         endDate: formvalues.endDate
           ? isToday(formvalues.endDate)
             ? "Present"
-            : format(formvalues.endDate, "MMM-yy")
+            : format(formvalues.endDate)
           : "",
         // technologies:
         //   typeof formvalues.technologies === "string"
