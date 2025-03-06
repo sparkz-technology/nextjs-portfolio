@@ -22,6 +22,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IEducation } from "@/lib/type";
 import { toggleEducationVisibilityAction, updateEducationSequenceAction } from "@/app/dashboard/education/action";
 import { useEducationDialog } from "@/lib/zustand/use-dialog-store";
+import { parseCustomDate } from "@/lib/utils"
+
 
 interface EducationTableProps {
   data: IEducation[];
@@ -61,7 +63,7 @@ export default function EducationTable(props: EducationTableProps) {
       id: "timeLine",
       header: () => <span className="font-semibold text-sm uppercase">Time Line</span>,
       cell: ({ row }) => (
-        <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${row?.original?.startDate} - ${row?.original?.endDate}`}</span>
+        <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${parseCustomDate(row?.original?.startDate)} - ${parseCustomDate(row?.original?.endDate)}`}</span>
       ),
     },
     {
