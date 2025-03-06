@@ -157,11 +157,11 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
         //   typeof formvalues.technologies === "string"
         //     ? (formvalues.technologies as string).split(",").map((tech) => tech.trim())
         //     : [],
-        technologies: Array.isArray(formvalues.technologies)
-    ? formvalues.technologies
-    : typeof formvalues.technologies === "string"
-    ? formvalues.technologies.split(",").map((tech) => tech.trim())
-    : [],
+  technologies: Array.isArray(formvalues.technologies)
+  ? formvalues.technologies
+  : typeof formvalues.technologies === "string"
+  ? (formvalues.technologies as string).split(",").map((tech) => tech.trim())
+  : [],
         projectLinks: formvalues.projectLinks.map((link) => ({
           ...link,
           icon: link.icon ? { id: link.icon.id } : null,
