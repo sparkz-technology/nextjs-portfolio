@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Confetti from "canvas-confetti";
+import { parse, isValid, format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,3 +37,7 @@ export const sideCannonsConfetti = async (seconds?: number, colors?: string[]) =
   frame();
 };
 
+export const parseCustomDateForTable = (dateStr: string): string => {
+    const date = parse(dateStr, "dd/MM/yyyy", new Date());
+    return isValid(date) ? format(date, "MMM-yy") : "Present";
+};
