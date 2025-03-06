@@ -88,7 +88,6 @@ export function ProjectDialog({ iconList }: { iconList: IIcon[] }) {
   const [activeTab, setActiveTab] = useState("basic");
   const isCreate = !data?.hasOwnProperty("id");
   
-import { format, parse, isValid } from "date-fns";
 
 const parseCustomDate = (dateStr: string): string => {
     const date = parse(dateStr, "dd/MM/yyyy", new Date());
