@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, MoreHorizontal } from "lucide-react";
+import dayjs from "dayjs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,6 +32,12 @@ interface ProjectTableProps {
   projectPageSize: number;
 }
 
+const parseCustomDate = (dateStr: string): string => {
+    const date = dayjs(dateStr, "DD/MM/YYYY", true);
+    return date.isValid() ? date.format("MMM-YY") : dayjs().format("MMM-YY");
+};
+
+
 export default function ProjectTable(props: ProjectTableProps) {
   const { openDialogWithData } = useProjectDialog();
 
@@ -46,7 +53,7 @@ export default function ProjectTable(props: ProjectTableProps) {
       id: "timeLine",
       header: () => <span className="font-semibold text-sm uppercase">Time Line</span>,
       cell: ({ row }) => (
-        <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${row?.original?.startDate} - ${row?.original?.endDate}`}</span>
+        <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${parseCustomDate(row?.original?.startDate)} - ${parseCustomDate(row?.original?.endDate)}`}</span>
       ),
     },
     {
