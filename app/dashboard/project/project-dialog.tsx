@@ -93,8 +93,8 @@ const isValidDate = (date: any): boolean => {
     id: data?.id ?? "",
     title: data?.title ?? "",
     href: data?.href ?? "",
-    startDate:  isValidDate(data?.startDate) ? new Date(data.startDate) : new Date();
-    endDate:  isValidDate(data?.endDate) ? new Date(data.endDate) : new Date();
+    startDate:  isValidDate(data?.startDate) ? new Date(data.startDate) : new Date() ,
+    endDate:  isValidDate(data?.endDate) ? new Date(data.endDate) : new Date() ,
     description: data?.description ?? "",
     active: data?.active ?? false,
     technologies: Array.isArray(data?.technologies) ? data.technologies.join(",") : data?.technologies ?? "",
