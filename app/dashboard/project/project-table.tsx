@@ -34,7 +34,7 @@ interface ProjectTableProps {
 
 const parseCustomDate = (dateStr: string): string => {
     const date = dayjs(dateStr, "DD/MM/YYYY", true);
-    return date.isValid() ? date.format("MMM-YY") : dayjs().format("MMM-YY");
+    return date.isValid() ? date.format("MMM-YY") : "Present";
 };
 
 
