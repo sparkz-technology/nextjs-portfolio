@@ -55,11 +55,11 @@ export function ExpreienceDialog() {
     try {
       const payload = {
         ...values,
-          startDate: formvalues.startDate ? format(formvalues.startDate,"dd/MM/yyyy") : "",
-          endDate: formvalues.endDate
-          ? isToday(formvalues.endDate)
+          startDate: values.startDate ? format(values.startDate,"dd/MM/yyyy") : "",
+          endDate: values.endDate
+          ? isToday(values.endDate)
             ? "Present"
-            : format(formvalues.endDate,"dd/MM/yyyy")
+            : format(values.endDate,"dd/MM/yyyy")
           : "",
       };
       if (isCreate) {
