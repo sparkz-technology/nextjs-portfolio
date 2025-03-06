@@ -143,7 +143,7 @@ export default function ProjectTable(props: ProjectTableProps) {
                   data-id={row.original.id}
                   data-from={row.original.sequenceValue.toString()}
                   data-to={(row.original.sequenceValue + 1).toString()}
-                  disabled={row.original.sequenceValue === props.totalCount}
+                  disabled={(row.original.sequenceValue + 1) === props.totalCount}
                 >
                   <ArrowDown size={20} />
                 </Button>
