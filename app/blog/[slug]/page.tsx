@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { ChevronLeft, Calendar } from "lucide-react"
 import { BlogLikeButton } from "@/app/blog/blog-like-button"
 import { formatDate } from "@/lib/utils"
+import Markdown from "react-markdown"
 
 // Mock data - in a real app, this would come from a database
 const posts = [
@@ -51,68 +52,29 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
 
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
 
-    <div className="container max-w-3xl py-6 space-y-6">
-      <Link href="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
-        <ChevronLeft className="h-4 w-4 mr-1" />
-        Back to all posts
-      </Link>
+      <div className="container max-w-3xl py-6 space-y-6">
+        <Link href="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
+          <ChevronLeft className="h-4 w-4 mr-1" />
+          Back to all posts
+        </Link>
 
-      <article className="space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
+        <article className="space-y-4">
+          <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
 
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div className="flex items-center">
-            <Calendar className="h-4 w-4 mr-1" />
-            <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <div className="flex items-center">
+              <Calendar className="h-4 w-4 mr-1" />
+              <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
+            </div>
+
+            <BlogLikeButton postId={post.id} initialLikes={post.likes} />
           </div>
-
-          <BlogLikeButton postId={post.id} initialLikes={post.likes} />
-        </div>
-
-        <div className="prose dark:prose-invert max-w-none">{renderMarkdown(post.content)}</div>
-      </article>
-    </div>
+          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+            {post.content}
+          </Markdown>
+        </article>
+      </div>
     </main>
-  )
-}
-
-function renderMarkdown(content: string) {
-  // This is a simplified markdown renderer
-  // In a real app, you would use a library like react-markdown
-  const sections = content.split("\n\n")
-
-  return (
-    <>
-      {sections.map((section, index) => {
-        if (section.startsWith("# ")) {
-          return (
-            <h1 key={index} className="text-2xl font-bold mt-6">
-              {section.substring(2)}
-            </h1>
-          )
-        } else if (section.startsWith("## ")) {
-          return (
-            <h2 key={index} className="text-xl font-bold mt-5">
-              {section.substring(3)}
-            </h2>
-          )
-        } else if (section.startsWith("- ")) {
-          return (
-            <ul key={index} className="list-disc pl-5 my-3">
-              {section.split("\n").map((item, i) => (
-                <li key={i}>{item.substring(2)}</li>
-              ))}
-            </ul>
-          )
-        } else {
-          return (
-            <p key={index} className="my-3">
-              {section}
-            </p>
-          )
-        }
-      })}
-    </>
   )
 }
 
