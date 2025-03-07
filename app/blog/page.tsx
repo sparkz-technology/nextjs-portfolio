@@ -38,8 +38,7 @@ const posts = [
     tags: ["Next.js", "Web Development"],
   },
 ]
-
-export function BlogPage() {
+export default async function BlogPage() {
   return (
     <div className="grid gap-4">
       {posts.map((post) => (
