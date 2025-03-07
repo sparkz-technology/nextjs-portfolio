@@ -57,12 +57,25 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
     }
 
     const validationSchema = Yup.object({
-        title: Yup.string().required("Title is required").min(5, "Must be at least 5 characters"),
-        excerpt: Yup.string().required("Excerpt is required").min(5, "Must be at least 5 characters"),
-        content: Yup.string().required("Content is required").min(20, "Must be at least 20 characters"),
-        tags: Yup.array().min(1, "You can't leave this blank.").required("Tags is required"),
+        title: Yup.string()
+            .required("Title is required")
+            .min(5, "Must be at least 5 characters"),
+
+        excerpt: Yup.string()
+            .required("Excerpt is required")
+            .min(5, "Must be at least 5 characters"),
+
+        content: Yup.string()
+            .required("Content is required")
+            .min(20, "Must be at least 20 characters"),
+
+        tags: Yup.array()
+            .ensure()
+            .min(1, "You can't leave this blank."),
+
         published: Yup.boolean(),
-    })
+    });
+
 
     useEffect(() => {
         if (postId && open) {
