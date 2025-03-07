@@ -133,7 +133,7 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                                             <TagInput
                                                 {...field}
                                                 placeholder="Enter a topic"
-                                                tags={field.value.tags}
+                                                tags={field.value.tags ?? []}
                                                 className='sm:min-w-[450px]'
                                                 setTags={(newTags) => {
                                                     setFieldValue("tags", newTags as [string, ...string[]]);
