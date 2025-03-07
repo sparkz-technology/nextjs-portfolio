@@ -34,9 +34,14 @@ async function getBlogPost(slug: string) {
   if (!post) return null
   return post
 }
+type Props = {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+export default async function BlogPostPage({ params, searchParams }: Props) {
+  const postSlug = (await params).slug
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getBlogPost(params.slug)
+  const post = await getBlogPost(postSlug)
 
   if (!post) {
     notFound()
