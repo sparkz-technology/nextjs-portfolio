@@ -23,6 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import MDEditor from "@uiw/react-md-editor"
 import Markdown from "react-markdown"
+import { TagInput } from "@/components/ui/tag-input"
 
 // Mock data for editing
 const postData = {
@@ -49,13 +50,17 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
 
     const initialValues = {
         title: "",
+        excerpt: "",
         content: "",
+        tags: [],
         published: true,
     }
 
     const validationSchema = Yup.object({
         title: Yup.string().required("Title is required").min(5, "Must be at least 5 characters"),
+        excerpt: Yup.string().required("Excerpt is required").min(5, "Must be at least 5 characters"),
         content: Yup.string().required("Content is required").min(20, "Must be at least 20 characters"),
+        tags: Yup.array().min(1, "You can't leave this blank.").required("Tags is required"),
         published: Yup.boolean(),
     })
 
@@ -96,12 +101,36 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                         <Form className="space-y-6 py-4">
                             <div className="grid gap-4">
                                 {/* Title Field */}
-                                <div className="grid gap-2">
-                                    <Label htmlFor="title">Title</Label>
-                                    <Field as={Input} id="title" name="title" placeholder="Enter post title" required />
-                                    <ErrorMessage name="title" component="p" className="text-red-500 text-sm" />
+                                <div className="flex gap-2">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="title">Title</Label>
+                                        <Field as={Input} id="title" name="title" placeholder="Enter post title" required />
+                                        <ErrorMessage name="title" component="p" className="text-red-500 text-sm" />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="title">Excerpt</Label>
+                                        <Field as={Input} id="excerpt" name="excerpt" placeholder="Enter post excerpt" required />
+                                        <ErrorMessage name="excerpt" component="p" className="text-red-500 text-sm" />
+                                    </div>
                                 </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="tags">Tags</Label>
+                                    <Field name="tags">
+                                        {({ field }: FieldProps) => (
+                                            <TagInput
+                                                {...field}
+                                                placeholder="Enter a topic"
+                                                tags={field.value.tags}
+                                                className='sm:min-w-[450px]'
+                                                setTags={(newTags) => {
+                                                    setFieldValue("tags", newTags as [string, ...string[]]);
+                                                }}
+                                            />
 
+                                        )}
+                                    </Field>
+                                    <ErrorMessage name="tags" component="p" className="text-red-500 text-sm" />
+                                </div>
                                 {/* Content Field */}
                                 <div className="grid gap-2 w-full">
                                     <Label htmlFor="content">Content (Markdown)</Label>
@@ -132,8 +161,8 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                                         <TabsContent value="preview" className="mt-2">
                                             <div className="border rounded-md min-h-[300px] p-4 prose dark:prose-invert max-w-none overflow-auto">
                                                 <Field name="content">
-                                                    {({ field }: { field: { value: string } }) => (field.value ? <Markdown className="prose max-w-full h-[200px] overflow-auto text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
-                                                        {field.value }
+                                                    {({ field }: { field: { value: string } }) => (field.value ? <Markdown className="prose max-w-full h-[300px] overflow-auto text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+                                                        {field.value}
                                                     </Markdown> : <p className="text-muted-foreground">Preview will appear here...</p>)}
                                                 </Field>
                                             </div>
