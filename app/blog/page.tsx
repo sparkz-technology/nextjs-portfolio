@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Calendar, ArrowRight } from "lucide-react"
-import { BlogLikeButton } from "@/app/blog/[slug]/blog-like-button"
+import { BlogLikeButton } from "@/app/blog/blog-like-button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { formatDate } from "@/lib/utils"

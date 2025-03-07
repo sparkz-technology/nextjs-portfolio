@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ChevronLeft, Calendar } from "lucide-react"
-import { BlogLikeButton } from "@/app/blog/[slug]/blog-like-button"
+import { BlogLikeButton } from "@/app/blog/blog-like-button"
 import { formatDate } from "@/lib/utils"
 
 // Mock data - in a real app, this would come from a database
