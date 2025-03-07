@@ -114,7 +114,7 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                         <Form className="space-y-6 py-4">
                             <div className="grid gap-4">
                                 {/* Title Field */}
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-start">
                                     <div className="grid gap-2">
                                         <Label htmlFor="title">Title</Label>
                                         <Field as={Input} id="title" name="title" placeholder="Enter post title" required />
