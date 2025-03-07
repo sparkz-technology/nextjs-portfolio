@@ -4,9 +4,9 @@ import { ISearchParams } from "@/lib/type";
 import { DeleteDialog } from "./blog-dialog";
 import { listPostAction } from "@/app/dashboard/blog/action";
 import BlogTable from "./blog-table";
-// import { Button } from "@/components/ui/button";
-// import { PlusCircle } from "lucide-react";
-// import { BlogFormDrawer } from "./blog-form-drawer";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import { BlogFormDrawer } from "./blog-form-drawer";
 
 interface GuestbookPageProps {
     searchParams: Promise<ISearchParams>;
@@ -30,12 +30,12 @@ export default async function BlogPage({ searchParams }: GuestbookPageProps) {
         <div className="p-4 space-y-4">
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Blog</h1>
-                {/* <BlogFormDrawer>
+                <BlogFormDrawer>
                     <Button className="fixed bottom-4 right-4 z-10 shadow-lg">
                         <PlusCircle className="h-4 w-4 mr-2" />
                         New Post
                     </Button>
-                </BlogFormDrawer> */}
+                </BlogFormDrawer>
             </div>
             <DeleteDialog />
             <BlogTable
