@@ -31,7 +31,7 @@ export default async function BlogPage({ searchParams }: GuestbookPageProps) {
             <div className="flex justify-between">
                 <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Blog</h1>
                 <BlogFormDrawer>
-                    <Button className="fixed bottom-4 right-4 z-10 shadow-lg">
+                    <Button className="shadow-lg">
                         <PlusCircle className="h-4 w-4 mr-2" />
                         New Post
                     </Button>
