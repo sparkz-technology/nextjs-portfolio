@@ -114,35 +114,34 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                         <Form className="space-y-6 py-4">
                             <div className="grid gap-4">
                                 {/* Title Field */}
-                                <div className="flex gap-2 items-start">
-                                    <div className="grid gap-2">
+                                <div className="flex gap-2 items-start w-full">
+                                    <div className="grid gap-2 w-full">
                                         <Label htmlFor="title">Title</Label>
                                         <Field as={Input} id="title" name="title" placeholder="Enter post title" required />
                                         <ErrorMessage name="title" component="p" className="text-red-500 text-sm" />
                                     </div>
-                                    <div className="grid gap-2">
+                                    <div className="grid gap-2 w-full">
                                         <Label htmlFor="title">Excerpt</Label>
                                         <Field as={Input} id="excerpt" name="excerpt" placeholder="Enter post excerpt" required />
                                         <ErrorMessage name="excerpt" component="p" className="text-red-500 text-sm" />
                                     </div>
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="tags">Tags</Label>
                                     <Field name="tags">
                                         {({ field }: FieldProps) => (
                                             <TagInput
                                                 {...field}
                                                 placeholder="Enter a topic"
-                                                tags={field.value.tags ?? []}
+                                                tags={field.value ?? []}
                                                 className='sm:min-w-[450px]'
                                                 setTags={(newTags) => {
-                                                    setFieldValue("tags", newTags as [string, ...string[]]);
+                                                    setFieldValue("tags", newTags);
                                                 }}
                                             />
-
                                         )}
                                     </Field>
                                     <ErrorMessage name="tags" component="p" className="text-red-500 text-sm" />
+
                                 </div>
                                 {/* Content Field */}
                                 <div className="grid gap-2 w-full">
@@ -172,9 +171,9 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                                         </TabsContent>
 
                                         <TabsContent value="preview" className="mt-2">
-                                            <div className="border rounded-md min-h-[300px] p-4 prose dark:prose-invert max-w-none overflow-auto">
+                                            <div className="border rounded-md min-h-[200px] p-4 prose dark:prose-invert max-w-none overflow-auto">
                                                 <Field name="content">
-                                                    {({ field }: { field: { value: string } }) => (field.value ? <Markdown className="prose max-w-full h-[250px] overflow-auto text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+                                                    {({ field }: { field: { value: string } }) => (field.value ? <Markdown className="prose max-w-full h-[200px] overflow-auto text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
                                                         {field.value}
                                                     </Markdown> : <p className="text-muted-foreground">Preview will appear here...</p>)}
                                                 </Field>

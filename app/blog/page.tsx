@@ -40,7 +40,7 @@ const posts = [
 ]
 export default async function BlogPage() {
     return (
-        <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
+        <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
             <h1 className="text-3xl font-bold tracking-tight mb-2">Blog</h1>
             <p className="text-muted-foreground mb-4">Thoughts, ideas, and insights on software engineering and technology.</p>
             <div className="grid gap-4">
