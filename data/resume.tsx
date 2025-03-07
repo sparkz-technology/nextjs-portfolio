@@ -1,11 +1,13 @@
 import { Icons } from "@/components/icons";
-import { HomeIcon, LayoutDashboardIcon, LibraryBig } from "lucide-react";
+import { HomeIcon, LayoutDashboardIcon, LibraryBig, Notebook } from "lucide-react";
 
 export const DATA = {
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "/guestbook", icon: LibraryBig, label: "Book" },
+    { href: "/blog", icon: Notebook, label: "Blog" },
     { href: "/dashboard", icon: LayoutDashboardIcon, label: "Dashboard", superAdminOnly: true },
+
   ],
   contact: {
     email: "sutharsansparkz@gmail.com",

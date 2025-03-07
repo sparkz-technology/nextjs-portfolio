@@ -11,6 +11,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   Mail,
+  Notebook,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -80,7 +81,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/dashboard/education",
         icon: GraduationCap,
       },
-    
+      {
+        title: "Blog",
+        url: "/dashboard/blog",
+        icon: Notebook,
+      },
     ],
   };
   return (
