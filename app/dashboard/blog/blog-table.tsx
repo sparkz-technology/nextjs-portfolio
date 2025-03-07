@@ -76,7 +76,7 @@ const BlogTable: React.FC<BlogTableProps> = (props) => {
               id: "createdAt",
               header: () => <span className="font-semibold text-sm uppercase">Created At</span>,
               cell: ({ row }) => (
-                <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${dayjs(row?.original?.createdAt)}`}</span>
+                <span className="capitalize font-medium text-gray-800 dark:text-gray-200">{`${dayjs(row?.original?.createdAt).format("DD/MM/YYYY")}`}</span>
               ),
             },
         {
