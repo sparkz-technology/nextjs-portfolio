@@ -111,3 +111,15 @@ export interface VisitData {
   mobileVisits: number;
   visitors: string[];
 }
+
+export interface IPost {
+  id: string;
+  title: string;
+  createdAt: Date;
+  published: boolean;
+  content: string
+  likes: number
+  slug: string
+  tags: string[];
+  excerpt: string
+}

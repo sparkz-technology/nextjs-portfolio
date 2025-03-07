@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IAsset, IEducation, IGuestSignature, IProject, ISkill, IWorkExperience } from "../type";
+import { IAsset, IEducation, IGuestSignature, IProject, ISkill, IWorkExperience ,IPost } from "../type";
 
 interface IDialogState<T> {
   type: string;
@@ -24,3 +24,4 @@ export const useEducationDialog = createDialogStore<IEducation>();
 export const useGuestSignatureDialog = createDialogStore<IGuestSignature>();
 export const useAssetDialog = createDialogStore<IAsset>();
 export const useProjectDialog = createDialogStore<IProject>();
+export const useBlogDialog = createDialogStore<IPost>();

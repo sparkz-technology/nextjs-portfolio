@@ -41,3 +41,11 @@ export const parseCustomDate = (dateStr: string): string => {
     const date = parse(dateStr, "dd/MM/yyyy", new Date());
     return isValid(date) ? format(date, "MMM-yy") : "Present";
 };
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date)
+}

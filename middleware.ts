@@ -38,7 +38,7 @@ import type { NextRequest } from "next/server";
 import { auth } from "./lib/auth";
 
 export const ROOT = "/";
-export const PUBLIC_ROUTES = ["/", "/guestbook"];
+export const PUBLIC_ROUTES = ["/", "/guestbook","/blog"];
 export const PRIVATE_ROUTES = [/^\/dashboard\/.*$/];
 export const DEFAULT_REDIRECT = "/";
 
