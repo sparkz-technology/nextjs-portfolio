@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { ISearchParams } from "@/lib/type";
 import { DeleteDialog } from "./blog-dialog";
-import { listBlogs, listPostAction } from "@/app/dashboard/blog/action";
+import { listBlogs } from "@/app/dashboard/blog/action";
 import BlogTable from "./blog-table";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";

@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store";
-import { IPost } from "@/lib/type";
 import dayjs from "dayjs";
 import { BlogWithLikeStatus } from "@/app/blog/action";
 
