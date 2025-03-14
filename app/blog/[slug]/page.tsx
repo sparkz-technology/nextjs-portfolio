@@ -22,7 +22,7 @@ export type BlogWithLikeStatus = Blog & {
   likes: number
 }
 
-export async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
+async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
   try {
     const session = await auth()
 
