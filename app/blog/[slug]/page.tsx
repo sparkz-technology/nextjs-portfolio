@@ -4,54 +4,92 @@ import { ChevronLeft, Calendar } from "lucide-react"
 import { BlogLikeButton } from "@/app/blog/blog-like-button"
 import { formatDate } from "@/lib/utils"
 import Markdown from "react-markdown"
+import { prisma } from "@/lib/prisma"
+import type { Blog } from "@prisma/client"
+import { auth } from "@/lib/auth"
 
-// Mock data - in a real app, this would come from a database
-const posts = [
-  {
-    id: "1",
-    slug: "building-scalable-react-applications",
-    title: "Building Scalable React Applications",
-    content:
-      "# Building Scalable React Applications\n\nReact is a powerful library for building user interfaces, but as your application grows, you need to consider scalability.\n\n## Component Structure\n\nOrganizing your components is crucial for maintainability. Here are some patterns I've found effective:\n\n- Feature-based organization\n- Atomic design principles\n- Container/Presenter pattern\n\n## State Management\n\nChoosing the right state management solution depends on your application's needs:\n\n- Context API for simpler apps\n- Redux for complex state requirements\n- Zustand for a lightweight alternative\n\n## Performance Optimization\n\nAs your app grows, performance becomes increasingly important:\n\n- Use React.memo for expensive components\n- Implement virtualization for long lists\n- Code-splitting to reduce bundle size\n\nBy following these principles, you can build React applications that scale well as your requirements grow.",
-    createdAt: "2023-10-15T10:30:00Z",
-    likes: 24,
-    author: "Sutharsan",
-  },
-  {
-    id: "2",
-    slug: "typescript-best-practices",
-    title: "TypeScript Best Practices for 2023",
-    content:
-      "# TypeScript Best Practices for 2023\n\nTypeScript continues to grow in popularity, and for good reason. Here are some best practices to follow in 2023.",
-    createdAt: "2023-09-22T14:15:00Z",
-    likes: 18,
-    author: "Sutharsan",
-  },
-]
-
-async function getBlogPost(slug: string) {
-  // In a real app, this would fetch from an API or database
-  const post = posts.find((post) => post.slug === slug)
-  if (!post) return null
-  return post
+export type BlogWithLikeStatus = Blog & {
+  isLikedByUser: boolean
+  _count?: {
+    likes: number
+  }
+  author?: {
+    id: string
+    name: string | null
+    username: string
+    avatarUrl: string | null
+  }
+  likes: number
 }
+
+export async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
+  try {
+    const session = await auth()
+
+    const blog = await prisma.blog.findFirst({
+      where: { excerpt: excerpt },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            avatarUrl: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+          },
+        },
+      },
+    })
+
+    if (!blog) {
+      return null
+    }
+
+    let isLikedByUser = false
+
+    if (session?.user?.id) {
+      const like = await prisma.blogLike.findUnique({
+        where: {
+          userId_blogId: {
+            userId: session.user.id,
+            blogId: blog.id,
+          },
+        },
+      })
+
+      isLikedByUser = !!like
+    }
+
+    return {
+      ...blog,
+      likes: blog._count?.likes || 0,
+      isLikedByUser,
+    }
+  } catch (error) {
+    console.error("Error fetching blog:", error)
+    return null
+  }
+}
+
 type Props = {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
-export default async function BlogPostPage({ params, searchParams }: Props) {
-  const postSlug = (await params).slug
 
-  const post = await getBlogPost(postSlug)
+export default async function BlogPostPage({ params }: Props) {
+  const postSlug = params.slug
+  const post = await getBlog(postSlug)
 
   if (!post) {
     notFound()
   }
 
   return (
-
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
-
       <div className="container max-w-3xl py-6 space-y-6">
         <Link href="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
           <ChevronLeft className="h-4 w-4 mr-1" />
@@ -64,7 +102,7 @@ export default async function BlogPostPage({ params, searchParams }: Props) {
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
-              <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
+              <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt.toISOString())}</time>
             </div>
 
             <BlogLikeButton postId={post.id} initialLikes={post.likes} />

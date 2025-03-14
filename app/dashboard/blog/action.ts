@@ -101,46 +101,61 @@ export async function updateBlogAction(
  * Toggle like status for a blog
  * Returns the new like status (true if liked, false if unliked)
  */
-export async function toggleBlogLike(blogId: string, userId: string): Promise<{ liked: boolean; likesCount: number }> {
-    // Check if the user has already liked this blog
-    const existingLike = await prisma.blogLike.findUnique({
+export type LikeResponseType = ResponseType & {
+    data?: {
+      liked: boolean
+      likesCount: number
+    }
+  }
+export async function toggleBlogLike(blogId: string, userId: string): Promise<LikeResponseType> {
+    try {
+      // Check if the user has already liked this blog
+      const existingLike = await prisma.blogLike.findUnique({
         where: {
-            userId_blogId: {
-                userId: userId,
-                blogId: blogId,
-            },
+          userId_blogId: {
+            userId: userId,
+            blogId: blogId,
+          },
         },
-    })
-
-    // If like exists, remove it; otherwise, create it
-    if (existingLike) {
+      })
+  
+      // If like exists, remove it; otherwise, create it
+      if (existingLike) {
         await prisma.blogLike.delete({
-            where: {
-                userId_blogId: {
-                    userId: userId,
-                    blogId: blogId,
-                },
+          where: {
+            userId_blogId: {
+              userId: userId,
+              blogId: blogId,
             },
+          },
         })
-    } else {
+      } else {
         await prisma.blogLike.create({
-            data: {
-                user: { connect: { id: userId } },
-                blog: { connect: { id: blogId } },
-            },
+          data: {
+            user: { connect: { id: userId } },
+            blog: { connect: { id: blogId } },
+          },
         })
-    }
-
-    // Get the updated likes count
-    const likesCount = await prisma.blogLike.count({
+      }
+  
+      // Get the updated likes count
+      const likesCount = await prisma.blogLike.count({
         where: { blogId: blogId },
-    })
-
-    return {
-        liked: !existingLike,
-        likesCount,
+      })
+  
+      return {
+        success: true,
+        message: existingLike ? "Blog unliked successfully" : "Blog liked successfully",
+        data: {
+          liked: !existingLike,
+          likesCount,
+        },
+      }
+    } catch (error) {
+      const errorMessage = (error as Error)?.message ?? `Error occurred while toggling blog like.`
+      return { success: false, message: errorMessage }
     }
-}
+  }
 
 /**
  * List blogs with pagination, filtering, and like status for the current user

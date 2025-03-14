@@ -255,7 +255,7 @@ model Visit {
 model Blog {
   id         String   @id @default(uuid()) @map("_id")
   title      String
-  excerpt    String
+  excerpt    String  @unique 
   content    String
   tags       String[] @default([])
   published  Boolean  @default(false)
