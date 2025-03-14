@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Blog, BlogLike, User } from "@prisma/client";
+import { Blog, User } from "@prisma/client";
 
 // Define a type for the blog input
 export type BlogInput = {

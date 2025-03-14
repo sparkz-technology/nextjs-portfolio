@@ -182,7 +182,13 @@ export async function listBlogs({
     const skip = (page - 1) * limit
 
     // Build the where clause based on filters
-    const where: any = {}
+    const where: {
+        authorId?: string
+        tags?: {
+            has: string
+        }
+        published?: boolean
+    } = {}
 
     if (authorId) {
         where.authorId = authorId
