@@ -7,6 +7,7 @@ import Markdown from "react-markdown"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
+import { useRouter } from "next/router"
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean
@@ -75,16 +76,10 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
   }
 }
 
-// Define the type to match what your project expects
-interface PageProps {
-  params: Promise<{ id: string }>
-  searchParams?: { [key: string]: string | string[] | undefined }
-}
 
-export default async function BlogPostPage({ params }: PageProps) {
-  // Resolve the Promise to get the actual params
-  const resolvedParams = await params
-  const postSlug = resolvedParams.id
+export default async function BlogPostPage() {
+  const router = useRouter()
+  const postSlug = router.query.id as string
   const post = await getBlog(postSlug)
 
   if (!post) {
