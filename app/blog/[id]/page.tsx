@@ -75,13 +75,16 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
   }
 }
 
-// Remove the custom Props type and use the standard Next.js page props pattern
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { id: string }
-}) {
-  const postSlug = params.id
+// Define the type to match what your project expects
+interface PageProps {
+  params: Promise<{ id: string }>
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export default async function BlogPostPage({ params }: PageProps) {
+  // Resolve the Promise to get the actual params
+  const resolvedParams = await params
+  const postSlug = resolvedParams.id
   const post = await getBlog(postSlug)
 
   if (!post) {
