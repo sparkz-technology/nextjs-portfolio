@@ -18,9 +18,10 @@ import { Badge } from "@/components/ui/badge";
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store";
 import { IPost } from "@/lib/type";
 import dayjs from "dayjs";
+import { BlogWithLikeStatus } from "@/app/blog/action";
 
 interface BlogTableProps {
-    data: IPost[];
+    data: (BlogWithLikeStatus & { _count?: { likes: number } })[];
     currentPage: number;
     totalCount: number;
     postPageSize: number;
@@ -28,7 +29,7 @@ interface BlogTableProps {
 
 const BlogTable: React.FC<BlogTableProps> = (props) => {
     const { openDialogWithData } = useBlogDialog();
-    const columns: ColumnDef<IPost>[] = [
+    const columns: ColumnDef<BlogWithLikeStatus>[] = [
         {
             id: "title",
             header: () => <span className="font-semibold text-sm uppercase">Title</span>,
@@ -49,8 +50,8 @@ const BlogTable: React.FC<BlogTableProps> = (props) => {
             id: "likes",
             header: () => <span className="font-semibold text-xs uppercase text-gray-600 dark:text-gray-400">Likes</span>,
             cell: ({ row }) => {
-                const hasLikes = !!row.original?.likes;
-                const likeCount = row.original?.likes || 0;
+                const hasLikes = !!row.original?._count.likes;
+                const likeCount = row.original?._count.likes || 0;
                 return (
                     <div className="flex items-center space-x-1">
                         <Heart
@@ -109,7 +110,7 @@ const BlogTable: React.FC<BlogTableProps> = (props) => {
     ];
 
     return (
-        <Table<IPost>
+        <Table<BlogWithLikeStatus>
             data={props.data}
             columns={columns}
             currentPage={props.currentPage}
