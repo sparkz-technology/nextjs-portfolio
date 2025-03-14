@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client"
 
 import { useState } from "react"
@@ -85,7 +84,7 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
                 animate={{ opacity: 1, y: 0 }}
                 className="text-red-500 text-sm"
               >
-                {nameForm.errors.name}
+                {typeof nameForm.errors.name === "string" && nameForm.errors.name}
               </motion.p>
             )}
             <DialogFooter className="flex justify-end mt-4">
@@ -113,7 +112,7 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
                 animate={{ opacity: 1, y: 0 }}
                 className="text-red-500 text-sm"
               >
-                {emailForm.errors.email}
+                {typeof emailForm.errors.email === "string" && emailForm.errors.email}
               </motion.p>
             )}
             <DialogFooter className="flex justify-between mt-4">
@@ -145,7 +144,7 @@ const StepForm = ({ currentStep, formData, setFormData, nextStep, prevStep, onSu
                 animate={{ opacity: 1, y: 0 }}
                 className="text-red-500 text-sm"
               >
-                {messageForm.errors.message}
+                {typeof messageForm.errors.message === "string" && messageForm.errors.message}
               </motion.p>
             )}
             <DialogFooter className="flex justify-between mt-4">
