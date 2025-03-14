@@ -96,6 +96,8 @@ model User {
   Authenticator   Authenticator[]
   contactId       String?
   Contact         Contact?
+   blogs          Blog[]        // One-to-Many: A user can have multiple blogs
+  likedBlogs     BlogLike[]    // Many-to-Many: User can like multiple blogs
 }
 
 model GuestSignatureLike {
@@ -249,3 +251,32 @@ model Visit {
 
   @@unique([date]) // Ensure one record per day
 }
+
+model Blog {
+  id         String   @id @default(uuid()) @map("_id")
+  title      String
+  excerpt    String
+  content    String
+  tags       String[] @default([])
+  published  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // Blog belongs to a User
+
+  likes      BlogLike[]
+}
+
+model BlogLike {
+  id       String @id @default(uuid()) @map("_id")
+  userId   String
+  blogId   String
+  user     User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blog     Blog  @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, blogId]) // Ensure a user can only like a blog once
+}
+
+
