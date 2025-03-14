@@ -76,12 +76,12 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
 }
 
 type Props = {
-  params: { slug: string }
+  params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const postSlug = params.slug
+  const postSlug = params.id
   const post = await getBlog(postSlug)
 
   if (!post) {
