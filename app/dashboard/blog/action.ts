@@ -1,9 +1,9 @@
 export const listPostAction = async ({ pageNo, pageSize }: {
     pageNo: number, pageSize: number
 }) => {
-    return { posts: [], totalCount: 0 }
+    return { posts: [pageSize,pageNo], totalCount: 0 }
 }
-export const deletePostAction = async (id: string) => { }
+export const deletePostAction = async (id: string) => {return id }
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"

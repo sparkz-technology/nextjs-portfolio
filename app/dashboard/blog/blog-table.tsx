@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { toast } from "sonner";
 import { ColumnDef } from "@tanstack/react-table";
 import { Heart, MoreHorizontal } from "lucide-react";
 
