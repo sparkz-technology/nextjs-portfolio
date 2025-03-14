@@ -8,7 +8,6 @@ import * as Yup from "yup"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import {
     Sheet,
@@ -24,20 +23,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import MDEditor from "@uiw/react-md-editor"
 import Markdown from "react-markdown"
 import { TagInput } from "@/components/ui/tag-input"
+import { createBlogAction, updateBlogAction } from "./action"
 
 // Mock data for editing
-const postData = {
-    "1": {
-        title: "Building Scalable React Applications",
-        content: "# React Scaling Tips\n\nUse atomic design, feature-based structures, and memoization.",
-        published: true,
-    },
-    "2": {
-        title: "TypeScript Best Practices for 2023",
-        content: "# TypeScript in 2023\n\nUse strict mode, type inference, and utility types.",
-        published: true,
-    },
-}
 
 type BlogFormDrawerProps = {
     children?: ReactNode
@@ -77,14 +65,6 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
     });
 
 
-    useEffect(() => {
-        if (postId && open) {
-            const post = postData[postId as keyof typeof postData]
-            if (post) {
-                setOpen(true) // Open only if post exists
-            }
-        }
-    }, [postId, open])
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -102,10 +82,15 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    onSubmit={(values, { setSubmitting, resetForm }) => {
-                        console.log("Form Data:", values)
+                    onSubmit={async (values, { setSubmitting, resetForm }) => {
+                        if (isEditing) {
+                            await updateBlogAction(values)
+                        } else {
+
+                            await createBlogAction(values)
+                        }
                         setSubmitting(false)
-                        setOpen(false) // Close after submission
+                        setOpen(false)
                         resetForm()
                     }}
                     enableReinitialize
