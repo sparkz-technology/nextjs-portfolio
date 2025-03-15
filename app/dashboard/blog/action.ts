@@ -1,3 +1,4 @@
+"use server"
 export const listPostAction = async ({ pageNo, pageSize }: {
     pageNo: number, pageSize: number
 }) => {
