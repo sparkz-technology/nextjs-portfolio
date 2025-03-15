@@ -158,7 +158,7 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                                         <TabsContent value="preview" className="mt-2">
                                             <div className="border rounded-md min-h-[200px] p-4 prose dark:prose-invert max-w-none overflow-auto">
                                                 <Field name="content">
-                                                    {({ field }: { field: { value: string } }) => (field.value ? <Markdown className="prose w-full h-[200px] overflow-auto text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+                                                    {({ field }: { field: { value: string } }) => (field.value ? <Markdown className="prose max-w-fit h-[200px] overflow-auto text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
                                                         {field.value}
                                                     </Markdown> : <p className="text-muted-foreground">Preview will appear here...</p>)}
                                                 </Field>

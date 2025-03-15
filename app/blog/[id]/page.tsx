@@ -108,7 +108,7 @@ export default async function BlogPostPage({
 
             <BlogLikeButton postId={post.id} initialLikes={post.likes} />
           </div>
-          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+          <Markdown  className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {post.content}
           </Markdown>
         </article>

@@ -1,10 +1,21 @@
 "use server"
-export const listPostAction = async ({ pageNo, pageSize }: {
-    pageNo: number, pageSize: number
-}) => {
-    return { posts: [pageSize,pageNo], totalCount: 0 }
+
+export const deletePostAction = async (id: string) => {
+    try {
+        if(!id){
+            return { success: false, message: "Id is required" };
+        }
+
+        await prisma.blog.delete({where:{id}})
+
+        return { success: true, message: "Post deleted " };
+
+    } catch (error) {
+        const errorMessage = (error as Error)?.message ?? `Error occur while creating Blog.`;
+        return { success: false, message: errorMessage };
+
+    }
 }
-export const deletePostAction = async (id: string) => {return id }
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
