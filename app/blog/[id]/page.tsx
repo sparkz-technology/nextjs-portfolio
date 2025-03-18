@@ -206,12 +206,14 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
 }
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   // Get the blog post
-  const post = await getBlog(params.id)
+  const { id } = await params
+  const post = await getBlog(id)
 
   // Return null metadata if post doesn't exist
   if (!post) {
@@ -253,12 +255,9 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   }
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { id: string }
-}) {
-  const post = await getBlog(params.id)
+export default async function BlogPostPage({ params }: Props) {
+  const { id } = await params
+  const post = await getBlog(id)
 
   if (!post) {
     notFound()
