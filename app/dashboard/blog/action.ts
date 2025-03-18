@@ -6,6 +6,7 @@ import type { Blog } from "@prisma/client"
 import { revalidatePath } from "next/cache";
 
 export const deletePostAction = async (id: string) => {
+    "use server";
     try {
         if (!id) {
             return { success: false, message: "Id is required" };
@@ -53,6 +54,7 @@ interface ResponseType {
  * Create a new blog post
  */
 export async function createBlogAction(blogData: BlogInput): Promise<ResponseType> {
+    "use server";
     const session = await retrieveAuthenticatedSession();
     if (!session?.user.id) {
         return { success: false, message: "User is not authenticated" };
@@ -86,6 +88,7 @@ export async function createBlogAction(blogData: BlogInput): Promise<ResponseTyp
 export async function updateBlogAction(
     blogData: Partial<BlogInput>,
 ): Promise<ResponseType> {
+    "use server";
     try {
         const session = await retrieveAuthenticatedSession();
         if (!session?.user.id) {
