@@ -7,7 +7,7 @@ import { formatDate } from "@/lib/utils"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from "@/components/markdown-preview"
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean
@@ -112,9 +112,7 @@ export default async function BlogPostPage({
           {/* <Markdown  className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {post.content}
           </Markdown> */}
-          <MarkdownPreview
-            source="Hello World!"
-          />
+          <MarkdownPreview source={post.content}  />
         </article>
       </div>
     </main>

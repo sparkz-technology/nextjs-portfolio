@@ -25,7 +25,9 @@ html {
     @apply bg-[#072827] text-[#2bcdb9]; /* Dark theme */
   }
 }
-
+.wmde-markdown{
+  background-color: var(--background) !important
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

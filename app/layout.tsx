@@ -117,7 +117,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(fontSans.variable)}>
+      <body className={cn(fontSans.variable)} >
         <main className={`min-h-screen bg-background font-sans antialiased `}>
           <SessionProviderClient>
             <ThemeProvider attribute="class" defaultTheme="light">
