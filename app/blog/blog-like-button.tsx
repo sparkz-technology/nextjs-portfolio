@@ -27,7 +27,7 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
   const handleLike = async () => {
     if (!isLoggedIn || loading) return
 
-    setLoading(true)
+    setLoading(true) // Start loading
 
     try {
       const success = await toggleBlogLike(postId)
@@ -50,7 +50,7 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
     } catch (error) {
       console.error("Failed to toggle like:", error)
     } finally {
-      setLoading(false)
+      setLoading(false) // Stop loading
     }
   }
 
@@ -63,7 +63,11 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
       disabled={!isLoggedIn || loading}
     >
       {loading ? (
-        <div className="h-4 w-4 animate-spin border-2 border-current border-t-transparent rounded-full" />
+        // Fixed spinner with correct border and animation
+        <div
+          className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"
+          role="status"
+        />
       ) : (
         <ThumbsUp className="h-4 w-4" />
       )}

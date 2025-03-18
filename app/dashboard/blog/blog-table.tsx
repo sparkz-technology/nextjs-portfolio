@@ -93,9 +93,7 @@ const BlogTable: React.FC<BlogTableProps> = (props) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <BlogFormDrawer post={post}>
-                                <DropdownMenuItem>Update</DropdownMenuItem>
-                            </BlogFormDrawer>
+                            <DropdownMenuItem onClick={() => openDialogWithData({ type: "post", data: post })}>Update</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(post.id)}>
                                 Copy post ID
                             </DropdownMenuItem>

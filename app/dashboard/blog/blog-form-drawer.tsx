@@ -25,6 +25,7 @@ import Markdown from "react-markdown"
 import { TagInput } from "@/components/ui/tag-input"
 import { createBlogAction, updateBlogAction } from "./action"
 import { BlogWithLikeStatus } from "@/app/blog/action"
+import { useBlogDialog } from "@/lib/zustand/use-dialog-store"
 
 // Mock data for editing
 
@@ -33,9 +34,11 @@ type BlogFormDrawerProps = {
     post?: BlogWithLikeStatus
 }
 
-export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
+export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
+    const { type, closeDialog, data } = useBlogDialog();
+
     const [open, setOpen] = useState(false) // Added open state
-    const isEditing = !!post?.authorId
+    const isEditing = !!data?.authorId
 
     const initialValues = {
         title: "",
@@ -68,7 +71,7 @@ export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
 
 
     return (
-        <Sheet open={open} onOpenChange={setOpen}>
+        <Sheet open={open || type == "post"} onOpenChange={setOpen}>
             <SheetTrigger asChild>{children}</SheetTrigger>
             <SheetContent side="bottom" className="h-[90vh] sm:max-w-full">
                 <SheetHeader>
@@ -81,7 +84,7 @@ export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
                 </SheetHeader>
 
                 <Formik
-                    initialValues={isEditing ? post : initialValues}
+                    initialValues={isEditing ? data : initialValues}
                     validationSchema={validationSchema}
                     onSubmit={async (values, { setSubmitting, resetForm }) => {
                         if (isEditing) {
@@ -91,12 +94,13 @@ export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
                             await createBlogAction(values)
                         }
                         setSubmitting(false)
+                        closeDialog()
                         setOpen(false)
                         resetForm()
                     }}
                     enableReinitialize
                 >
-                    {({ setFieldValue,isSubmitting ,values }) => (
+                    {({ setFieldValue, isSubmitting, values }) => (
                         <Form className="space-y-6 py-4">
                             <div className="grid gap-4">
                                 {/* Title Field */}
