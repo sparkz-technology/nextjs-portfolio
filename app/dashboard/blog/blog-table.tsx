@@ -21,7 +21,7 @@ import { BlogWithLikeStatus } from "@/app/blog/action";
 import { BlogFormDrawer } from "./blog-form-drawer";
 
 interface BlogTableProps {
-    data: (BlogWithLikeStatus & { _count?: { likes: number } })[];
+    data: (BlogWithLikeStatus & { isLoggedIn: boolean, _count?: { likes: number } })[];
     currentPage: number;
     totalCount: number;
     postPageSize: number;
@@ -93,8 +93,8 @@ const BlogTable: React.FC<BlogTableProps> = (props) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <BlogFormDrawer  post={post}>
-                                    Update
+                            <BlogFormDrawer post={post}>
+                                Update
                             </BlogFormDrawer>
                             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(post.id)}>
                                 Copy post ID

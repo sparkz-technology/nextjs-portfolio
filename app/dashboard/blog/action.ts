@@ -33,6 +33,7 @@ type BlogInput = {
 
 type BlogWithLikeStatus = Blog & {
     isLikedByUser: boolean
+    isLoggedIn: boolean
     _count?: {
         likes: number
     }
@@ -277,6 +278,7 @@ export async function listBlogs({
     const blogsWithLikeStatus = blogs.map((blog) => ({
         ...blog,
         isLikedByUser: !!userLikes[blog.id],
+        isLoggedIn: !!userId,
     }))
 
     return {
@@ -330,6 +332,7 @@ export async function getBlog(blogId: string, userId?: string): Promise<BlogWith
 
     return {
         ...blog,
+        isLoggedIn: !!userId,
         isLikedByUser,
     }
 }
