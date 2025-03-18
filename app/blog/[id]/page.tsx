@@ -3,10 +3,11 @@ import { notFound } from "next/navigation"
 import { ChevronLeft, Calendar } from "lucide-react"
 import { BlogLikeButton } from "@/app/blog/blog-like-button"
 import { formatDate } from "@/lib/utils"
-import Markdown from "react-markdown"
+// import Markdown from "react-markdown"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean
@@ -108,9 +109,12 @@ export default async function BlogPostPage({
 
             <BlogLikeButton postId={post.id} initialLikes={post.likes} />
           </div>
-          <Markdown  className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+          {/* <Markdown  className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {post.content}
-          </Markdown>
+          </Markdown> */}
+          <MarkdownPreview
+            source="Hello World!"
+          />
         </article>
       </div>
     </main>
