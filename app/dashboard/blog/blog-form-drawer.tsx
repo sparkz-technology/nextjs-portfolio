@@ -71,7 +71,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
 
 
     return (
-        <Sheet open={open || type == "post"} onOpenChange={setOpen}>
+        <Sheet open={open || type == "post"} onOpenChange={(isOpen) => { setOpen(isOpen); isOpen && closeDialog() }}>
             <SheetTrigger asChild>{children}</SheetTrigger>
             <SheetContent side="bottom" className="h-[90vh] sm:max-w-full">
                 <SheetHeader>
