@@ -2,9 +2,18 @@
 
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import type { Blog } from "@prisma/client"
 import { revalidatePath } from "next/cache";
-
+type Blog = {
+    id: string;
+    title: string;
+    excerpt: string;
+    content: string;
+    tags: string[];
+    published: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    authorId: string;
+}
 export const deletePostAction = async (id: string) => {
     "use server";
     try {
@@ -13,7 +22,7 @@ export const deletePostAction = async (id: string) => {
         }
 
         await prisma.blog.delete({ where: { id } })
-        await revalidatePath("/dashboard/blog","page");
+        revalidatePath("/dashboard/blog", "page");
         return { success: true, message: "Post deleted " };
 
     } catch (error) {
@@ -70,7 +79,7 @@ export async function createBlogAction(blogData: BlogInput): Promise<ResponseTyp
                 },
             },
         })
-        await revalidatePath("/dashboard/blog","page");
+        revalidatePath("/dashboard/blog", "page");
         return { success: true, message: "Blog created successfully" };
 
     } catch (error) {
@@ -117,7 +126,7 @@ export async function updateBlogAction(
                 },
             }
         })
-        await revalidatePath("/dashboard/blog","page");
+         revalidatePath("/dashboard/blog", "page");
 
         return { success: true, message: "Blog updated successfully" }
     } catch (error) {
