@@ -7,10 +7,7 @@ import { formatDate } from "@/lib/utils"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
-import dynamic from "next/dynamic"
-const MarkdownPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
-  ssr: false,
-});
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean
