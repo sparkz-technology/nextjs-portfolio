@@ -26,6 +26,7 @@ import { TagInput } from "@/components/ui/tag-input"
 import { createBlogAction, updateBlogAction } from "./action"
 import { BlogWithLikeStatus } from "@/app/blog/action"
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store"
+import { toast } from "sonner"
 
 // Mock data for editing
 
@@ -100,16 +101,23 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                     initialValues={isEditing ? data : initialValues}
                     validationSchema={validationSchema}
                     onSubmit={async (values, { setSubmitting, resetForm }) => {
-                        if (isEditing) {
-                            await updateBlogAction(values)
-                        } else {
-
-                            await createBlogAction(values)
+                        try {
+                            if (isEditing) {
+                                await updateBlogAction(values)
+                                toast.success("Post updated successfully")
+                            } else {
+                                await createBlogAction(values)
+                                toast.success("Post created successfully")
+                            }
                         }
-                        setSubmitting(false)
-                        closeDialog()
-                        setOpen(false)
-                        resetForm()
+                        catch {
+                            toast.error("Something went wrong")
+                        } finally {
+                            setSubmitting(false)
+                            closeDialog()
+                            setOpen(false)
+                            resetForm()
+                        }
                     }}
                     enableReinitialize
                 >
