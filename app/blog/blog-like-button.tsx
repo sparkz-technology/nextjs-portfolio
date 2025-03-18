@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { ThumbsUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { toggleBlogLike } from "./action"
 
 type BlogLikeButtonProps = {
@@ -25,23 +25,35 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
   }, [postId])
 
   const handleLike = async () => {
+    console.log("handleLike",isLoggedIn,loading)
     if (!isLoggedIn || loading) return
 
     setLoading(true) // Start loading
 
     try {
-      const success = await toggleBlogLike(postId)
-      if (success) {
-        const newLikes = hasLiked ? likes - 1 : likes + 1
-        setLikes(newLikes)
-        setHasLiked(!hasLiked)
+      // Wait for the server response before updating UI
+      const response = await toggleBlogLike(postId)
 
-        // Update localStorage to toggle like status
+      // Only update UI if the operation was successful
+      if (response.success) {
+        // If the server returns the new like count, use it directly
+        if (response.data?.likesCount !== undefined) {
+          setLikes(response.data?.likesCount)
+        } else {
+          // Otherwise calculate based on current state
+          setLikes(hasLiked ? likes - 1 : likes + 1)
+        }
+
+        // Update liked status
+        const newHasLiked = response.data?.liked !== undefined ? response.data?.liked : !hasLiked
+        setHasLiked(newHasLiked)
+
+        // Update localStorage to match server state
         let likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]")
 
-        if (hasLiked) {
+        if (!newHasLiked) {
           likedPosts = likedPosts.filter((id: string) => id !== postId)
-        } else {
+        } else if (!likedPosts.includes(postId)) {
           likedPosts.push(postId)
         }
 
@@ -49,44 +61,44 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
       }
     } catch (error) {
       console.error("Failed to toggle like:", error)
+      // Don't update UI on error
     } finally {
       setLoading(false) // Stop loading
     }
   }
 
-  const LikeButtonContent = () => (
-    <Button
-      variant="ghost"
-      size="sm"
-      className={`gap-1 ${hasLiked ? "text-primary" : ""}`}
-      onClick={handleLike}
-      disabled={!isLoggedIn || loading}
-    >
-      {loading ? (
-        // Fixed spinner with correct border and animation
-        <div
-          className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"
-          role="status"
-        />
-      ) : (
-        <ThumbsUp className="h-4 w-4" />
-      )}
-      <span>{likes}</span>
-    </Button>
-  )
-
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div>
-          <LikeButtonContent />
-        </div>
-      </TooltipTrigger>
-      {!isLoggedIn && (
-        <TooltipContent>
-          <p>Please log in to like this post</p>
-        </TooltipContent>
-      )}
-    </Tooltip>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`gap-1 ${hasLiked ? "text-primary" : ""}`}
+              onClick={handleLike}
+              disabled={!isLoggedIn || loading}
+            >
+              {loading ? (
+                <div
+                  className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"
+                  role="status"
+                  aria-label="Loading"
+                />
+              ) : (
+                <ThumbsUp className="h-4 w-4" />
+              )}
+              <span>{likes}</span>
+            </Button>
+          </div>
+        </TooltipTrigger>
+        {!isLoggedIn && (
+          <TooltipContent>
+            <p>Please log in to like this post</p>
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
   )
 }
+
