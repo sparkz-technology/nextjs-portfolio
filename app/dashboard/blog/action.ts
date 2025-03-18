@@ -1,4 +1,8 @@
 "use server"
+import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
+import type { Blog } from "@prisma/client"
+import { revalidatePath } from "next/cache";
 
 export const deletePostAction = async (id: string) => {
     try {
@@ -17,10 +21,7 @@ export const deletePostAction = async (id: string) => {
 
     }
 }
-import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
-import type { Blog } from "@prisma/client"
-import { revalidatePath } from "next/cache";
+
 
 type BlogInput = {
     id?: string
@@ -94,7 +95,6 @@ export async function updateBlogAction(
         const blog = await prisma.blog.findFirst({
             where: {
                 id: blogData.id,
-                authorId: session.user.id,
             },
         })
 
@@ -104,7 +104,16 @@ export async function updateBlogAction(
 
         await prisma.blog.update({
             where: { id: blogData.id },
-            data: blogData,
+            data: {
+                content: blogData.content || "",
+                excerpt: blogData.excerpt || "",
+                title: blogData.title || "",
+                tags: blogData.tags || [],
+                published: blogData.published || false,
+                author: {
+                    connect: { id: session.user.id },
+                },
+            }
         })
         await revalidatePath("dashboard/blog");
 
