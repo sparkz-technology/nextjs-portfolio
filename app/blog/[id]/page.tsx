@@ -21,6 +21,7 @@ export type BlogWithLikeStatus = Blog & {
     avatarUrl: string | null
   }
   likes: number
+  isLoggedIn: boolean
 }
 
 async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
@@ -51,8 +52,10 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
     }
 
     let isLikedByUser = false
+    let isLoggedIn = false
 
     if (session?.user?.id) {
+      isLoggedIn = true
       const like = await prisma.blogLike.findUnique({
         where: {
           userId_blogId: {
@@ -69,6 +72,7 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
       ...blog,
       likes: blog._count?.likes || 0,
       isLikedByUser,
+      isLoggedIn,
     }
   } catch (error) {
     console.error("Error fetching blog:", error)
@@ -107,12 +111,12 @@ export default async function BlogPostPage({
               <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt.toISOString())}</time>
             </div>
 
-            <BlogLikeButton postId={post.id} initialLikes={post.likes} />
+            <BlogLikeButton isLoggedIn={post.isLoggedIn} postId={post.id} initialLikes={post.likes} isLikedByUser={post.isLikedByUser} />
           </div>
           {/* <Markdown  className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {post.content}
           </Markdown> */}
-          <MarkdownPreview source={post.content}  />
+          <MarkdownPreview source={post.content} />
         </article>
       </div>
     </main>

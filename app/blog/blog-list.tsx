@@ -76,8 +76,10 @@ export default async function BlogList({
                 Read more <ArrowRight className="h-3 w-3 ml-1" />
               </Link>
               <BlogLikeButton
+                isLoggedIn={post.isLoggedIn}
                 postId={post.id}
                 initialLikes={post._count?.likes ?? 0}
+                isLikedByUser={post.isLikedByUser}
               />
             </CardFooter>
           </Card>

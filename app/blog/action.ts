@@ -18,6 +18,7 @@ export type BlogWithLikeStatus = Blog & {
     likes: number;
   };
   author?: Pick<User, "id" | "name" | "username" | "avatarUrl">;
+  isLoggedIn: boolean;
 };
 
 // Standardized response type
@@ -45,9 +46,13 @@ export type LikeResponseType = ResponseType<{
 
 export async function toggleBlogLike(
   blogId: string,
-  userId: string
 ): Promise<LikeResponseType> {
   try {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) {
+      return { success: false, message: "User is not authenticated" };
+    }
     // Check if the user has already liked this blog
     const existingLike = await prisma.blogLike.findUnique({
       where: {
@@ -158,23 +163,24 @@ export async function listBlogs({
     // Fetch liked status for the current user
     const userLikes: Record<string, boolean> = userId
       ? (
-          await prisma.blogLike.findMany({
-            where: {
-              userId,
-              blogId: { in: blogs.map((blog) => blog.id) },
-            },
-            select: { blogId: true },
-          })
-        ).reduce((acc, like) => {
-          acc[like.blogId] = true;
-          return acc;
-        }, {} as Record<string, boolean>)
+        await prisma.blogLike.findMany({
+          where: {
+            userId,
+            blogId: { in: blogs.map((blog) => blog.id) },
+          },
+          select: { blogId: true },
+        })
+      ).reduce((acc, like) => {
+        acc[like.blogId] = true;
+        return acc;
+      }, {} as Record<string, boolean>)
       : {};
 
     // Attach like status to each blog
     const blogsWithLikeStatus: BlogWithLikeStatus[] = blogs.map((blog) => ({
       ...blog,
       isLikedByUser: !!userLikes[blog.id],
+      isLoggedIn: !!userId,
     }));
 
     return {

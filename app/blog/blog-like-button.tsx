@@ -3,55 +3,86 @@
 import { useState, useEffect } from "react"
 import { ThumbsUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { toggleBlogLike } from "./action"
 
 type BlogLikeButtonProps = {
   postId: string
   initialLikes: number
+  isLikedByUser: boolean
+  isLoggedIn: boolean
 }
 
-export function BlogLikeButton({ postId, initialLikes }: BlogLikeButtonProps) {
+export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn }: BlogLikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes)
-  const [hasLiked, setHasLiked] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [hasLiked, setHasLiked] = useState(isLikedByUser)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    // Check if user has already liked this post
+    // Initialize like state from localStorage for persistence
     const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]")
     setHasLiked(likedPosts.includes(postId))
-
-    // Check if user is admin (in a real app, this would come from auth)
-    // For demo purposes, we'll just set a flag in localStorage
-    setIsAdmin(localStorage.getItem("isAdmin") === "true")
   }, [postId])
 
-  const handleLike = () => {
-    if (isAdmin || hasLiked) return
+  const handleLike = async () => {
+    if (!isLoggedIn || loading) return
 
-    // Update likes count
-    const newLikes = likes + 1
-    setLikes(newLikes)
-    setHasLiked(true)
+    setLoading(true)
 
-    // Store liked status in localStorage
-    const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]")
-    localStorage.setItem("likedPosts", JSON.stringify([...likedPosts, postId]))
+    try {
+      const success = await toggleBlogLike(postId)
+      if (success) {
+        const newLikes = hasLiked ? likes - 1 : likes + 1
+        setLikes(newLikes)
+        setHasLiked(!hasLiked)
 
-    // In a real app, you would send this to an API
-    // fetch(`/api/blog/${postId}/like`, { method: 'POST' })
+        // Update localStorage to toggle like status
+        let likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]")
+
+        if (hasLiked) {
+          likedPosts = likedPosts.filter((id: string) => id !== postId)
+        } else {
+          likedPosts.push(postId)
+        }
+
+        localStorage.setItem("likedPosts", JSON.stringify(likedPosts))
+      }
+    } catch (error) {
+      console.error("Failed to toggle like:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  return (
+  const LikeButtonContent = () => (
     <Button
       variant="ghost"
       size="sm"
-      className={`gap-1 ${hasLiked ? "text-primary" : ""} ${isAdmin ? "opacity-50 cursor-not-allowed" : ""}`}
+      className={`gap-1 ${hasLiked ? "text-primary" : ""}`}
       onClick={handleLike}
-      disabled={hasLiked || isAdmin}
-      title={isAdmin ? "Admins cannot like posts" : hasLiked ? "You already liked this post" : "Like this post"}
+      disabled={!isLoggedIn || loading}
     >
-      <ThumbsUp className="h-4 w-4" />
+      {loading ? (
+        <div className="h-4 w-4 animate-spin border-2 border-current border-t-transparent rounded-full" />
+      ) : (
+        <ThumbsUp className="h-4 w-4" />
+      )}
       <span>{likes}</span>
     </Button>
   )
-}
 
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <LikeButtonContent />
+        </div>
+      </TooltipTrigger>
+      {!isLoggedIn && (
+        <TooltipContent>
+          <p>Please log in to like this post</p>
+        </TooltipContent>
+      )}
+    </Tooltip>
+  )
+}

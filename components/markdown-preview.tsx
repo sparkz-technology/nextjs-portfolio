@@ -1,14 +1,9 @@
 "use client";
 import React from "react";
-import MarkdownPreview from "@uiw/react-markdown-preview";
-import { useTheme } from "next-themes"; // Assuming you're using next-themes
+import MarkdownPreview, { MarkdownPreviewProps } from "@uiw/react-markdown-preview";
+import { useTheme } from "next-themes";
 
-// Create and export the component
-interface CustomMarkdownPreviewProps {
-  [key: string]: any;
-}
-
-const CustomMarkdownPreview: React.FC<CustomMarkdownPreviewProps> = (props) => {
+const CustomMarkdownPreview: React.FC<MarkdownPreviewProps> = (props) => {
   const { theme } = useTheme();
 
   return React.createElement(MarkdownPreview, {
