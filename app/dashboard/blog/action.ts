@@ -14,7 +14,7 @@ type Blog = {
     updatedAt: Date;
     authorId: string;
 }
-export const deletePostAction = async (id: string) => {
+export async function deletePostAction(id: string) {
     "use server";
     try {
         if (!id) {
@@ -126,7 +126,7 @@ export async function updateBlogAction(
                 },
             }
         })
-         revalidatePath("dashboard/blog", "page");
+        revalidatePath("dashboard/blog", "page");
 
         return { success: true, message: "Blog updated successfully" }
     } catch (error) {
