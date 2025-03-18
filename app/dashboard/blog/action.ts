@@ -11,8 +11,7 @@ export const deletePostAction = async (id: string) => {
         }
 
         await prisma.blog.delete({ where: { id } })
-        await revalidatePath("dashboard/blog");
-
+        await revalidatePath("/dashboard/blog","page");
         return { success: true, message: "Post deleted " };
 
     } catch (error) {
@@ -68,8 +67,7 @@ export async function createBlogAction(blogData: BlogInput): Promise<ResponseTyp
                 },
             },
         })
-        await revalidatePath("dashboard/blog");
-
+        await revalidatePath("/dashboard/blog","page");
         return { success: true, message: "Blog created successfully" };
 
     } catch (error) {
@@ -115,7 +113,7 @@ export async function updateBlogAction(
                 },
             }
         })
-        await revalidatePath("dashboard/blog");
+        await revalidatePath("/dashboard/blog","page");
 
         return { success: true, message: "Blog updated successfully" }
     } catch (error) {
