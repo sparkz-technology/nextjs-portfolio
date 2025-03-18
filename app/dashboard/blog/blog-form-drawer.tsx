@@ -182,7 +182,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                             {/* Form Buttons */}
                             <SheetFooter>
                                 <SheetClose asChild>
-                                    <Button variant="outline" type="button" onClick={() => setOpen(false)}>Cancel</Button>
+                                    <Button variant="outline" type="button" onClick={() => { setOpen(!open); closeDialog() }}>Cancel</Button>
                                 </SheetClose>
                                 <Button type="submit"> {isSubmitting ? "Saving..." : "Save Post"}</Button>
                             </SheetFooter>
