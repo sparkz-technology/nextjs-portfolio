@@ -96,7 +96,7 @@ export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
                     }}
                     enableReinitialize
                 >
-                    {({ setFieldValue,isSubmitting }) => (
+                    {({ setFieldValue,isSubmitting ,values }) => (
                         <Form className="space-y-6 py-4">
                             <div className="grid gap-4">
                                 {/* Title Field */}
@@ -170,7 +170,7 @@ export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
 
                                 {/* Published Switch */}
                                 <div className="flex items-center space-x-2">
-                                    <Switch id="published" name="published" onCheckedChange={(value) => setFieldValue("published", value)} />
+                                    <Switch id="published" name="published" checked={values.published} onCheckedChange={(value) => setFieldValue("published", value)} />
                                     <Label htmlFor="published">Publish immediately</Label>
                                 </div>
                             </div>
