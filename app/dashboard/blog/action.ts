@@ -2,11 +2,12 @@
 
 export const deletePostAction = async (id: string) => {
     try {
-        if(!id){
+        if (!id) {
             return { success: false, message: "Id is required" };
         }
 
-        await prisma.blog.delete({where:{id}})
+        await prisma.blog.delete({ where: { id } })
+        revalidatePath("dashboard/blog");
 
         return { success: true, message: "Post deleted " };
 
@@ -19,9 +20,10 @@ export const deletePostAction = async (id: string) => {
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
+import { revalidatePath } from "next/cache";
 
 type BlogInput = {
-    id?:string
+    id?: string
     title: string
     excerpt: string
     content: string
@@ -64,6 +66,8 @@ export async function createBlogAction(blogData: BlogInput): Promise<ResponseTyp
                 },
             },
         })
+        revalidatePath("dashboard/blog");
+
         return { success: true, message: "Blog created successfully" };
 
     } catch (error) {
@@ -101,6 +105,7 @@ export async function updateBlogAction(
             where: { id: blogData.id },
             data: blogData,
         })
+        revalidatePath("dashboard/blog");
 
         return { success: true, message: "Blog updated successfully" }
     } catch (error) {
@@ -115,59 +120,59 @@ export async function updateBlogAction(
  */
 export type LikeResponseType = ResponseType & {
     data?: {
-      liked: boolean
-      likesCount: number
+        liked: boolean
+        likesCount: number
     }
-  }
+}
 export async function toggleBlogLike(blogId: string, userId: string): Promise<LikeResponseType> {
     try {
-      // Check if the user has already liked this blog
-      const existingLike = await prisma.blogLike.findUnique({
-        where: {
-          userId_blogId: {
-            userId: userId,
-            blogId: blogId,
-          },
-        },
-      })
-  
-      // If like exists, remove it; otherwise, create it
-      if (existingLike) {
-        await prisma.blogLike.delete({
-          where: {
-            userId_blogId: {
-              userId: userId,
-              blogId: blogId,
+        // Check if the user has already liked this blog
+        const existingLike = await prisma.blogLike.findUnique({
+            where: {
+                userId_blogId: {
+                    userId: userId,
+                    blogId: blogId,
+                },
             },
-          },
         })
-      } else {
-        await prisma.blogLike.create({
-          data: {
-            user: { connect: { id: userId } },
-            blog: { connect: { id: blogId } },
-          },
+
+        // If like exists, remove it; otherwise, create it
+        if (existingLike) {
+            await prisma.blogLike.delete({
+                where: {
+                    userId_blogId: {
+                        userId: userId,
+                        blogId: blogId,
+                    },
+                },
+            })
+        } else {
+            await prisma.blogLike.create({
+                data: {
+                    user: { connect: { id: userId } },
+                    blog: { connect: { id: blogId } },
+                },
+            })
+        }
+
+        // Get the updated likes count
+        const likesCount = await prisma.blogLike.count({
+            where: { blogId: blogId },
         })
-      }
-  
-      // Get the updated likes count
-      const likesCount = await prisma.blogLike.count({
-        where: { blogId: blogId },
-      })
-  
-      return {
-        success: true,
-        message: existingLike ? "Blog unliked successfully" : "Blog liked successfully",
-        data: {
-          liked: !existingLike,
-          likesCount,
-        },
-      }
+
+        return {
+            success: true,
+            message: existingLike ? "Blog unliked successfully" : "Blog liked successfully",
+            data: {
+                liked: !existingLike,
+                likesCount,
+            },
+        }
     } catch (error) {
-      const errorMessage = (error as Error)?.message ?? `Error occurred while toggling blog like.`
-      return { success: false, message: errorMessage }
+        const errorMessage = (error as Error)?.message ?? `Error occurred while toggling blog like.`
+        return { success: false, message: errorMessage }
     }
-  }
+}
 
 /**
  * List blogs with pagination, filtering, and like status for the current user

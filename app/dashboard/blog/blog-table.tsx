@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store";
 import dayjs from "dayjs";
 import { BlogWithLikeStatus } from "@/app/blog/action";
+import { BlogFormDrawer } from "./blog-form-drawer";
 
 interface BlogTableProps {
     data: (BlogWithLikeStatus & { _count?: { likes: number } })[];
@@ -92,6 +93,11 @@ const BlogTable: React.FC<BlogTableProps> = (props) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <BlogFormDrawer  post={post}>
+                                <DropdownMenuLabel>
+                                    Update
+                                </DropdownMenuLabel>
+                            </BlogFormDrawer>
                             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(post.id)}>
                                 Copy post ID
                             </DropdownMenuItem>

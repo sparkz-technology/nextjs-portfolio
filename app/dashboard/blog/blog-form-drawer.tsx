@@ -24,17 +24,18 @@ import MDEditor from "@uiw/react-md-editor"
 import Markdown from "react-markdown"
 import { TagInput } from "@/components/ui/tag-input"
 import { createBlogAction, updateBlogAction } from "./action"
+import { BlogWithLikeStatus } from "@/app/blog/action"
 
 // Mock data for editing
 
 type BlogFormDrawerProps = {
     children?: ReactNode
-    postId?: string
+    post?: BlogWithLikeStatus
 }
 
-export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
+export function BlogFormDrawer({ children, post }: BlogFormDrawerProps) {
     const [open, setOpen] = useState(false) // Added open state
-    const isEditing = !!postId
+    const isEditing = !!post?.authorId
 
     const initialValues = {
         title: "",
@@ -80,7 +81,7 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                 </SheetHeader>
 
                 <Formik
-                    initialValues={initialValues}
+                    initialValues={isEditing ? post : initialValues}
                     validationSchema={validationSchema}
                     onSubmit={async (values, { setSubmitting, resetForm }) => {
                         if (isEditing) {
@@ -95,7 +96,7 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                     }}
                     enableReinitialize
                 >
-                    {({ setFieldValue }) => (
+                    {({ setFieldValue,isSubmitting }) => (
                         <Form className="space-y-6 py-4">
                             <div className="grid gap-4">
                                 {/* Title Field */}
@@ -179,7 +180,7 @@ export function BlogFormDrawer({ children, postId }: BlogFormDrawerProps) {
                                 <SheetClose asChild>
                                     <Button variant="outline" type="button" onClick={() => setOpen(false)}>Cancel</Button>
                                 </SheetClose>
-                                <Button type="submit"> {isEditing ? "Save Changes" : "Create Post"} </Button>
+                                <Button type="submit"> {isSubmitting ? "Saving..." : "Save Post"}</Button>
                             </SheetFooter>
                         </Form>
                     )}
