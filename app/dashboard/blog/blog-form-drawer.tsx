@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { Formik, Form, Field, ErrorMessage, FieldProps } from "formik"
 import * as Yup from "yup"
 
@@ -40,6 +40,18 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
     const [open, setOpen] = useState(false) // Added open state
     const isEditing = !!data?.authorId
 
+    useEffect(() => {
+        if (type === "post") {
+            setOpen(true)
+        }
+    }, [type])
+
+    useEffect(() => {
+        if (!open) {
+            closeDialog()
+        }
+    }, [open])
+
     const initialValues = {
         title: "",
         excerpt: "",
@@ -71,12 +83,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
 
 
     return (
-        <Sheet open={open || type == "post"} onOpenChange={(isOpen) => {
-            setOpen(isOpen)
-            if (isOpen) {
-                closeDialog()
-            }
-        }}
+        <Sheet open={open} onOpenChange={setOpen}
         >
             {children && <SheetTrigger asChild>{children}</SheetTrigger>}
             <SheetContent side="bottom" className="h-[90vh] sm:max-w-full">
@@ -188,7 +195,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                             {/* Form Buttons */}
                             <SheetFooter>
                                 <SheetClose asChild>
-                                    <Button variant="outline" type="button" onClick={() => { setOpen(!open); closeDialog() }}>Cancel</Button>
+                                    <Button variant="outline" type="button" onClick={() => { setOpen(!open) }}>Cancel</Button>
                                 </SheetClose>
                                 <Button type="submit"> {isSubmitting ? "Saving..." : "Save Post"}</Button>
                             </SheetFooter>
