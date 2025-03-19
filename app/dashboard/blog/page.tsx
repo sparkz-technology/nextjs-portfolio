@@ -11,6 +11,9 @@ import { BlogFormDrawer } from "./blog-form-drawer";
 interface GuestbookPageProps {
   searchParams: Promise<ISearchParams>;
 }
+
+export const dynamic = "force-dynamic";
+
 export default async function BlogPage({ searchParams }: GuestbookPageProps) {
   const { page, pageSize } = (await searchParams) || {};
 
