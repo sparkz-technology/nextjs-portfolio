@@ -46,15 +46,15 @@ const nextConfig: NextConfig = {
         },
       ],
     },
-    {
-      source: "/static/(.*)",
-      headers: [
-        {
-          key: "Cache-Control",
-          value: "public, max-age=31536000, immutable",
-        },
-      ],
-    },
+    // {
+    //   source: "/static/(.*)",
+    //   headers: [
+    //     {
+    //       key: "Cache-Control",
+    //       value: "public, max-age=31536000, immutable",
+    //     },
+    //   ],
+    // },
   ],
   generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString();
