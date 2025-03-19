@@ -22,7 +22,7 @@
 //         }
 
 //         await prisma.blog.delete({ where: { id } })
-//             revalidatePath("/dashboard/blog");
+//             revalidatePath("dashboard/blog");
 //         return { success: true, message: "Post deleted " };
 
 //     } catch (error) {
@@ -78,7 +78,7 @@
 //                 },
 //             },
 //         })
-//             revalidatePath("/dashboard/blog");
+//             revalidatePath("dashboard/blog");
 //         return { success: true, message: "Blog created successfully" };
 
 //     } catch (error) {
@@ -125,7 +125,7 @@
 //                 },
 //             }
 //         })
-//             revalidatePath("/dashboard/blog");
+//             revalidatePath("dashboard/blog");
 
 //         return { success: true, message: "Blog updated successfully" }
 //     } catch (error) {
@@ -380,7 +380,7 @@ export async function deletePostAction(id: string) {
     }
 
     await prisma.blog.delete({ where: { id } });
-    revalidatePath("/dashboard/blog");
+    revalidatePath("dashboard/blog");
     return { success: true, message: "Post deleted " };
   } catch (error) {
     const errorMessage =
@@ -437,7 +437,7 @@ export async function createBlogAction(
         },
       },
     });
-    revalidatePath("/dashboard/blog");
+    revalidatePath("dashboard/blog");
     return { success: true, message: "Blog created successfully" };
   } catch (error) {
     const errorMessage =
@@ -485,7 +485,7 @@ export async function updateBlogAction(
         },
       },
     });
-    revalidatePath("/dashboard/blog");
+    revalidatePath("dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
   } catch (error) {
