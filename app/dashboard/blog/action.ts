@@ -490,7 +490,8 @@ export async function updateBlogAction(
     }
     console.log("Revalidating path: /dashboard/blog");
     revalidatePath("/dashboard/blog");
-
+    revalidatePath("dashboard/blog");
+    revalidatePath("/blog");
     console.log("Revalidated path: /dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
