@@ -32,7 +32,6 @@
 //     }
 // }
 
-
 // type BlogInput = {
 //     id?: string
 //     title: string
@@ -357,72 +356,75 @@
 //     }
 // }
 
-"use server"
+"use server";
 
-import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
-import { revalidatePath } from "next/cache"
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 type Blog = {
-  id: string
-  title: string
-  excerpt: string
-  content: string
-  tags: string[]
-  published: boolean
-  createdAt: Date
-  updatedAt: Date
-  authorId: string
-}
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  tags: string[];
+  published: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: string;
+};
 export async function deletePostAction(id: string) {
-  "use server"
+  "use server";
   try {
     if (!id) {
-      return { success: false, message: "Id is required" }
+      return { success: false, message: "Id is required" };
     }
 
-    await prisma.blog.delete({ where: { id } })
-    revalidatePath("/dashboard/blog")
-    return { success: true, message: "Post deleted " }
+    await prisma.blog.delete({ where: { id } });
+    revalidatePath("/dashboard/blog");
+    return { success: true, message: "Post deleted " };
   } catch (error) {
-    const errorMessage = (error as Error)?.message ?? `Error occur while creating Blog.`
-    return { success: false, message: errorMessage }
+    const errorMessage =
+      (error as Error)?.message ?? `Error occur while creating Blog.`;
+    return { success: false, message: errorMessage };
   }
 }
 
 type BlogInput = {
-  id?: string
-  title: string
-  excerpt: string
-  content: string
-  tags?: string[]
-  published?: boolean
-}
+  id?: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  tags?: string[];
+  published?: boolean;
+};
 
 type BlogWithLikeStatus = Blog & {
-  isLikedByUser: boolean
-  isLoggedIn: boolean
+  isLikedByUser: boolean;
+  isLoggedIn: boolean;
   _count?: {
-    likes: number
-  }
-}
+    likes: number;
+  };
+};
 async function retrieveAuthenticatedSession() {
-  const session = await auth()
-  return session
+  const session = await auth();
+  return session;
 }
 
 interface ResponseType {
-  success: boolean
-  message: string
+  success: boolean;
+  message: string;
 }
 
 /**
  * Create a new blog post
  */
-export async function createBlogAction(blogData: BlogInput): Promise<ResponseType> {
-  "use server"
-  const session = await retrieveAuthenticatedSession()
+export async function createBlogAction(
+  blogData: BlogInput
+): Promise<ResponseType> {
+  "use server";
+  const session = await retrieveAuthenticatedSession();
   if (!session?.user.id) {
-    return { success: false, message: "User is not authenticated" }
+    return { success: false, message: "User is not authenticated" };
   }
   try {
     await prisma.blog.create({
@@ -434,12 +436,13 @@ export async function createBlogAction(blogData: BlogInput): Promise<ResponseTyp
           connect: { id: session.user.id },
         },
       },
-    })
-    revalidatePath("/dashboard/blog")
-    return { success: true, message: "Blog created successfully" }
+    });
+    revalidatePath("/dashboard/blog");
+    return { success: true, message: "Blog created successfully" };
   } catch (error) {
-    const errorMessage = (error as Error)?.message ?? `Error occur while creating Blog.`
-    return { success: false, message: errorMessage }
+    const errorMessage =
+      (error as Error)?.message ?? `Error occur while creating Blog.`;
+    return { success: false, message: errorMessage };
   }
 }
 
@@ -447,21 +450,26 @@ export async function createBlogAction(blogData: BlogInput): Promise<ResponseTyp
  * Update an existing blog post
  * Only the author can update their blog
  */
-export async function updateBlogAction(blogData: Partial<BlogInput>): Promise<ResponseType> {
-  "use server"
+export async function updateBlogAction(
+  blogData: Partial<BlogInput>
+): Promise<ResponseType> {
+  "use server";
   try {
-    const session = await retrieveAuthenticatedSession()
+    const session = await retrieveAuthenticatedSession();
     if (!session?.user.id) {
-      return { success: false, message: "User is not authenticated" }
+      return { success: false, message: "User is not authenticated" };
     }
     const blog = await prisma.blog.findFirst({
       where: {
         id: blogData.id,
       },
-    })
+    });
 
     if (!blog) {
-      return { success: false, message: "Blog not found or you are not the author" }
+      return {
+        success: false,
+        message: "Blog not found or you are not the author",
+      };
     }
 
     await prisma.blog.update({
@@ -476,13 +484,14 @@ export async function updateBlogAction(blogData: Partial<BlogInput>): Promise<Re
           connect: { id: session.user.id },
         },
       },
-    })
-    revalidatePath("/dashboard/blog")
+    });
+    revalidatePath("/dashboard/blog");
 
-    return { success: true, message: "Blog updated successfully" }
+    return { success: true, message: "Blog updated successfully" };
   } catch (error) {
-    const errorMessage = (error as Error)?.message ?? `Error occurred while updating Blog.`
-    return { success: false, message: errorMessage }
+    const errorMessage =
+      (error as Error)?.message ?? `Error occurred while updating Blog.`;
+    return { success: false, message: errorMessage };
   }
 }
 
@@ -492,11 +501,14 @@ export async function updateBlogAction(blogData: Partial<BlogInput>): Promise<Re
  */
 export type LikeResponseType = ResponseType & {
   data?: {
-    liked: boolean
-    likesCount: number
-  }
-}
-export async function toggleBlogLike(blogId: string, userId: string): Promise<LikeResponseType> {
+    liked: boolean;
+    likesCount: number;
+  };
+};
+export async function toggleBlogLike(
+  blogId: string,
+  userId: string
+): Promise<LikeResponseType> {
   try {
     // Check if the user has already liked this blog
     const existingLike = await prisma.blogLike.findUnique({
@@ -506,7 +518,7 @@ export async function toggleBlogLike(blogId: string, userId: string): Promise<Li
           blogId: blogId,
         },
       },
-    })
+    });
 
     // If like exists, remove it; otherwise, create it
     if (existingLike) {
@@ -517,32 +529,35 @@ export async function toggleBlogLike(blogId: string, userId: string): Promise<Li
             blogId: blogId,
           },
         },
-      })
+      });
     } else {
       await prisma.blogLike.create({
         data: {
           user: { connect: { id: userId } },
           blog: { connect: { id: blogId } },
         },
-      })
+      });
     }
 
     // Get the updated likes count
     const likesCount = await prisma.blogLike.count({
       where: { blogId: blogId },
-    })
+    });
 
     return {
       success: true,
-      message: existingLike ? "Blog unliked successfully" : "Blog liked successfully",
+      message: existingLike
+        ? "Blog unliked successfully"
+        : "Blog liked successfully",
       data: {
         liked: !existingLike,
         likesCount,
       },
-    }
+    };
   } catch (error) {
-    const errorMessage = (error as Error)?.message ?? `Error occurred while toggling blog like.`
-    return { success: false, message: errorMessage }
+    const errorMessage =
+      (error as Error)?.message ?? `Error occurred while toggling blog like.`;
+    return { success: false, message: errorMessage };
   }
 }
 
@@ -557,45 +572,45 @@ export async function listBlogs({
   tag,
   publishedOnly = true,
 }: {
-  userId?: string
-  page?: number
-  limit?: number
-  authorId?: string
-  tag?: string
-  publishedOnly?: boolean
+  userId?: string;
+  page?: number;
+  limit?: number;
+  authorId?: string;
+  tag?: string;
+  publishedOnly?: boolean;
 }): Promise<{
-  blogs: BlogWithLikeStatus[]
-  totalCount: number
-  totalPages: number
+  blogs: BlogWithLikeStatus[];
+  totalCount: number;
+  totalPages: number;
 }> {
-  const skip = (page - 1) * limit
+  const skip = (page - 1) * limit;
 
   // Build the where clause based on filters
   const where: {
-    authorId?: string
+    authorId?: string;
     tags?: {
-      has: string
-    }
-    published?: boolean
-  } = {}
+      has: string;
+    };
+    published?: boolean;
+  } = {};
 
   if (authorId) {
-    where.authorId = authorId
+    where.authorId = authorId;
   }
 
   if (tag) {
     where.tags = {
       has: tag,
-    }
+    };
   }
 
   if (publishedOnly) {
-    where.published = true
+    where.published = true;
   }
 
   // Get total count for pagination
-  const totalCount = await prisma.blog.count({ where })
-  const totalPages = Math.ceil(totalCount / limit)
+  const totalCount = await prisma.blog.count({ where });
+  const totalPages = Math.ceil(totalCount / limit);
 
   // Get blogs with like counts
   const blogs = await prisma.blog.findMany({
@@ -618,10 +633,10 @@ export async function listBlogs({
         },
       },
     },
-  })
+  });
 
   // If userId is provided, check which blogs the user has liked
-  let userLikes: Record<string, boolean> = {}
+  let userLikes: Record<string, boolean> = {};
 
   if (userId) {
     const likes = await prisma.blogLike.findMany({
@@ -634,15 +649,12 @@ export async function listBlogs({
       select: {
         blogId: true,
       },
-    })
+    });
 
-    userLikes = likes.reduce(
-      (acc, like) => {
-        acc[like.blogId] = true
-        return acc
-      },
-      {} as Record<string, boolean>,
-    )
+    userLikes = likes.reduce((acc, like) => {
+      acc[like.blogId] = true;
+      return acc;
+    }, {} as Record<string, boolean>);
   }
 
   // Add isLikedByUser flag to each blog
@@ -650,19 +662,22 @@ export async function listBlogs({
     ...blog,
     isLikedByUser: !!userLikes[blog.id],
     isLoggedIn: !!userId,
-  }))
+  }));
 
   return {
     blogs: blogsWithLikeStatus,
     totalCount,
     totalPages,
-  }
+  };
 }
 
 /**
  * Get a single blog with like status for the current user
  */
-export async function getBlog(blogId: string, userId?: string): Promise<BlogWithLikeStatus | null> {
+export async function getBlog(
+  blogId: string,
+  userId?: string
+): Promise<BlogWithLikeStatus | null> {
   const blog = await prisma.blog.findUnique({
     where: { id: blogId },
     include: {
@@ -680,13 +695,13 @@ export async function getBlog(blogId: string, userId?: string): Promise<BlogWith
         },
       },
     },
-  })
+  });
 
   if (!blog) {
-    return null
+    return null;
   }
 
-  let isLikedByUser = false
+  let isLikedByUser = false;
 
   if (userId) {
     const like = await prisma.blogLike.findUnique({
@@ -696,15 +711,14 @@ export async function getBlog(blogId: string, userId?: string): Promise<BlogWith
           blogId,
         },
       },
-    })
+    });
 
-    isLikedByUser = !!like
+    isLikedByUser = !!like;
   }
 
   return {
     ...blog,
     isLoggedIn: !!userId,
     isLikedByUser,
-  }
+  };
 }
-
