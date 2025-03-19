@@ -485,7 +485,7 @@ export async function updateBlogAction(
         },
       },
     });
-    revalidatePath("/");
+    revalidatePath("dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
   } catch (error) {

@@ -1,4 +1,3 @@
-"use server";
 import { notFound } from "next/navigation";
 
 import { ISearchParams } from "@/lib/type";
