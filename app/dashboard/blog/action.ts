@@ -360,7 +360,7 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 type Blog = {
   id: string;
   title: string;
@@ -490,7 +490,6 @@ export async function updateBlogAction(
     }
     console.log("Revalidating path: /dashboard/blog");
     revalidatePath("dashboard/blog");
-    revalidateTag("blogs")
     console.log("Revalidated path: /dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
@@ -656,8 +655,7 @@ export async function listBlogs({
       select: {
         blogId: true,
       },
-    },
-    { next: { tags: ["blogs"] } },
+    }
   );
 
     userLikes = likes.reduce((acc, like) => {
