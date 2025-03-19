@@ -488,7 +488,10 @@ export async function updateBlogAction(
     } catch {
       return { success: false, message: "Error while updating blog " };
     }
+    console.log("Revalidating path: /dashboard/blog");
     revalidatePath("dashboard/blog");
+
+    console.log("Revalidated path: /dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
   } catch (error) {
