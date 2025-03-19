@@ -492,6 +492,9 @@ export async function updateBlogAction(
     revalidatePath("/dashboard/blog");
     revalidatePath("dashboard/blog");
     revalidatePath("/blog");
+    if (blogData.id) {
+      revalidatePath(`/dashboard/blog/${blogData.id}`);
+    }
     console.log("Revalidated path: /dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
