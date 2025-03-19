@@ -471,24 +471,28 @@ export async function updateBlogAction(
         message: "Blog not found or you are not the author",
       };
     }
-
-    await prisma.blog.update({
-      where: { id: blogData.id },
-      data: {
-        content: blogData.content || "",
-        excerpt: blogData.excerpt || "",
-        title: blogData.title || "",
-        tags: blogData.tags || [],
-        published: blogData.published || false,
-        author: {
-          connect: { id: session.user.id },
+    try {
+      await prisma.blog.update({
+        where: { id: blogData.id },
+        data: {
+          content: blogData.content || "",
+          excerpt: blogData.excerpt || "",
+          title: blogData.title || "",
+          tags: blogData.tags || [],
+          published: blogData.published || false,
+          author: {
+            connect: { id: session.user.id },
+          },
         },
-      },
-    });
+      });
+    } catch {
+      return { success: false, message: "Error while updating blog " };
+    }
     revalidatePath("dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
   } catch (error) {
+    revalidatePath("dashboard/blog");
     const errorMessage =
       (error as Error)?.message ?? `Error occurred while updating Blog.`;
     return { success: false, message: errorMessage };

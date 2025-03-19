@@ -1,10 +1,8 @@
-
-
-import type { NextConfig } from "next"
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  compress:false,
+  compress: false,
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -30,7 +28,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-    headers: async () => [
+  headers: async () => [
     {
       source: "/(.*)",
       headers: [
@@ -58,13 +56,13 @@ const nextConfig: NextConfig = {
       ],
     },
   ],
-    generateBuildId: async () => {
-    return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString()
+  generateBuildId: async () => {
+    return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString();
   },
-    experimental: {
+  experimental: {
     reactCompiler: true,
-    nextScriptWorkers: true, 
-    },
+    nextScriptWorkers: true,
+  },
   distDir: "build",
-}
-export default nextConfig
+};
+export default nextConfig;
