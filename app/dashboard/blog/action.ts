@@ -126,7 +126,7 @@ export async function updateBlogAction(
     } catch {
       return { success: false, message: "Error while updating blog " };
     }
-    revalidatePath("/dashboard/blog/");
+    revalidatePath("dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
   } catch (error) {
