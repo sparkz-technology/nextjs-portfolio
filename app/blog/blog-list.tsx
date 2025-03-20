@@ -94,7 +94,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
                 ))}
               </div>
               <CardTitle className="text-xl">
-                <Link href={`/blog/${post.id}`} className="hover:text-primary transition-colors">
+                <Link href={`/blog/${post.excerpt}`} className="hover:text-primary transition-colors">
                   {post.title}
                 </Link>
               </CardTitle>
