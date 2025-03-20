@@ -1,6 +1,6 @@
 "use client"
-import { useEffect, useState, type ReactNode } from "react"
-import { Formik, Form, Field, ErrorMessage, type FieldProps } from "formik"
+import { useEffect, useState, ReactNode } from "react"
+import { Formik, Form, Field, ErrorMessage, FieldProps } from "formik"
 import * as Yup from "yup"
 
 import { Button } from "@/components/ui/button"
@@ -20,21 +20,29 @@ import {
 import MDEditor from "@uiw/react-md-editor"
 import { TagInput } from "@/components/ui/tag-input"
 import { createBlogAction, updateBlogAction } from "./action"
-import type { BlogWithLikeStatus } from "@/app/blog/action"
+import { BlogWithLikeStatus } from "@/app/blog/action"
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store"
 import { toast } from "sonner"
 
-// Mock data for editing
-
+// BlogFormDrawer Props
 type BlogFormDrawerProps = {
   children?: ReactNode
   post?: BlogWithLikeStatus
 }
 
+// Initial Form Values Type
+type BlogFormValues = {
+  title: string
+  excerpt: string
+  content: string
+  tags: string[]
+  published: boolean
+}
+
 export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
   const { type, closeDialog, data } = useBlogDialog()
 
-  const [open, setOpen] = useState(false) // Added open state
+  const [open, setOpen] = useState(false)
   const isEditing = !!data?.authorId
 
   useEffect(() => {
@@ -47,9 +55,9 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
     if (!open) {
       closeDialog()
     }
-  }, [open])
+  }, [open, closeDialog])
 
-  const initialValues = {
+  const initialValues: BlogFormValues = {
     title: "",
     excerpt: "",
     content: "",
@@ -59,20 +67,16 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required").min(5, "Must be at least 5 characters"),
-
     excerpt: Yup.string().required("Excerpt is required").min(5, "Must be at least 5 characters"),
-
     content: Yup.string().required("Content is required").min(20, "Must be at least 20 characters"),
-
-    tags: Yup.array().ensure().min(1, "You can't leave this blank."),
-
+    tags: Yup.array().of(Yup.string()).min(1, "You can't leave this blank."),
     published: Yup.boolean(),
   })
 
-  // Extracted onSubmit function
+  // Handle form submission
   const handleSubmit = async (
-    values: any,
-    { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void },
+    values: BlogFormValues,
+    { setSubmitting, resetForm }: { setSubmitting: (isSubmitting: boolean) => void; resetForm: () => void }
   ) => {
     try {
       if (isEditing) {
@@ -106,7 +110,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
         </SheetHeader>
 
         <Formik
-          initialValues={isEditing ? data : initialValues}
+          initialValues={isEditing ? (data as BlogFormValues) : initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
           enableReinitialize
@@ -114,7 +118,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
           {({ setFieldValue, isSubmitting, values }) => (
             <Form className="space-y-6 py-4">
               <div className="grid gap-4">
-                {/* Title Field */}
+                {/* Title & Excerpt Fields */}
                 <div className="flex gap-2 items-start w-full">
                   <div className="grid gap-2 w-full">
                     <Label htmlFor="title">Title</Label>
@@ -122,14 +126,16 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                     <ErrorMessage name="title" component="p" className="text-red-500 text-sm" />
                   </div>
                   <div className="grid gap-2 w-full">
-                    <Label htmlFor="title">Excerpt</Label>
+                    <Label htmlFor="excerpt">Excerpt</Label>
                     <Field as={Input} id="excerpt" name="excerpt" placeholder="Enter post excerpt" required />
                     <ErrorMessage name="excerpt" component="p" className="text-red-500 text-sm" />
                   </div>
                 </div>
+
+                {/* Tags Field */}
                 <div className="grid gap-2">
                   <Field name="tags">
-                    {({ field }: FieldProps) => (
+                    {({ field }: FieldProps<string[]>) => (
                       <TagInput
                         {...field}
                         placeholder="Enter a topic"
@@ -143,11 +149,12 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                   </Field>
                   <ErrorMessage name="tags" component="p" className="text-red-500 text-sm" />
                 </div>
+
                 {/* Content Field */}
                 <div className="grid gap-2 w-full">
                   <Label htmlFor="content">Content (Markdown)</Label>
                   <Field name="content">
-                    {({ field }: FieldProps) => (
+                    {({ field }: FieldProps<string>) => (
                       <MDEditor
                         value={field.value}
                         onChange={(value) => setFieldValue("content", value)}
@@ -188,7 +195,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                     Cancel
                   </Button>
                 </SheetClose>
-                <Button type="submit"> {isSubmitting ? "Saving..." : "Save Post"}</Button>
+                <Button type="submit">{isSubmitting ? "Saving..." : "Save Post"}</Button>
               </SheetFooter>
             </Form>
           )}
