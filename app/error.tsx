@@ -29,7 +29,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
           </p>
           {error.message && <p className="mt-2 text-center text-sm text-red-600">Error details: {error.message}</p>}
         </CardContent>
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex justify-between gap-3">
           <Button onClick={() => reset()} className="mt-3 w-full sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
             Try again
           </Button>
