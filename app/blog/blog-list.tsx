@@ -110,7 +110,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
             </CardContent>
             <CardFooter className="p-4 pt-0 flex items-center justify-between">
               <Link
-                href={`/blog/${post.id}`}
+                href={`/blog/${post.excerpt}`}
                 className="text-sm font-medium text-primary flex items-center hover:underline"
               >
                 Read more <ArrowRight className="h-3 w-3 ml-1" />
