@@ -27,6 +27,7 @@ import { createBlogAction, updateBlogAction } from "./action"
 import { BlogWithLikeStatus } from "@/app/blog/action"
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store"
 import { toast } from "sonner"
+import { useRouter } from 'next/router';
 
 // Mock data for editing
 
@@ -37,6 +38,7 @@ type BlogFormDrawerProps = {
 
 export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
     const { type, closeDialog, data } = useBlogDialog();
+  const router = useRouter();
 
     const [open, setOpen] = useState(false) // Added open state
     const isEditing = !!data?.authorId
@@ -104,9 +106,11 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                         try {
                             if (isEditing) {
                                 await updateBlogAction(values)
+                                    router.replace(router.asPath);
                                 toast.success("Post updated successfully")
                             } else {
                                 await createBlogAction(values)
+                                    router.replace(router.asPath);
                                 toast.success("Post created successfully")
                             }
                         }
