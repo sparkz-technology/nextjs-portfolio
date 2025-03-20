@@ -159,7 +159,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
                         value={field.value}
                         onChange={(value) => setFieldValue("content", value)}
                         preview="edit"
-                        height={300}
+                        height={200}
                         visibleDragbar={false}
                         textareaProps={{
                           placeholder: "Write your content here...",
