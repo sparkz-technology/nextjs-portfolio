@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { useBlogDialog } from "@/lib/zustand/use-dialog-store";
 import { deletePostAction } from "@/app/dashboard/blog/action";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useRouter } from 'next/router';
 
 export const DeleteDialog: React.FC = () => {
   const { type, closeDialog, data } = useBlogDialog();
+  const router = useRouter();
 
   interface DeleteDialogValues {
     id: string;
@@ -23,8 +25,11 @@ export const DeleteDialog: React.FC = () => {
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
     } finally {
+      
       closeDialog();
       setSubmitting(false);
+          router.replace(router.asPath);
+
     }
   };
   return (
