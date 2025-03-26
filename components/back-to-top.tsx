@@ -35,7 +35,7 @@ export default function BackToTop() {
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       className={cn(
-        "fixed bottom-14 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all duration-500",
+        "fixed bottom-20 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all duration-500",
         "bg-white hover:bg-gray-50",
         "dark:bg-black dark:hover:bg-gray-900",
         "border-2 border-gray-200 dark:border-gray-800",
