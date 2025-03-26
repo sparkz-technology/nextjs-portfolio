@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Separator } from "@/components/ui/separator";
-import { BackdropLoader } from "@/components/backdrop-loader";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb";
 
 export const metadata: Metadata = {
@@ -34,9 +32,7 @@ export default function RootLayout({
             </Breadcrumb>
           </div>
         </header>
-        <Suspense fallback={<BackdropLoader />}>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
-        </Suspense>
       </SidebarInset>
     </SidebarProvider>
   );
