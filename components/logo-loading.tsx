@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 function setTextAnimation(
   delay: number,
@@ -7,27 +7,26 @@ function setTextAnimation(
   strokeWidth: number,
   timingFunction: string,
   strokeColor: string,
-  repeat: boolean
+  repeat: boolean,
 ): void {
-  const svgElement = document.getElementById("logo-svg"); // Target the specific SVG
-  if (!svgElement) return;
+  const svgElement = document.getElementById("logo-svg") // Target the specific SVG
+  if (!svgElement) return
 
-  const paths: NodeListOf<SVGPathElement> = svgElement.querySelectorAll("path"); // Select paths within this SVG only
-  const mode: string = repeat ? "infinite" : "forwards";
+  const paths: NodeListOf<SVGPathElement> = svgElement.querySelectorAll("path") // Select paths within this SVG only
+  const mode: string = repeat ? "infinite" : "forwards"
 
   for (let i = 0; i < paths.length; i++) {
-    const path: SVGPathElement = paths[i];
-    const length: number = path.getTotalLength();
+    const path: SVGPathElement = paths[i]
+    const length: number = path.getTotalLength()
 
-    path.style.strokeDashoffset = `${length}px`;
-    path.style.strokeDasharray = `${length}px`;
-    path.style.strokeWidth = `${strokeWidth}px`;
-    path.style.stroke = `${strokeColor}`;
-    path.style.animation = `${duration}s svg-text-anim ${mode} ${timingFunction}`;
-    path.style.animationDelay = `${i * delay}s`;
+    path.style.strokeDashoffset = `${length}px`
+    path.style.strokeDasharray = `${length}px`
+    path.style.strokeWidth = `${strokeWidth}px`
+    path.style.stroke = `${strokeColor}`
+    path.style.animation = `${duration}s svg-text-anim ${mode} ${timingFunction}`
+    path.style.animationDelay = `${i * delay}s`
   }
 }
-
 
 export default function LogoLoading() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -66,25 +65,22 @@ export default function LogoLoading() {
         fill: ${isDarkMode ? "#ffffff" : "#000000"};
       }
     }
-      path {
-          will-change: stroke-dasharray, stroke-dashoffset;
-        }
-
-    `;
+    path {
+      will-change: stroke-dasharray, stroke-dashoffset;
+    }
+  `;
 
   return (
     <div className="fixed inset-0 bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-50 flex items-center justify-center z-50">
       <style>{svgAnimation}</style>
-      <div>
+      <div className="w-full max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] px-4">
         <svg
           id="logo-svg" 
-          width="704.1"
-          height="121.951"
           viewBox="0 0 704.1 121.951"
           xmlns="http://www.w3.org/2000/svg"
-          className="!stroke-black !dark:stroke-white"
+          className="w-full h-auto !stroke-black !dark:stroke-white"
         >
-          <g id="svgGroup" strokeLinecap="round" fillRule="evenodd" fontSize="9pt" strokeWidth="0.25mm" fill="none">
+            <g id="svgGroup" strokeLinecap="round" fillRule="evenodd" fontSize="9pt" strokeWidth="0.25mm" fill="none">
             <path
               d="M 34.35 121.051 Q 25.65 121.051 17.775 118.051 A 30.647 30.647 0 0 1 8.376 112.477 A 28.595 28.595 0 0 1 4.95 108.901 A 22.144 22.144 0 0 1 0.35 98.25 A 29.883 29.883 0 0 1 0 93.601 Q 0 87.796 1.849 83.802 A 14.43 14.43 0 0 1 3.6 80.926 Q 7.2 76.351 12.6 74.551 A 35.309 35.309 0 0 1 19.233 73.004 A 30.088 30.088 0 0 1 23.1 72.751 A 44.471 44.471 0 0 0 18.685 78.213 A 34.654 34.654 0 0 0 15.825 83.251 A 29.07 29.07 0 0 0 14.049 88.214 A 21.884 21.884 0 0 0 13.35 93.601 Q 13.35 98.701 15.975 103.126 A 18.141 18.141 0 0 0 20.965 108.532 A 23.521 23.521 0 0 0 23.85 110.326 A 22.524 22.524 0 0 0 29.636 112.385 Q 32.217 112.944 35.199 113.066 A 41.529 41.529 0 0 0 36.9 113.101 Q 43.65 113.101 50.025 110.851 A 27.351 27.351 0 0 0 56.645 107.497 A 23.605 23.605 0 0 0 60.525 104.101 A 15.57 15.57 0 0 0 64.569 94.704 A 20.641 20.641 0 0 0 64.65 92.851 A 17.921 17.921 0 0 0 63.727 87.008 A 15.721 15.721 0 0 0 61.125 82.276 A 33.428 33.428 0 0 0 55.928 77.096 A 42.312 42.312 0 0 0 52.05 74.326 A 162.824 162.824 0 0 0 40.543 67.676 A 176.803 176.803 0 0 0 40.35 67.576 Q 34.2 64.351 28.65 60.601 A 36.995 36.995 0 0 1 22.238 55.162 A 32.26 32.26 0 0 1 19.575 51.901 A 18.931 18.931 0 0 1 16.244 43.178 A 24.577 24.577 0 0 1 16.05 40.051 A 28.088 28.088 0 0 1 16.918 33.283 Q 17.636 30.388 18.948 27.333 A 46.309 46.309 0 0 1 19.125 26.926 Q 22.2 19.951 27.9 13.801 A 44.065 44.065 0 0 1 40.45 4.437 A 50.548 50.548 0 0 1 41.7 3.826 Q 49.8 0.001 59.7 0.001 Q 70.05 0.001 74.25 4.351 Q 78.45 8.701 78.45 15.751 Q 78.45 21.301 76.5 27.601 Q 74.55 33.901 71.775 39.601 Q 69.542 44.187 67.455 47.706 A 72.886 72.886 0 0 1 66.45 49.351 Q 63.963 48.785 62.413 47.58 A 6.632 6.632 0 0 1 61.5 46.726 A 6.376 6.376 0 0 1 60.105 43.977 Q 59.85 42.937 59.85 41.701 Q 59.85 38.864 60.884 35.42 A 33.035 33.035 0 0 1 61.125 34.651 A 112.443 112.443 0 0 1 63.191 28.889 A 130.807 130.807 0 0 1 64.125 26.551 Q 65.85 22.351 67.125 18.376 A 31.753 31.753 0 0 0 67.902 15.531 Q 68.4 13.276 68.4 11.401 A 7.439 7.439 0 0 0 68.214 9.686 A 4.905 4.905 0 0 0 66.825 7.201 Q 65.583 6.017 62.334 5.767 A 24.657 24.657 0 0 0 60.45 5.701 Q 53.25 5.701 47.25 8.851 Q 41.25 12.001 36.825 16.801 A 40.56 40.56 0 0 0 32.085 23.006 A 34.485 34.485 0 0 0 30 26.926 Q 27.6 32.251 27.6 36.601 Q 27.6 42.001 31.05 45.826 A 31.361 31.361 0 0 0 35.288 49.699 A 42.806 42.806 0 0 0 39.975 52.801 Q 45.45 55.951 51.525 59.101 Q 57.6 62.251 63.075 66.151 Q 68.55 70.051 72 75.451 A 21.389 21.389 0 0 1 74.924 82.923 A 29.705 29.705 0 0 1 75.45 88.651 Q 75.45 96.451 71.925 102.451 Q 68.4 108.451 62.4 112.576 Q 56.4 116.701 49.125 118.876 Q 41.85 121.051 34.35 121.051 Z"
               id="0"
@@ -137,7 +133,7 @@ export default function LogoLoading() {
             />
           </g>
         </svg>
-      </div>
-    </div>
-  );
-}
+        </div>
+        </div>
+        )
+
