@@ -44,7 +44,7 @@
 // }
 
 // export default IconRenderer;
-import React from "react";
+import React, { Suspense } from "react";
 import { IconType } from "react-icons";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { MdMailOutline, MdLink } from "react-icons/md";
@@ -65,7 +65,11 @@ const IconRenderer: React.FC<IconRendererProps> = ({ iconName = "" }) => {
   const trimmedIconName = iconName.trim();
   const IconComponent = icons[trimmedIconName] || MdLink; // Default to MdLink if not found
 
-  return <IconComponent size={20} />;
+  return (
+     <Suspense fallback={null}>
+    <IconComponent size={20} />
+           </Suspense>
+       )
 };
 
 export default IconRenderer;
