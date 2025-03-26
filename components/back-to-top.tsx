@@ -35,7 +35,7 @@ export default function BackToTop() {
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       className={cn(
-        "fixed bottom-8 right-8 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-500",
+        "fixed bottom-14 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-all duration-500",
         "bg-white hover:bg-gray-50",
         "dark:bg-black dark:hover:bg-gray-900",
         "border-2 border-gray-200 dark:border-gray-800",
@@ -58,7 +58,7 @@ export default function BackToTop() {
       <div className="relative flex items-center justify-center">
         <Rocket
           className={cn(
-            "h-6 w-6 transition-transform duration-300",
+            "h-4 w-4 transition-transform duration-300",
             "text-gray-800 dark:text-gray-200",
             "rotate-0 group-hover:-rotate-45 group-hover:scale-110",
             "group-hover:animate-pulse",
