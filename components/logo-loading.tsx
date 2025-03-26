@@ -9,7 +9,10 @@ function setTextAnimation(
   strokeColor: string,
   repeat: boolean
 ): void {
-  const paths: NodeListOf<SVGPathElement> = document.querySelectorAll("path");
+  const svgElement = document.getElementById("logo-svg"); // Target the specific SVG
+  if (!svgElement) return;
+
+  const paths: NodeListOf<SVGPathElement> = svgElement.querySelectorAll("path"); // Select paths within this SVG only
   const mode: string = repeat ? "infinite" : "forwards";
 
   for (let i = 0; i < paths.length; i++) {
@@ -24,6 +27,7 @@ function setTextAnimation(
     path.style.animationDelay = `${i * delay}s`;
   }
 }
+
 
 export default function LogoLoading() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -73,6 +77,7 @@ export default function LogoLoading() {
       <style>{svgAnimation}</style>
       <div>
         <svg
+          id="logo-svg" 
           width="704.1"
           height="121.951"
           viewBox="0 0 704.1 121.951"
