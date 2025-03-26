@@ -133,6 +133,7 @@ import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import MarkdownPreview from "@/components/markdown-preview"
 import type { Metadata, ResolvingMetadata } from "next/types"
+import BackToTop from "@/components/back-to-top"
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean
@@ -289,6 +290,7 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
           <MarkdownPreview source={post.content} />
         </article>
+         <BackToTop />
       </div>
     </main>
   )
