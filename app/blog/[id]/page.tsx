@@ -25,6 +25,19 @@ export type BlogWithLikeStatus = Blog & {
   isLoggedIn: boolean
 }
 
+function extractTextFromMarkdown(markdown: string): string {
+  if (!markdown) return ""
+  let text = markdown.replace(/```[\s\S]*?```/g, "")
+  text = text.replace(/!\[.*?\]$$.*?$$/g, "")
+  text = text.replace(/\[([^\]]+)\]$$[^)]+$$/g, "$1")
+  text = text.replace(/#{1,6}\s+/g, "")
+  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2")
+  text = text.replace(/(\*|_)(.*?)\1/g, "$2")
+  text = text.replace(/<[^>]*>/g, "")
+  text = text.replace(/\s+/g, " ").trim()
+
+  return text
+}
 async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
   try {
     const session = await auth()
@@ -95,16 +108,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {}
   }
 
-  const description = post.excerpt
-
+  const contentPreview = extractTextFromMarkdown(post.content)
+  const truncatedContent = contentPreview.length > 160 ? `${contentPreview.substring(0, 160)}...` : contentPreview
   return {
     title: post.title,
-    description: description,
+    description: truncatedContent,
     keywords: post.tags,
     authors: post.author ? [{ name: post.author.name || post.author.username }] : undefined,
     openGraph: {
       title: post.title,
-      description: description,
+      description: truncatedContent,
       type: "article",
       publishedTime: post.createdAt.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
@@ -114,7 +127,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: description,
+      description: truncatedContent,
     },
     other: {
       "article:published_time": post.createdAt.toISOString(),
