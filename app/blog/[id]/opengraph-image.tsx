@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og"
 import { prisma } from "@/lib/prisma"
-
+import type { Blog } from "@prisma/client"
 // Image metadata
 export const alt = "Blog post thumbnail"
 export const size = {
@@ -52,7 +52,7 @@ export default async function Image({ params }: { params: { id: string } }) {
         },
       },
     },
-  })
+  }) as Blog
 
   // If no blog post is found, return a default image
   if (!blog) {
