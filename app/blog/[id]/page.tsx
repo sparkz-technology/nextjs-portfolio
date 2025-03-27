@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import MarkdownPreview from "@/components/markdown-preview"
-import type { Metadata, ResolvingMetadata } from "next/types"
+import type { Metadata } from "next/types"
 import BackToTop from "@/components/back-to-top"
 
 export type BlogWithLikeStatus = Blog & {
@@ -86,7 +86,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Get the blog post
   const { id } = await params
   const post = await getBlog(id)
