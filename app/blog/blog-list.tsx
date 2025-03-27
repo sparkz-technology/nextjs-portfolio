@@ -92,7 +92,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
       </p>
       <div className="grid gap-4">
         {posts.map((post) => {
-        const contentPreview = extractTextFromMarkdown(post.excerpt)
+        const contentPreview = extractTextFromMarkdown(post.content)
   const truncatedContent = contentPreview.length > 160 ? `${contentPreview.substring(0, 160)}...` : contentPreview
       return(
           <Card
