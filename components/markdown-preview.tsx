@@ -9,7 +9,7 @@ const CustomMarkdownPreview: React.FC<MarkdownPreviewProps> = (props) => {
   return React.createElement(MarkdownPreview, {
     ...props,
     wrapperElement: {
-      "data-color-mode": theme === "light" || theme === "dark" ? theme : undefined,
+      "data-color-mode": theme === "light" || theme === "dark" ? theme : "light",
     },
   });
 };
