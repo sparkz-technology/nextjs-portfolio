@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og"
 import { prisma } from "@/lib/prisma"
 
+// Extend the Blog type to ensure tags are properly typed
+
 // Image metadata
 export const alt = "Blog post thumbnail"
 export const size = {
@@ -47,8 +49,8 @@ export default async function Image({ params }: { params: { id: string } }) {
       author: {
         select: {
           name: true,
-          username
-            : true,
+          username: true,
+          avatarUrl : true,
         },
       },
     },
@@ -65,8 +67,8 @@ export default async function Image({ params }: { params: { id: string } }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(to bottom right, #f8fafc, #e2e8f0)",
-          color: "#334155",
+          background: "#000000",
+          color: "#ffffff",
         }}
       >
         <div style={{ fontSize: 56, fontWeight: "bold" }}>Blog Post Not Found</div>
@@ -106,11 +108,12 @@ export default async function Image({ params }: { params: { id: string } }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "stretch",
-        background: "linear-gradient(to bottom right, #f8fafc, #e2e8f0)",
+        background: "#000000",
+        color: "#ffffff",
       }}
     >
-      {/* Colored top bar */}
-      <div style={{ height: "8px", background: "linear-gradient(to right, #3b82f6, #8b5cf6)" }} />
+      {/* Accent top bar */}
+      <div style={{ height: "10px", background: "#ffffff" }} />
 
       {/* Main content */}
       <div
@@ -135,8 +138,9 @@ export default async function Image({ params }: { params: { id: string } }) {
                     borderRadius: "9999px",
                     fontSize: "14px",
                     fontWeight: 500,
-                    background: "rgba(59, 130, 246, 0.1)",
-                    color: "#3b82f6",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    color: "#ffffff",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
                   }}
                 >
                   {tag.trim()}
@@ -151,8 +155,9 @@ export default async function Image({ params }: { params: { id: string } }) {
               fontSize: "56px",
               fontWeight: "bold",
               lineHeight: 1.1,
-              color: "#1e293b",
+              color: "#ffffff",
               letterSpacing: "-0.025em",
+              textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
             }}
           >
             {blog.title}
@@ -163,13 +168,13 @@ export default async function Image({ params }: { params: { id: string } }) {
             style={{
               fontSize: "22px",
               lineHeight: 1.5,
-              color: "#64748b",
+              color: "#e0e0e0",
               maxWidth: "90%",
-              padding: "16px",
-              background: "white",
-              borderRadius: "8px",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-              border: "1px solid rgba(203, 213, 225, 0.5)",
+              padding: "20px",
+              background: "rgba(30, 30, 30, 0.7)",
+              borderRadius: "12px",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
             }}
           >
             {truncatedContent}
@@ -184,32 +189,64 @@ export default async function Image({ params }: { params: { id: string } }) {
             alignItems: "center",
             marginTop: "32px",
             paddingTop: "24px",
-            borderTop: "1px solid rgba(203, 213, 225, 0.8)",
+            borderTop: "1px solid rgba(255, 255, 255, 0.2)",
           }}
         >
           {/* Author info */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             {/* Avatar placeholder */}
-            <div
+{/*             <div
               style={{
                 width: "48px",
                 height: "48px",
                 borderRadius: "9999px",
-                background: "linear-gradient(to bottom right, #3b82f6, #8b5cf6)",
+                background: "#ffffff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "white",
+                color: "#000000",
                 fontSize: "20px",
                 fontWeight: "bold",
+                boxShadow: "0 0 15px rgba(255, 255, 255, 0.3)",
               }}
             >
               {authorName.charAt(0).toUpperCase()}
-            </div>
+            </div> */}
+{blog.author?.avatarUrl ? (
+    <img
+      src={blog.author.avatarUrl}
+      alt={authorName}
+      style={{
+        width: "48px",
+        height: "48px",
+        borderRadius: "9999px",
+        objectFit: "cover",
+        boxShadow: "0 0 15px rgba(255, 255, 255, 0.3)",
+      }}
+    />
+  ) : (
+    <div
+      style={{
+        width: "48px",
+        height: "48px",
+        borderRadius: "9999px",
+        background: "#ffffff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#000000",
+        fontSize: "20px",
+        fontWeight: "bold",
+        boxShadow: "0 0 15px rgba(255, 255, 255, 0.3)",
+      }}
+    >
+      {authorName.charAt(0).toUpperCase()}
+    </div>
+  )}
 
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b" }}>{authorName}</div>
-              <div style={{ fontSize: "16px", color: "#64748b" }}>{formattedDate}</div>
+              <div style={{ fontSize: "18px", fontWeight: "bold", color: "#ffffff" }}>{authorName}</div>
+              <div style={{ fontSize: "16px", color: "#a0a0a0" }}>{formattedDate}</div>
             </div>
           </div>
 
@@ -218,11 +255,11 @@ export default async function Image({ params }: { params: { id: string } }) {
             style={{
               fontSize: "20px",
               fontWeight: "bold",
-              color: "#1e293b",
-              padding: "8px 16px",
-              borderRadius: "8px",
-              background: "white",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+              color: "#000000",
+              padding: "10px 18px",
+              borderRadius: "10px",
+              background: "#ffffff",
+              boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
             }}
           >
             My Blog
@@ -233,4 +270,3 @@ export default async function Image({ params }: { params: { id: string } }) {
     { ...size },
   )
 }
-
