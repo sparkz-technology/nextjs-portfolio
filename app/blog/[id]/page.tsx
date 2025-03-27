@@ -1,128 +1,3 @@
-// import Link from "next/link"
-// import { notFound } from "next/navigation"
-// import { ChevronLeft, Calendar } from "lucide-react"
-// import { BlogLikeButton } from "@/app/blog/blog-like-button"
-// import { formatDate } from "@/lib/utils"
-// // import Markdown from "react-markdown"
-// import { prisma } from "@/lib/prisma"
-// import type { Blog } from "@prisma/client"
-// import { auth } from "@/lib/auth"
-// import MarkdownPreview from "@/components/markdown-preview"
-
-// export type BlogWithLikeStatus = Blog & {
-//   isLikedByUser: boolean
-//   _count?: {
-//     likes: number
-//   }
-//   author?: {
-//     id: string
-//     name: string | null
-//     username: string
-//     avatarUrl: string | null
-//   }
-//   likes: number
-//   isLoggedIn: boolean
-// }
-
-// async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
-//   try {
-//     const session = await auth()
-
-//     const blog = await prisma.blog.findFirst({
-//       where: { excerpt: excerpt },
-//       include: {
-//         author: {
-//           select: {
-//             id: true,
-//             name: true,
-//             username: true,
-//             avatarUrl: true,
-//           },
-//         },
-//         _count: {
-//           select: {
-//             likes: true,
-//           },
-//         },
-//       },
-//     })
-
-//     if (!blog) {
-//       return null
-//     }
-
-//     let isLikedByUser = false
-//     let isLoggedIn = false
-
-//     if (session?.user?.id) {
-//       isLoggedIn = true
-//       const like = await prisma.blogLike.findUnique({
-//         where: {
-//           userId_blogId: {
-//             userId: session.user.id,
-//             blogId: blog.id,
-//           },
-//         },
-//       })
-
-//       isLikedByUser = !!like
-//     }
-
-//     return {
-//       ...blog,
-//       likes: blog._count?.likes || 0,
-//       isLikedByUser,
-//       isLoggedIn,
-//     }
-//   } catch (error) {
-//     console.error("Error fetching blog:", error)
-//     return null
-//   }
-// }
-
-
-// export default async function BlogPostPage({
-//   params,
-// }: {
-//   params: Promise<{ id: string }>
-// }) {
-//   const { id } = await params
-
-//   const post = await getBlog(id)
-
-//   if (!post) {
-//     notFound()
-//   }
-
-//   return (
-//     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
-//       <div className="container max-w-3xl py-6 space-y-6">
-//         <Link href="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
-//           <ChevronLeft className="h-4 w-4 mr-1" />
-//           Back to all posts
-//         </Link>
-
-//         <article className="space-y-4">
-//           <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
-
-//           <div className="flex items-center justify-between text-sm text-muted-foreground">
-//             <div className="flex items-center">
-//               <Calendar className="h-4 w-4 mr-1" />
-//               <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt.toISOString())}</time>
-//             </div>
-
-//             <BlogLikeButton isLoggedIn={post.isLoggedIn} postId={post.id} initialLikes={post.likes} isLikedByUser={post.isLikedByUser} />
-//           </div>
-//           {/* <Markdown  className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
-//             {post.content}
-//           </Markdown> */}
-//           <MarkdownPreview source={post.content} />
-//         </article>
-//       </div>
-//     </main>
-//   )
-// }
-
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ChevronLeft, Calendar } from "lucide-react"
@@ -216,15 +91,10 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   const { id } = await params
   const post = await getBlog(id)
 
-  // Return null metadata if post doesn't exist
   if (!post) {
     return {}
   }
 
-  // Get the parent metadata (optional)
-  const previousImages = (await parent).openGraph?.images || []
-
-  // Use the excerpt as the description
   const description = post.excerpt
 
   return {
@@ -240,7 +110,6 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
       modifiedTime: post.updatedAt.toISOString(),
       authors: post.author?.name || post.author?.username,
       tags: post.tags,
-      images: [...previousImages],
     },
     twitter: {
       card: "summary_large_image",
