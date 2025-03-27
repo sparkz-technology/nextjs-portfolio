@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og"
 import { prisma } from "@/lib/prisma"
-import type { Blog } from "@prisma/client"
 
 // Extend the Blog type to ensure tags are properly typed
 
