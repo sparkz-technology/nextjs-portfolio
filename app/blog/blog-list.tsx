@@ -82,8 +82,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
       }
     };
   }, [fetchMore, hasMore]);
-  const contentPreview = extractTextFromMarkdown(blog.content)
-  const truncatedContent = contentPreview.length > 160 ? `${contentPreview.substring(0, 160)}...` : contentPreview
+
 
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
@@ -92,7 +91,10 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
         Thoughts, ideas, and insights on software engineering and technology.
       </p>
       <div className="grid gap-4">
-        {posts.map((post) => (
+        {posts.map((post) => {
+        const contentPreview = extractTextFromMarkdown(post.excerpt)
+  const truncatedContent = contentPreview.length > 160 ? `${contentPreview.substring(0, 160)}...` : contentPreview
+      return(
           <Card
             key={post.id}
             className="flex flex-col overflow-hidden border hover:shadow-lg transition-all duration-300 ease-out h-full"
@@ -135,7 +137,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
               />
             </CardFooter>
           </Card>
-        ))}
+        )})}
       </div>
 
       {/* Loader or "No more posts" */}
