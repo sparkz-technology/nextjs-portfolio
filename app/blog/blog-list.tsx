@@ -16,7 +16,18 @@ import { formatDate } from "@/lib/utils";
 import { BlogWithLikeStatus, listBlogs } from "./action";
 
 const PAGE_SIZE = 5;
-
+function extractTextFromMarkdown(markdown: string): string {
+  if (!markdown) return ""
+  let text = markdown.replace(/```[\s\S]*?```/g, "")
+  text = text.replace(/!\[.*?\]$$.*?$$/g, "")
+  text = text.replace(/\[([^\]]+)\]$$[^)]+$$/g, "$1")
+  text = text.replace(/#{1,6}\s+/g, "")
+  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2")
+  text = text.replace(/(\*|_)(.*?)\1/g, "$2")
+  text = text.replace(/<[^>]*>/g, "")
+  text = text.replace(/\s+/g, " ").trim()
+  return text
+}
 export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeStatus[] }) {
   const [posts, setPosts] = useState<BlogWithLikeStatus[]>(initialPosts || []);
   const [page, setPage] = useState(1);
@@ -71,7 +82,8 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
       }
     };
   }, [fetchMore, hasMore]);
-  
+  const contentPreview = extractTextFromMarkdown(blog.content)
+  const truncatedContent = contentPreview.length > 160 ? `${contentPreview.substring(0, 160)}...` : contentPreview
 
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
@@ -106,7 +118,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 pt-2">
-              <p className="text-muted-foreground">{post.excerpt}</p>
+              <p className="text-muted-foreground">{truncatedContent}</p>
             </CardContent>
             <CardFooter className="p-4 pt-0 flex items-center justify-between">
               <Link
