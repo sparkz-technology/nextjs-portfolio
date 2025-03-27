@@ -1,6 +1,9 @@
 import { ImageResponse } from "next/og"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
+
+// Extend the Blog type to ensure tags are properly typed
+
 // Image metadata
 export const alt = "Blog post thumbnail"
 export const size = {
@@ -48,11 +51,10 @@ export default async function Image({ params }: { params: { id: string } }) {
         select: {
           name: true,
           username: true,
-          avatarUrl: true,
         },
       },
     },
-  }) as Blog
+  })
 
   // If no blog post is found, return a default image
   if (!blog) {
@@ -90,7 +92,7 @@ const tags = blog?.tags
   ? Array.isArray(blog.tags)
     ? blog.tags.slice(0, 3)
     : typeof blog.tags === "string"
-    ? blog.tags.split(",").slice(0, 3)
+    ? (blog.tags as string).split(",").slice(0, 3)
     : []
   : []
 

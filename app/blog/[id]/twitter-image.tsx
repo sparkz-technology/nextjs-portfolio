@@ -47,8 +47,8 @@ export default async function Image({ params }: { params: { id: string } }) {
       author: {
         select: {
           name: true,
-          username: true,
-          avatarUrl: true,
+          username
+            : true,
         },
       },
     },
@@ -86,12 +86,13 @@ export default async function Image({ params }: { params: { id: string } }) {
   const authorName = blog.author?.name || blog.author?.username || "Anonymous"
 
   // Extract tags for display
-const tags = Array.isArray(blog.tags)
-  ? blog.tags.slice(0, 3)
-  : typeof blog.tags === "string"
-  ? blog.tags.split(",").slice(0, 3)
-  : []
-
+  const tags = blog?.tags
+    ? Array.isArray(blog.tags)
+      ? blog.tags.slice(0, 3)
+      : typeof blog.tags === "string"
+        ? (blog.tags as string).split(",").slice(0, 3)
+        : []
+    : []
 
   // Extract content preview from markdown
   const contentPreview = extractTextFromMarkdown(blog.content)
