@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { deleteImage, deleteVideo, extractPublicId, isCloudinaryUrl, uploadImage, uploadVideo } from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
-import { IProject } from "@/lib/type";
+import { IProject } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
 import * as yup from "yup";

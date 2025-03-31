@@ -1,10 +1,85 @@
+"use server";
 import { v2 as cloudinary } from "cloudinary";
+import axios from "axios";
+import JSZip from "jszip";
+import fs from "fs";
+import path from "path";
+import { NextResponse } from "next/server";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+// 🌟 Universal Upload Function
+export const uploadFile = async (base64: string) => {
+  try {
+    // Extract MIME type from base64 string
+    const mimeTypeMatch = base64.match(/^data:(.+);base64,/);
+    if (!mimeTypeMatch) {
+      throw new Error("Invalid base64 string. Unable to determine file type.");
+    }
+
+    const mimeType = mimeTypeMatch[1]; // e.g., "image/png", "video/mp4"
+    const buffer = Buffer.from(base64.split(",")[1], "base64");
+
+    // Define allowed MIME types for different resource types
+    const allowedMimeTypes: Record<string, string[]> = {
+      image: ["image/png", "image/jpeg", "image/gif", "image/webp", "image/svg+xml"],
+      video: ["video/mp4", "video/webm", "video/mov", "video/avi", "video/ogg"],
+      audio: ["audio/mpeg", "audio/wav", "audio/ogg"],
+      raw: [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "text/plain",
+        "text/csv",
+      ],
+    };
+
+    // Determine the Cloudinary resource type
+    let resourceType: "image" | "video" | "raw" = "raw"; // Default to "raw"
+    for (const [type, mimeList] of Object.entries(allowedMimeTypes)) {
+      if (mimeList.includes(mimeType)) {
+        resourceType = type as "image" | "video" | "raw";
+        break;
+      }
+    }
+
+    // Handle unsupported file types
+    if (!resourceType) {
+      throw new Error(`Unsupported file type: ${mimeType}`);
+    }
+
+    // Upload file to Cloudinary
+    const result = (await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            resource_type: resourceType,
+            folder: "uploads", // Optional: Upload to a specific folder
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result as { secure_url: string; public_id: string });
+          }
+        )
+        .end(buffer);
+    })) as { secure_url: string; public_id: string };
+
+    return result;
+  } catch (error) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "An error occurred while uploading the file."
+    );
+  }
+};
+
 
 export const uploadImage = async (base64: string) => {
   try {
@@ -146,4 +221,43 @@ export async function extractPublicId(url: string): Promise<string> {
 }
 export async function isCloudinaryUrl(url: string): Promise<boolean> {
   return url.trim().includes("res.cloudinary.com");
+}
+
+export async function downloadFilesAsZip(files: { url: string; name: string }[]) {
+  try {
+    if (!files || !Array.isArray(files) || files.length === 0) {
+      throw new Error("No valid files provided.");
+    }
+
+    // Initialize JSZip
+    const zip = new JSZip();
+
+    // Download and add each file to the ZIP
+    await Promise.all(
+      files.map(async (file) => {
+        const response = await axios.get(file.url, {
+          responseType: "arraybuffer", // Get binary data
+        });
+        zip.file(file.name, response.data); // Add to ZIP
+      })
+    );
+
+    // Generate ZIP as Buffer
+    const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+
+    // Convert to Base64 (safe to send to the client)
+    const zipBase64 = zipBuffer.toString("base64");
+
+    // ✅ Return plain object with the base64 string
+    return {
+      success: true,
+      data: `data:application/zip;base64,${zipBase64}`,
+    };
+  } catch (error) {
+    console.error("❌ Error creating ZIP:", error);
+    return {
+      success: false,
+      error: "Failed to create ZIP file.",
+    };
+  }
 }

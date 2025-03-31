@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { DeleteDialog, SkillDialog } from "@/app/dashboard/skill/skill-dialog";
 import SkillTable from "@/app/dashboard/skill/skill-table";
-import { ISearchParams } from "@/lib/type";
+import { ISearchParams } from "@/lib/types";
 import { listSkillsAction } from "@/app/dashboard/skill/action";
 
 interface SkillPageProps {

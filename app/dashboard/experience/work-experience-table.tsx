@@ -19,7 +19,7 @@ import Table from "@/components/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { IWorkExperience } from "@/lib/type";
+import { IWorkExperience } from "@/lib/types";
 import { toggleVisibilityByIdAction, updateSequenceAction } from "@/app/dashboard/experience/action";
 import { parseCustomDate } from "@/lib/utils"
 import { useWorkExperienceDialog } from "@/lib/zustand/use-dialog-store";

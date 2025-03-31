@@ -1,4 +1,4 @@
-import { IIcon } from "@/lib/type";
+import { IIcon } from "@/lib/types";
 import { listIconsAction } from "../action";
 import { listaboutAction } from "./action";
 import { AdminDataManager } from "./admin-data-manager";

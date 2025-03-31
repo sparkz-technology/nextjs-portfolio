@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IMessage } from "@/lib/type";
+import { IMessage } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { toggleReadByIdAction } from "@/app/dashboard/message/action";
 

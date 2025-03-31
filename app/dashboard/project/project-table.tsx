@@ -17,7 +17,7 @@ import Table from "@/components/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { IProject } from "@/lib/type";
+import { IProject } from "@/lib/types";
 import IconRenderer from "@/components/icon-renderer";
 import { toast } from "sonner";
 import { toggleProjectVisibilityAction, updateProjectSequenceAction } from "./action";

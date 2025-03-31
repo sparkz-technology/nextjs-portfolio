@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { DeleteDialog, ExpreienceDialog } from "@/app/dashboard/experience/work-experience-dialog";
 import WorkExprienceTable from "@/app/dashboard/experience/work-experience-table";
-import { ISearchParams } from "@/lib/type";
+import { ISearchParams } from "@/lib/types";
 import { listWorkExprienceAction } from "@/app/dashboard/experience/action";
 
 interface WorkExperiencePageProps {

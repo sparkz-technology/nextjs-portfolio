@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { updateAboutAction } from "./action";
 import { Label } from "@/components/ui/label";
 import { type Option, SearchableSelect } from "@/components/searchable-select";
-import type { IIcon } from "@/lib/type";
+import type { IIcon } from "@/lib/types";
 import { addIconAction, deleteIconAction } from "../action";
 import IconRenderer from "@/components/icon-renderer";
 

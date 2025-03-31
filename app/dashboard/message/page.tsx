@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import MessageTable from "@/app/dashboard/message/message-table";
-import { ISearchParams } from "@/lib/type";
+import { ISearchParams } from "@/lib/types";
 import { listMessageAction } from "@/app/dashboard/message/action";
 
 interface MessagePageProps {

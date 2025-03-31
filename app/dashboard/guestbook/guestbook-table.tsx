@@ -18,7 +18,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useGuestSignatureDialog } from "@/lib/zustand/use-dialog-store";
 import { toggleVisibilityByIdAction } from "@/app/dashboard/guestbook/action";
-import { IGuestSignature } from "@/lib/type";
+import { IGuestSignature } from "@/lib/types";
 
 interface GustbookTableProps {
   data: IGuestSignature[];

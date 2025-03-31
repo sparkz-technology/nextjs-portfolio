@@ -19,7 +19,7 @@ import Table from "@/components/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { IEducation } from "@/lib/type";
+import { IEducation } from "@/lib/types";
 import { toggleEducationVisibilityAction, updateEducationSequenceAction } from "@/app/dashboard/education/action";
 import { useEducationDialog } from "@/lib/zustand/use-dialog-store";
 import { parseCustomDate } from "@/lib/utils"

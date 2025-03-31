@@ -213,6 +213,7 @@ export default async function Image({ params }: { params: { id: string } }) {
               {authorName.charAt(0).toUpperCase()}
             </div> */}
 {blog.author?.avatarUrl ? (
+  /* eslint-disable @next/next/no-img-element */
     <img
       src={blog.author.avatarUrl}
       alt={authorName}

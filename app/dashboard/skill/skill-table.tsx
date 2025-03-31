@@ -18,7 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Badge } from "@/components/ui/badge";
 import { useSkillDialog } from "@/lib/zustand/use-dialog-store";
 import { toggleVisibilityByIdAction, updateSequenceAction } from "@/app/dashboard/skill/action";
-import { ISkill } from "@/lib/type";
+import { ISkill } from "@/lib/types";
 
 interface SkillTableProps {
   data: ISkill[];

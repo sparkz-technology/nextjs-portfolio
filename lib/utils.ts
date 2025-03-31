@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Confetti from "canvas-confetti";
-import { parse, isValid, format } from "date-fns";
+import { parse, isValid, format, formatDistanceToNow } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -41,11 +41,37 @@ export const parseCustomDate = (dateStr: string): string => {
     const date = parse(dateStr, "dd/MM/yyyy", new Date());
     return isValid(date) ? format(date, "MMM-yy") : "Present";
 };
-export function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date)
+// export function formatDate(dateString: string): string {
+//   const date = new Date(dateString)
+//   return new Intl.DateTimeFormat("en-US", {
+//     year: "numeric",
+//     month: "short",
+//     day: "numeric",
+//   }).format(date)
+// }
+export function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return bytes + " B"
+  else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB"
+  else return (bytes / 1048576).toFixed(1) + " MB"
 }
+
+export function formatDate(date: Date): string {
+  return formatDistanceToNow(date, { addSuffix: true })
+}
+
+export function getFileType(fileName: string): string {
+  const extension = fileName.split(".").pop()?.toLowerCase() || ""
+
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "svg", "webp"]
+  const documentExtensions = ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "csv"]
+  const videoExtensions = ["mp4", "webm", "mov", "avi"]
+  const audioExtensions = ["mp3", "wav", "ogg"]
+
+  if (imageExtensions.includes(extension)) return "image"
+  if (documentExtensions.includes(extension)) return "document"
+  if (videoExtensions.includes(extension)) return "video"
+  if (audioExtensions.includes(extension)) return "audio"
+
+  return "other"
+}
+

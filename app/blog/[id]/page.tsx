@@ -160,7 +160,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
-              <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt.toISOString())}</time>
+              <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
             </div>
 
             <BlogLikeButton

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { ISearchParams } from "@/lib/type";
+import { ISearchParams } from "@/lib/types";
 import { DeleteDialog } from "./guestbook-dialog";
 import GustbookTable from "@/app/dashboard/guestbook/guestbook-table";
 import { listGuestSignatureAction } from "@/app/dashboard/guestbook/action";

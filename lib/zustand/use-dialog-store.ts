@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IAsset, IEducation, IGuestSignature, IProject, ISkill, IWorkExperience  } from "../type";
+import { IAsset, IEducation, IGuestSignature, IProject, ISkill, IWorkExperience  } from "../types";
 import { BlogWithLikeStatus } from "@/app/blog/action";
 
 interface IDialogState<T> {

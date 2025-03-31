@@ -30,7 +30,7 @@ import {
   updateProjectAction,
 } from "./action";
 import { useProjectDialog } from "@/lib/zustand/use-dialog-store";
-import { IIcon, IProject } from "@/lib/type";
+import { IIcon, IProject } from "@/lib/types";
 
 const projectLinkSchema = Yup.object().shape({
   type: Yup.string().required("Type is required"), // Validating type field

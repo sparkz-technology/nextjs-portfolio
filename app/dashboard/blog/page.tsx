@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { ISearchParams } from "@/lib/type";
+import { ISearchParams } from "@/lib/types";
 import { DeleteDialog } from "./blog-dialog";
 import { listBlogs } from "@/app/dashboard/blog/action";
 import BlogTable from "./blog-table";

@@ -1,6 +1,6 @@
 "use client";
 
-import { IAsset } from "@/lib/type";
+import { IAsset } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "timeago.js";
 import { MoreHorizontal } from "lucide-react";

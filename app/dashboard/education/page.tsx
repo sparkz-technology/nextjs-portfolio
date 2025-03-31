@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { DeleteDialog, EducationDialog } from "@/app/dashboard/education/education-dialog";
 import EducationTable from "@/app/dashboard/education/education-table";
-import { ISearchParams } from "@/lib/type";
+import { ISearchParams } from "@/lib/types";
 import { listEducationAction } from "@/app/dashboard/education/action";
 
 interface EducationPageProps {

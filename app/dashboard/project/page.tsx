@@ -2,7 +2,7 @@ import * as React from "react";
 import { DeleteDialog, ProjectDialog } from "./project-dialog";
 import ProjectTable from "./project-table";
 import { listIconsAction, listProjectsAction } from "./action";
-import { IIcon, ISearchParams } from "@/lib/type";
+import { IIcon, ISearchParams } from "@/lib/types";
 import { notFound } from "next/navigation";
 
 interface ProjectPageProps {

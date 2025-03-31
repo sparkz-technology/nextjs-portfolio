@@ -96,8 +96,8 @@ model User {
   Authenticator   Authenticator[]
   contactId       String?
   Contact         Contact?
-   blogs          Blog[]        // One-to-Many: A user can have multiple blogs
-  likedBlogs     BlogLike[]    // Many-to-Many: User can like multiple blogs
+  blogs           Blog[] // One-to-Many: A user can have multiple blogs
+  likedBlogs      BlogLike[] // Many-to-Many: User can like multiple blogs
 }
 
 model GuestSignatureLike {
@@ -232,15 +232,15 @@ model Message {
   isRead    Boolean  @default(false)
 }
 
-model Asset {
-  id        String   @id @default(uuid()) @map("_id")
-  name      String
-  type      String
-  url       String
-  publicId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model Asset {
+//   id        String   @id @default(uuid()) @map("_id")
+//   name      String
+//   type      String
+//   url       String
+//   publicId  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model Visit {
   id            String   @id @default(uuid()) @map("_id")
@@ -253,30 +253,53 @@ model Visit {
 }
 
 model Blog {
-  id         String   @id @default(uuid()) @map("_id")
-  title      String
-  excerpt    String  @unique 
-  content    String
-  tags       String[] @default([])
-  published  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(uuid()) @map("_id")
+  title     String
+  excerpt   String   @unique
+  content   String
+  tags      String[] @default([])
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  authorId   String
-  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade) // Blog belongs to a User
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade) // Blog belongs to a User
 
-  likes      BlogLike[]
+  likes BlogLike[]
 }
 
 model BlogLike {
-  id       String @id @default(uuid()) @map("_id")
-  userId   String
-  blogId   String
-  user     User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  blog     Blog  @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid()) @map("_id")
+  userId    String
+  blogId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@unique([userId, blogId]) // Ensure a user can only like a blog once
 }
 
+model Folder {
+  id        String   @id @default(uuid()) @map("_id") // Use auto() for MongoDB
+  name      String
+  parentId  String?
+  parent    Folder?  @relation("FolderToFolder", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children  Folder[] @relation("FolderToFolder")
+  assets    Asset[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
+model Asset {
+  id        String   @id @default(uuid()) @map("_id") // Use auto() for MongoDB
+  name      String
+  type      String
+  size      Int?
+  url       String
+  folderId  String?
+  publicId  String?
+  folder    Folder?  @relation(fields: [folderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  favorite  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
