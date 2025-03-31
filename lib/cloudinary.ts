@@ -2,9 +2,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import axios from "axios";
 import JSZip from "jszip";
-import fs from "fs";
-import path from "path";
-import { NextResponse } from "next/server";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

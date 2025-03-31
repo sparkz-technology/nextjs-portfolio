@@ -5,7 +5,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Folder, FileText, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,

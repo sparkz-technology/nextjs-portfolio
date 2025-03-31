@@ -101,6 +101,7 @@ export function AssetToolbar() {
       toast.success("Assets downloaded successfully");
     } catch (error) {
       toast.error("Failed to download assets");
+      console.error("Error downloading assets:", error);
     }
 
     

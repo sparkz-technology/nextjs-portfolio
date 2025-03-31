@@ -39,7 +39,6 @@ export function AssetList() {
     openDeleteDialog,
     openShareDialog,
     setDownloadingAsset,
-    setDownloadingSelected,
   } = useAssetManagerStore();
 
   useEffect(() => {
