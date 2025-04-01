@@ -1,6 +1,6 @@
 import { Visit } from '@prisma/client';
 import { prisma } from "@/lib/prisma";
-import { serialize, parse } from 'cookie';
+import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { NextResponse, NextRequest } from 'next/server';
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<VisitResponse
 
   const { token } = await req.json() as { token?: string };
   const cookies = parse(req.headers.get('cookie') || '');
-  let visitorId: string | undefined = cookies.visitor_id;
+  const visitorId: string | undefined = cookies.visitor_id;
 
   if (token) {
     return NextResponse.json({ message: 'Session active, no new visit recorded', deviceType: 'desktop', visitRecord: {} as Visit, token: "" }, { status: 200 });
