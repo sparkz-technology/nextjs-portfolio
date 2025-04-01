@@ -21,7 +21,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<VisitResponse
 
   const { token } = await req.json() as { token?: string };
   const cookies = parse(req.headers.get('cookie') || '');
-  const visitorId: string | undefined = cookies.visitor_id;
+  let visitorId: string | undefined = cookies.visitor_id;
 
   if (token) {
     return NextResponse.json({ message: 'Session active, no new visit recorded', deviceType: 'desktop', visitRecord: {} as Visit, token: "" }, { status: 200 });
