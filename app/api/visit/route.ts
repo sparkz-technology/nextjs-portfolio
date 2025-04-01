@@ -9,7 +9,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 
 interface VisitResponse {
   message: string;
-  deviceType: 'mobile' | 'desktop';
+  deviceType: string;
   visitRecord: Visit;
   token: string;
 }
