@@ -37,7 +37,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<VisitResponse
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
 
-  let visitRecord: Visit = await prisma.visit.upsert({
+  const visitRecord: Visit = await prisma.visit.upsert({
     where: { date: today },
     update: {
       [isMobile ? 'mobileVisits' : 'desktopVisits']: { increment: 1 },
