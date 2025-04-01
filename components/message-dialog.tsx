@@ -55,7 +55,7 @@ export function MessageDialog() {
 
     useEffect(() => {
     const fetchVisitData = async () => {
-      let sessionToken: string | null = sessionStorage.getItem('sessionToken');
+      const sessionToken: string | null = sessionStorage.getItem('sessionToken');
 
       if (sessionToken) {
         return; // Token exists, don't call API again
