@@ -6,8 +6,8 @@ import { prisma } from "@/lib/prisma"
 // Image metadata
 export const alt = "Blog post thumbnail"
 export const size = {
-  width: 675 ,
-  height: 1200,
+  width: 1200 ,
+  height: 630,
 }
 
 export const contentType = "image/png"
