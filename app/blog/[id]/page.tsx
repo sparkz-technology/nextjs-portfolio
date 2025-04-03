@@ -2,7 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ChevronLeft, Calendar } from "lucide-react"
 import { BlogLikeButton } from "@/app/blog/blog-like-button"
-import { formatDate } from "@/lib/utils"
+import { formatDate ,calculateReadTime } from "@/lib/utils"
 import { prisma } from "@/lib/prisma"
 import type { Blog } from "@prisma/client"
 import { auth } from "@/lib/auth"
@@ -162,7 +162,7 @@ export default async function BlogPostPage({ params }: Props) {
               <Calendar className="h-4 w-4 mr-1" />
               <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
                  <span>|</span>
-                <span>{calculateReadTime(contentPreview)} min read</span>
+                <span>{calculateReadTime(extractTextFromMarkdown(post.content))} min read</span>
             </div>
 
             <BlogLikeButton
