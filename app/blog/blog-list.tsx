@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatDate } from "@/lib/utils";
+import { formatDate ,calculateReadTime} from "@/lib/utils";
 import { BlogWithLikeStatus, listBlogs } from "./action";
 
 const PAGE_SIZE = 5;
@@ -117,6 +117,8 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
                   <Calendar className="h-3 w-3 mr-1" />
                   {formatDate(new Date(post.createdAt))}
                 </time>
+                <span>|</span>
+                <span>{calculateReadTime(contentPreview)} min read</span>
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 pt-2">
