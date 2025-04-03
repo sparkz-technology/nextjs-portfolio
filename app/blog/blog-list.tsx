@@ -112,7 +112,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
                   {post.title}
                 </Link>
               </CardTitle>
-              <CardDescription className="text-sm text-muted-foreground">
+                         <CardDescription className="text-sm text-muted-foreground flex items-center gap-2">
                 <time dateTime={post.createdAt.toISOString()} className="flex items-center">
                   <Calendar className="h-3 w-3 mr-1" />
                   {formatDate(new Date(post.createdAt))}
