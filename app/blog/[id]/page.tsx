@@ -158,9 +158,11 @@ export default async function BlogPostPage({ params }: Props) {
           <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
 
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <Calendar className="h-4 w-4 mr-1" />
               <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
+                 <span>|</span>
+                <span>{calculateReadTime(contentPreview)} min read</span>
             </div>
 
             <BlogLikeButton
