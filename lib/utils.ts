@@ -78,10 +78,8 @@ export function getFileType(fileName: string): string {
 export function calculateReadTime(text: string): number {
   // Average reading speed in words per minute
   const WORDS_PER_MINUTE = 200;
-  
   // Remove markdown formatting and count words
-  const plainText = extractTextFromMarkdown(text);
-  const wordCount = plainText.split(/\s+/).length;
+  const wordCount = text.split(/\s+/).length;
   
   // Calculate and round up to nearest minute
   return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
