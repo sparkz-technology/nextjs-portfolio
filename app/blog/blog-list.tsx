@@ -12,8 +12,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatDate ,calculateReadTime} from "@/lib/utils";
+import { calculateReadTime} from "@/lib/utils";
 import { BlogWithLikeStatus, listBlogs } from "./action";
+import BlogShareButton from "./blog-share-button";
+
+const formatDate = (date: Date): string => {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
 
 const PAGE_SIZE = 5;
 function extractTextFromMarkdown(markdown: string): string {
@@ -131,12 +140,18 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
               >
                 Read more <ArrowRight className="h-3 w-3 ml-1" />
               </Link>
+              <div className="flex items-center space-x-1">
               <BlogLikeButton
                 isLoggedIn={post.isLoggedIn}
                 postId={post.id}
                 initialLikes={post._count?.likes ?? 0}
                 isLikedByUser={post.isLikedByUser}
               />
+                <BlogShareButton
+                postTitle={post.title}
+                postExcerpt={post.excerpt}
+              />
+              </div>
             </CardFooter>
           </Card>
         )})}
