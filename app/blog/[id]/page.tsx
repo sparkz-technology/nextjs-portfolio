@@ -148,7 +148,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
-      <div className="container max-w-3xl py-6 space-y-6">
+      <div className="container max-w-3xl pb-6 space-y-6">
         <Link href="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
           <ChevronLeft className="h-4 w-4 mr-1" />
           Back to all posts
