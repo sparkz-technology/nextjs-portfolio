@@ -1,47 +1,48 @@
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { ChevronLeft, Calendar, Clock } from "lucide-react"
-import { BlogLikeButton } from "@/app/blog/blog-like-button"
-import { formatDate ,calculateReadTime } from "@/lib/utils"
-import { prisma } from "@/lib/prisma"
-import type { Blog } from "@prisma/client"
-import { auth } from "@/lib/auth"
-import MarkdownPreview from "@/components/markdown-preview"
-import type { Metadata } from "next/types"
-import BackToTop from "@/components/back-to-top"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ChevronLeft, Calendar, Clock } from "lucide-react";
+import { BlogLikeButton } from "@/app/blog/blog-like-button";
+import { formatDate, calculateReadTime } from "@/lib/utils";
+import { prisma } from "@/lib/prisma";
+import type { Blog } from "@prisma/client";
+import { auth } from "@/lib/auth";
+import MarkdownPreview from "@/components/markdown-preview";
+import type { Metadata } from "next/types";
+import BackToTop from "@/components/back-to-top";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BlogShareButton from "../blog-share-button";
 
 export type BlogWithLikeStatus = Blog & {
-  isLikedByUser: boolean
+  isLikedByUser: boolean;
   _count?: {
-    likes: number
-  }
+    likes: number;
+  };
   author?: {
-    id: string
-    name: string | null
-    username: string
-    avatarUrl: string | null
-  }
-  likes: number
-  isLoggedIn: boolean
-}
+    id: string;
+    name: string | null;
+    username: string;
+    avatarUrl: string | null;
+  };
+  likes: number;
+  isLoggedIn: boolean;
+};
 
 function extractTextFromMarkdown(markdown: string): string {
-  if (!markdown) return ""
-  let text = markdown.replace(/```[\s\S]*?```/g, "")
-  text = text.replace(/!\[.*?\]$$.*?$$/g, "")
-  text = text.replace(/\[([^\]]+)\]$$[^)]+$$/g, "$1")
-  text = text.replace(/#{1,6}\s+/g, "")
-  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2")
-  text = text.replace(/(\*|_)(.*?)\1/g, "$2")
-  text = text.replace(/<[^>]*>/g, "")
-  text = text.replace(/\s+/g, " ").trim()
+  if (!markdown) return "";
+  let text = markdown.replace(/```[\s\S]*?```/g, "");
+  text = text.replace(/!\[.*?\]$$.*?$$/g, "");
+  text = text.replace(/\[([^\]]+)\]$$[^)]+$$/g, "$1");
+  text = text.replace(/#{1,6}\s+/g, "");
+  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2");
+  text = text.replace(/(\*|_)(.*?)\1/g, "$2");
+  text = text.replace(/<[^>]*>/g, "");
+  text = text.replace(/\s+/g, " ").trim();
 
-  return text
+  return text;
 }
 async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
   try {
-    const session = await auth()
+    const session = await auth();
 
     const blog = await prisma.blog.findFirst({
       where: { excerpt: excerpt },
@@ -60,17 +61,17 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
           },
         },
       },
-    })
+    });
 
     if (!blog) {
-      return null
+      return null;
     }
 
-    let isLikedByUser = false
-    let isLoggedIn = false
+    let isLikedByUser = false;
+    let isLoggedIn = false;
 
     if (session?.user?.id) {
-      isLoggedIn = true
+      isLoggedIn = true;
       const like = await prisma.blogLike.findUnique({
         where: {
           userId_blogId: {
@@ -78,9 +79,9 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
             blogId: blog.id,
           },
         },
-      })
+      });
 
-      isLikedByUser = !!like
+      isLikedByUser = !!like;
     }
 
     return {
@@ -88,34 +89,39 @@ async function getBlog(excerpt: string): Promise<BlogWithLikeStatus | null> {
       likes: blog._count?.likes || 0,
       isLikedByUser,
       isLoggedIn,
-    }
+    };
   } catch (error) {
-    console.error("Error fetching blog:", error)
-    return null
+    console.error("Error fetching blog:", error);
+    return null;
   }
 }
 
 type Props = {
-  params: Promise<{ id: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Get the blog post
-  const { id } = await params
-  const post = await getBlog(id)
+  const { id } = await params;
+  const post = await getBlog(id);
 
   if (!post) {
-    return {}
+    return {};
   }
 
-  const contentPreview = extractTextFromMarkdown(post.content)
-  const truncatedContent = contentPreview.length > 160 ? `${contentPreview.substring(0, 160)}...` : contentPreview
+  const contentPreview = extractTextFromMarkdown(post.content);
+  const truncatedContent =
+    contentPreview.length > 160
+      ? `${contentPreview.substring(0, 160)}...`
+      : contentPreview;
   return {
     title: post.title,
     description: truncatedContent,
     keywords: post.tags,
-    authors: post.author ? [{ name: post.author.name || post.author.username }] : undefined,
+    authors: post.author
+      ? [{ name: post.author.name || post.author.username }]
+      : undefined,
     openGraph: {
       title: post.title,
       description: truncatedContent,
@@ -136,21 +142,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "article:author": post.author?.name || post.author?.username || "",
       "article:published": post.published.toString(),
     },
-  }
+  };
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { id } = await params
-  const post = await getBlog(id)
+  const { id } = await params;
+  const post = await getBlog(id);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
       <div className="container max-w-3xl pb-6 space-y-6">
-        <Link href="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary">
+        <Link
+          href="/blog"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-primary"
+        >
           <ChevronLeft className="h-4 w-4 mr-1" />
           Back to all posts
         </Link>
@@ -165,38 +174,49 @@ export default async function BlogPostPage({ params }: Props) {
                  <span>|</span>
                 <span>{calculateReadTime(extractTextFromMarkdown(post.content))} min read</span>
             </div> */}
-        <div className="flex items-center space-x-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={post.author?.avatarUrl || "./placeholder.svg"} alt={post.author?.name ||""} />
-                  <AvatarFallback>{post.author?.name?.charAt(0) || "?"}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium">{post.author?.name || "Unknown Author"}</p>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar className="h-3 w-3 mr-1" />
-                    <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
-                    <span className="mx-1">•</span>
-                    <Clock className="h-3 w-3 mr-1" />
-                    <span>{calculateReadTime(post.content)} min read</span>
-                  </div>
+            <div className="flex items-center space-x-3">
+              <Avatar className="h-10 w-10">
+                <AvatarImage
+                  src={post.author?.avatarUrl || "./placeholder.svg"}
+                  alt={post.author?.name || ""}
+                />
+                <AvatarFallback>
+                  {post.author?.name?.charAt(0) || "?"}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-medium">
+                  {post.author?.name || "Unknown Author"}
+                </p>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Calendar className="h-3 w-3 mr-1" />
+                  <time dateTime={post.createdAt.toISOString()}>
+                    {formatDate(post.createdAt)}
+                  </time>
+                  <span className="mx-1">•</span>
+                  <Clock className="h-3 w-3 mr-1" />
+                  <span>{calculateReadTime(post.content)} min read</span>
                 </div>
               </div>
-              <div className="flex items-center space-x-1">
-
-            <BlogLikeButton
-              isLoggedIn={post.isLoggedIn}
-              postId={post.id}
-              initialLikes={post.likes}
-              isLikedByUser={post.isLikedByUser}
+            </div>
+            <div className="flex items-center space-x-1">
+              <BlogLikeButton
+                isLoggedIn={post.isLoggedIn}
+                postId={post.id}
+                initialLikes={post.likes}
+                isLikedByUser={post.isLikedByUser}
               />
-              </div>
+              <BlogShareButton
+                postTitle={post.title}
+                postExcerpt={post.excerpt}
+              />
+            </div>
           </div>
-          
+
           <MarkdownPreview source={post.content} />
         </article>
-         <BackToTop />
+        <BackToTop />
       </div>
     </main>
-  )
+  );
 }
-
