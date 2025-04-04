@@ -175,7 +175,7 @@ export default async function BlogPostPage({ params }: Props) {
         <article className="space-y-4">
           <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
 
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <div className="flex items-center justify-between text-sm text-muted-foreground mb-6">
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage
