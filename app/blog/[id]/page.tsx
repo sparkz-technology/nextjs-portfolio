@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Calendar, Clock } from "lucide-react";
 import { BlogLikeButton } from "@/app/blog/blog-like-button";
-import { formatDate, calculateReadTime } from "@/lib/utils";
+import { calculateReadTime } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
 import type { Blog } from "@prisma/client";
 import { auth } from "@/lib/auth";
@@ -25,6 +25,14 @@ export type BlogWithLikeStatus = Blog & {
   };
   likes: number;
   isLoggedIn: boolean;
+};
+
+const formatDate = (date: Date): string => {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
 };
 
 function extractTextFromMarkdown(markdown: string): string {
@@ -168,12 +176,6 @@ export default async function BlogPostPage({ params }: Props) {
           <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
 
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            {/* <div className="flex items-center gap-1">
-              <Calendar className="h-4 w-4 mr-1" />
-              <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
-                 <span>|</span>
-                <span>{calculateReadTime(extractTextFromMarkdown(post.content))} min read</span>
-            </div> */}
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10">
                 <AvatarImage

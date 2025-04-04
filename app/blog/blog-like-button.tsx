@@ -75,7 +75,7 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
             <Button
               variant="ghost"
               size="sm"
-              className={`gap-1 ${hasLiked ? "text-primary" : ""}`}
+              className={`gap-1 ${hasLiked ? "text-red-500" : ""}`}
               onClick={handleLike}
               disabled={!isLoggedIn || loading}
             >
@@ -86,7 +86,7 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
                   aria-label="Loading"
                 />
               ) : (
-                <Heart className={`h-4 w-4 ${isLikedByUser ? "fill-red-500" : ""}`} />
+                <Heart className={`h-4 w-4 ${hasLiked ? "fill-red-500" : ""}`} />
               )}
               <span>{likes}</span>
             </Button>
