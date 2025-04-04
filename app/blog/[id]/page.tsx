@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ChevronLeft, Calendar } from "lucide-react"
+import { ChevronLeft, Calendar, Clock } from "lucide-react"
 import { BlogLikeButton } from "@/app/blog/blog-like-button"
 import { formatDate ,calculateReadTime } from "@/lib/utils"
 import { prisma } from "@/lib/prisma"
@@ -9,6 +9,7 @@ import { auth } from "@/lib/auth"
 import MarkdownPreview from "@/components/markdown-preview"
 import type { Metadata } from "next/types"
 import BackToTop from "@/components/back-to-top"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean
@@ -158,20 +159,39 @@ export default async function BlogPostPage({ params }: Props) {
           <h1 className="text-3xl font-bold tracking-tight">{post.title}</h1>
 
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
+            {/* <div className="flex items-center gap-1">
               <Calendar className="h-4 w-4 mr-1" />
               <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
                  <span>|</span>
                 <span>{calculateReadTime(extractTextFromMarkdown(post.content))} min read</span>
-            </div>
+            </div> */}
+        <div className="flex items-center space-x-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={post.author?.avatarUrl || "./placeholder.svg"} alt={post.author?.name ||""} />
+                  <AvatarFallback>{post.author?.name?.charAt(0) || "?"}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">{post.author?.name || "Unknown Author"}</p>
+                  <div className="flex items-center text-sm text-muted-foreground">
+                    <Calendar className="h-3 w-3 mr-1" />
+                    <time dateTime={post.createdAt.toISOString()}>{formatDate(post.createdAt)}</time>
+                    <span className="mx-1">•</span>
+                    <Clock className="h-3 w-3 mr-1" />
+                    <span>{calculateReadTime(post.content)} min read</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-1">
 
             <BlogLikeButton
               isLoggedIn={post.isLoggedIn}
               postId={post.id}
               initialLikes={post.likes}
               isLikedByUser={post.isLikedByUser}
-            />
+              />
+              </div>
           </div>
+          
           <MarkdownPreview source={post.content} />
         </article>
          <BackToTop />

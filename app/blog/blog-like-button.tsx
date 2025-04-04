@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ThumbsUp } from "lucide-react"
+import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 import { toggleBlogLike } from "./action"
@@ -86,7 +86,7 @@ export function BlogLikeButton({ postId, initialLikes, isLikedByUser, isLoggedIn
                   aria-label="Loading"
                 />
               ) : (
-                <ThumbsUp className="h-4 w-4" />
+                <Heart className={`h-4 w-4 ${isLikedByUser ? "fill-red-500" : ""}`} />
               )}
               <span>{likes}</span>
             </Button>
