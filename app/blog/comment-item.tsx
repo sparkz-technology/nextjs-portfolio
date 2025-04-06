@@ -267,6 +267,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
               <CommentForm
                 blogId={comment.blogId}
                 parentId={comment.id}
+                author={comment.author.name || "unknown"}
                 onCommentAdded={handleAddReply}
                 onCancel={handleCancelReply}
                 placeholder="Add a reply..."

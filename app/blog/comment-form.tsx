@@ -20,6 +20,7 @@ interface CommentFormProps {
     onCancel?: () => void
     isEditing?: boolean
     placeholder?: string
+    author?: string 
 }
 
 export function CommentForm({
@@ -31,6 +32,7 @@ export function CommentForm({
     onCancel,
     isEditing = false,
     placeholder = "Add a comment...",
+    author,
 }: CommentFormProps) {
     const [content, setContent] = useState(initialValue)
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -115,27 +117,43 @@ export function CommentForm({
             </Avatar>
 
             <div className="flex-1 relative">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Textarea
-                                ref={textareaRef}
-                                placeholder={placeholder}
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                onFocus={() => setIsFocused(true)}
-                                disabled={!session?.user}
-                                className={clsx(
-                                    "min-h-[60px] resize-none pr-16",
-                                    !session?.user && "cursor-not-allowed opacity-70"
-                                )}
-                            />
-                        </TooltipTrigger>
-                        {!session?.user && (
-                            <TooltipContent side="top" className="text-sm">
-                                You must be logged in to comment.
-                            </TooltipContent>
-                        )}
-                    </Tooltip>
+                {author && (
+                    <div className="absolute -top-6 left-2 flex items-center gap-2 px-2 py-1 bg-muted rounded-md shadow-sm text-sm text-muted-foreground">
+                        <span>@{author}</span>
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={onCancel}
+                            disabled={isSubmitting}
+                            className="h-5 w-5 p-0"
+                        >
+                            <X className="w-3.5 h-3.5" />
+                        </Button>
+                    </div>
+                )}
+
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Textarea
+                            ref={textareaRef}
+                            placeholder={placeholder}
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            onFocus={() => setIsFocused(true)}
+                            disabled={!session?.user}
+                            className={clsx(
+                                "min-h-[60px] resize-none pr-16",
+                                !session?.user && "cursor-not-allowed opacity-70"
+                            )}
+                        />
+                    </TooltipTrigger>
+                    {!session?.user && (
+                        <TooltipContent side="top" className="text-sm">
+                            You must be logged in to comment.
+                        </TooltipContent>
+                    )}
+                </Tooltip>
 
                 {(isFocused || isEditing) && (
                     <div className="absolute bottom-2 right-2 flex gap-1">
