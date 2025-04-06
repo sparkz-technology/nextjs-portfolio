@@ -154,7 +154,9 @@ export function CommentForm({
                             disabled={!session?.user}
                             className={clsx(
                                 "min-h-[60px] resize-none pr-16",
-                                !session?.user && "cursor-not-allowed opacity-70"
+                                !session?.user && "cursor-not-allowed opacity-70",
+                                isEditing && "rounded-t-none",
+                                author && "rounded-t-none",
                             )}
                         />
                     </TooltipTrigger>
@@ -167,19 +169,6 @@ export function CommentForm({
 
                 {(isFocused || isEditing) && (
                     <div className="absolute bottom-2 right-2 flex gap-1">
-                        {onCancel && (
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={onCancel}
-                                disabled={isSubmitting}
-                                className="p-1"
-                            >
-                                <X className="w-4 h-4" />
-                            </Button>
-                        )}
-
                         <Button
                             type="button"
                             size="icon"

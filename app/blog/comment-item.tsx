@@ -223,9 +223,8 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
                 isEditing
               />
             </PortalWrapper>
-          ) : (
-            <div className="text-sm">{comment.content}</div>
-          )}
+          ) : null}
+          <div className="text-sm">{comment.content}</div>
 
           {!isEditing && (
             <div className="flex items-center gap-4 pt-1">
