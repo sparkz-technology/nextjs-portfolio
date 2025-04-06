@@ -8,7 +8,6 @@ export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
 
-  // Check if we've scrolled down enough to show the button
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
@@ -44,39 +43,71 @@ export default function BackToTop() {
       )}
       aria-label="Back to top"
     >
-      {/* Outer ring animation */}
+      {/* Outer ring animation - only shows on hover */}
       <span
         className={cn(
-          "absolute inset-0 rounded-full",
-          "animate-ping opacity-30",
-          "bg-gray-200 dark:bg-gray-800",
-          isHovering ? "duration-[2000ms]" : "duration-0 opacity-0",
+          "absolute inset-0 rounded-full bg-gray-200 dark:bg-gray-800",
+          "transition-opacity duration-300",
+          isHovering ? "opacity-30 animate-ping" : "opacity-0",
         )}
+        style={{ animationDuration: "2000ms" }}
       />
 
       {/* Inner content with animation */}
       <div className="relative flex items-center justify-center">
         <Rocket
           className={cn(
-            "h-4 w-4 transition-transform duration-300",
+            "h-4 w-4 transition-all duration-300",
             "text-gray-800 dark:text-gray-200",
-            "rotate-0 group-hover:-rotate-45 group-hover:scale-110",
-            "group-hover:animate-pulse",
+            isHovering ? "-rotate-45 scale-110" : "rotate-0 scale-100",
           )}
         />
 
         {/* Particle effects on hover */}
-        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-          {isHovering && (
-            <>
-              <span className="absolute h-1.5 w-1.5 animate-particle1 rounded-full bg-gray-800 dark:bg-gray-200" />
-              <span className="absolute h-1 w-1 animate-particle2 rounded-full bg-gray-600 dark:bg-gray-400" />
-              <span className="absolute h-0.5 w-0.5 animate-particle3 rounded-full bg-gray-400 dark:bg-gray-600" />
-            </>
-          )}
-        </div>
+        {isHovering && (
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
+            <span 
+              className="absolute h-1.5 w-1.5 rounded-full bg-gray-800 dark:bg-gray-200"
+              style={{
+                animation: "particle1 1s ease-out infinite",
+                left: "-4px"
+              }} 
+            />
+            <span 
+              className="absolute h-1 w-1 rounded-full bg-gray-600 dark:bg-gray-400"
+              style={{
+                animation: "particle2 1s ease-out infinite",
+                left: "0px",
+                animationDelay: "0.2s"
+              }} 
+            />
+            <span 
+              className="absolute h-0.5 w-0.5 rounded-full bg-gray-400 dark:bg-gray-600"
+              style={{
+                animation: "particle3 1s ease-out infinite",
+                left: "4px",
+                animationDelay: "0.4s"
+              }} 
+            />
+          </div>
+        )}
       </div>
+
+      {/* Add CSS animations for particles in your global CSS */}
+      <style jsx global>{`
+        @keyframes particle1 {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-10px) scale(0.5); opacity: 0; }
+        }
+        @keyframes particle2 {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-8px) scale(0.5); opacity: 0; }
+        }
+        @keyframes particle3 {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-6px) scale(0.5); opacity: 0; }
+        }
+      `}</style>
     </button>
   )
 }
-
