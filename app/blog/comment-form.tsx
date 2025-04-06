@@ -58,7 +58,7 @@ export function CommentForm({
                 const optimisticComment: Comment = {
                     id: commentId,
                     content: content,
-                    author: { id: session?.user.id ?? "", name: session?.user.name ?? "", image: "/placeholder.svg" },
+                    author: { id: session?.user.id ?? "", name: session?.user.name ?? "", image: session?.user.image ?? "" },
                     blogId: blogId,
                     parentId: parentId!,
                     createdAt: new Date().toISOString(),
