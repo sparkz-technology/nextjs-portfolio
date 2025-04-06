@@ -126,7 +126,6 @@ export async function getComments({ blogId, limit = 10, parentId = null }: GetCo
     const total = await prisma.comment.count({
       where: {
         blogId,
-        parentId,
       },
     });
 
