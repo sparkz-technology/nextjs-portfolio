@@ -224,7 +224,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
                     variant="ghost"
                     size="sm"
                     disabled={status !== "authenticated"}
-                    className={`h-8 px-2 ${isLiked ? "text-primary" : ""}`}
+                    className={`h-8 px-2 ${isLiked ? "text-red-500" : "text-primary"}`}
                     onClick={handleLike}
                   >
                     <Heart className={`mr-1 h-4 w-4 ${isLiked ? "fill-red-500" : ""}`} />
