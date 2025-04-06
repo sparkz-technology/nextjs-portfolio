@@ -7,13 +7,14 @@ import { getComments } from "./comment-actions"
 import type { Comment } from "@/lib/types"
 
 interface CommentSectionProps {
-    blogId: string
+  blogId: string
 }
 
 export function CommentSection({ blogId }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([])
   const [totalComments, setTotalComments] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [isNewComments, setIsNewComments] = useState(true)
 
   useEffect(() => {
     const loadInitialComments = async () => {
@@ -94,14 +95,17 @@ export function CommentSection({ blogId }: CommentSectionProps) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">{totalComments} Comments</h2>
-      <CommentForm blogId={blogId} onCommentAdded={handleAddComment} />
-
+      <div hidden={!isNewComments}>
+        <CommentForm blogId={blogId} onCommentAdded={handleAddComment} />
+      </div>
+      <div id="commentForm" />
       {isLoading ? (
         <div className="py-4 text-center text-muted-foreground">Loading comments...</div>
       ) : (
         <>
           <CommentList
             comments={comments}
+            onSetIsNewComments={setIsNewComments}
             onUpdateComment={handleUpdateComment}
             onDeleteComment={handleDeleteComment}
           />

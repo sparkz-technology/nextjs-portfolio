@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,14 +19,16 @@ import { Flag, MoreVertical, Heart } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { PortalWrapper } from "@/components/portal-wrapper";
 
 interface CommentItemProps {
   comment: Comment;
   onUpdateComment: (comment: Comment) => void;
   onDeleteComment: (commentId: string) => void;
+  onSetIsNewComments: (visible: boolean) => void;
 }
 
-export function CommentItem({ comment, onUpdateComment, onDeleteComment }: CommentItemProps) {
+export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIsNewComments }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replies, setReplies] = useState<Comment[]>([]);
@@ -38,15 +40,18 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
 
   const handleEdit = () => {
     setIsEditing(true);
+    onSetIsNewComments(false);
   };
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+    onSetIsNewComments(true);
   };
 
   const handleUpdate = (updatedComment: Comment) => {
     onUpdateComment(updatedComment);
     setIsEditing(false);
+    onSetIsNewComments(true);
   };
 
   const handleDelete = async () => {
@@ -111,10 +116,12 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
 
   const handleReply = () => {
     setIsReplying(true);
+    onSetIsNewComments(false);
   };
 
   const handleCancelReply = () => {
     setIsReplying(false);
+    onSetIsNewComments(true);
   };
 
   const handleAddReply = (newReply: Comment) => {
@@ -127,6 +134,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
     setIsReplying(false);
     setShowReplies(true);
     setRepliesLoaded(true);
+    onSetIsNewComments(true);
 
     // Update the parent comment to reflect the new reply count
     onUpdateComment({
@@ -138,9 +146,10 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
   const handleUpdateReply = (updatedComment: Comment) => {
     // First update the local replies state
     setReplies((prevReplies) => prevReplies.map((reply) => (reply.id === updatedComment.id ? updatedComment : reply)));
-
+    onSetIsNewComments(true);
     // Then propagate the update to the parent
     onUpdateComment(updatedComment);
+
   };
 
   const loadReplies = async () => {
@@ -203,15 +212,17 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
           </div>
 
           {isEditing ? (
-            <CommentForm
-              initialValue={comment.content}
-              blogId={comment.blogId}
-              parentId={comment.parentId!}
-              commentId={comment.id}
-              onCommentAdded={handleUpdate}
-              onCancel={handleCancelEdit}
-              isEditing
-            />
+            <PortalWrapper containerId="commentForm">
+              <CommentForm
+                initialValue={comment.content}
+                blogId={comment.blogId}
+                parentId={comment.parentId!}
+                commentId={comment.id}
+                onCommentAdded={handleUpdate}
+                onCancel={handleCancelEdit}
+                isEditing
+              />
+            </PortalWrapper>
           ) : (
             <div className="text-sm">{comment.content}</div>
           )}
@@ -252,7 +263,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
           )}
 
           {isReplying && (
-            <div className="mt-4">
+            <PortalWrapper containerId="commentForm">
               <CommentForm
                 blogId={comment.blogId}
                 parentId={comment.id}
@@ -260,7 +271,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
                 onCancel={handleCancelReply}
                 placeholder="Add a reply..."
               />
-            </div>
+            </PortalWrapper>
           )}
 
           {repliesCount > 0 && !isReplying && (
@@ -274,6 +285,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
           {showReplies && repliesLoaded && (
             <CommentList
               comments={replies}
+              onSetIsNewComments={onSetIsNewComments}
               onUpdateComment={handleUpdateReply}
               onDeleteComment={handleDeleteReply}
               isNested
@@ -282,17 +294,17 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
         </div>
 
         <DropdownMenu>
-        <Tooltip>
-          <DropdownMenuTrigger asChild disabled={status !== "authenticated"}>
-        <TooltipTrigger>
-            <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100">
-              <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">More options</span>
-            </Button>
-        </TooltipTrigger>
-          </DropdownMenuTrigger>
+          <Tooltip>
+            <DropdownMenuTrigger asChild disabled={status !== "authenticated"}>
+              <TooltipTrigger>
+                <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100">
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">More options</span>
+                </Button>
+              </TooltipTrigger>
+            </DropdownMenuTrigger>
             <TooltipContent>{status === "unauthenticated" ? "Log in for more options" : "More options"}</TooltipContent>
-        </Tooltip>
+          </Tooltip>
           <DropdownMenuContent align="end">
             {comment.isAuthor && (
               <>

@@ -36,7 +36,6 @@ export function CommentForm({
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
     const { data: session, status } = useSession()
-console.log("CommentForm rendered with session:", status)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     useEffect(() => {
