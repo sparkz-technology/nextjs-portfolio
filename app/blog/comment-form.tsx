@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { addComment, updateComment } from "./comment-actions"
 import type { Comment } from "@/lib/types"
 import { useSession } from "next-auth/react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Loader2, Send, X } from "lucide-react"
 import clsx from "clsx"
 

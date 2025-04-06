@@ -15,8 +15,9 @@ import { CommentList } from "./comment-list";
 import type { Comment } from "@/lib/types";
 import { deleteComment, getCommentReplies, reportComment, likeComment } from "./comment-actions";
 import { formatTimeAgo } from "@/lib/utils";
-import { Flag, MoreVertical, ThumbsUp } from "lucide-react";
+import { Flag, MoreVertical, Heart } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CommentItemProps {
@@ -91,18 +92,18 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
   const handleReport = async () => {
     // Prevent reporting own content
     if (comment.isAuthor) {
-      alert("You cannot report your own comment");
+      toast.error("You cannot report your own comment");
       return;
     }
 
     try {
       await reportComment(comment.id);
-      alert("Comment reported successfully");
+      toast.success("Comment reported successfully");
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        toast.error(error.message);
       } else {
-        alert("Failed to report comment");
+        toast.error("Failed to report comment");
       }
       console.error("Failed to report comment:", error);
     }
@@ -226,7 +227,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment }: Comme
                     className={`h-8 px-2 ${isLiked ? "text-primary" : ""}`}
                     onClick={handleLike}
                   >
-                    <ThumbsUp className={`mr-1 h-4 w-4 ${isLiked ? "fill-current" : ""}`} />
+                    <Heart className={`mr-1 h-4 w-4 ${isLiked ? "fill-red-500" : ""}`} />
                     <span className="text-xs">{comment.likeCount || 0}</span>
                   </Button>
                   <TooltipContent>{status === "unauthenticated" ? "Log in to like" : "Like"}</TooltipContent>
