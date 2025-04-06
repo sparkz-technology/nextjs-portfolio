@@ -5,10 +5,13 @@ import { Rocket } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export default function BackToTop() {
+  const [isMounted, setIsMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true) 
+
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
         setIsVisible(true)
@@ -18,19 +21,17 @@ export default function BackToTop() {
     }
 
     window.addEventListener("scroll", toggleVisibility)
+    toggleVisibility() // in case the user already scrolled
     return () => window.removeEventListener("scroll", toggleVisibility)
   }, [])
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    })
-  }
+  if (!isMounted) return null 
 
   return (
     <button
-      onClick={scrollToTop}
+      onClick={() => {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       className={cn(
@@ -43,7 +44,6 @@ export default function BackToTop() {
       )}
       aria-label="Back to top"
     >
-      {/* Outer ring animation - only shows on hover */}
       <span
         className={cn(
           "absolute inset-0 rounded-full bg-gray-200 dark:bg-gray-800",
@@ -53,7 +53,6 @@ export default function BackToTop() {
         style={{ animationDuration: "2000ms" }}
       />
 
-      {/* Inner content with animation */}
       <div className="relative flex items-center justify-center">
         <Rocket
           className={cn(
@@ -63,49 +62,65 @@ export default function BackToTop() {
           )}
         />
 
-        {/* Particle effects on hover */}
         {isHovering && (
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-            <span 
+            <span
               className="absolute h-1.5 w-1.5 rounded-full bg-gray-800 dark:bg-gray-200"
               style={{
                 animation: "particle1 1s ease-out infinite",
-                left: "-4px"
-              }} 
+                left: "-4px",
+              }}
             />
-            <span 
+            <span
               className="absolute h-1 w-1 rounded-full bg-gray-600 dark:bg-gray-400"
               style={{
                 animation: "particle2 1s ease-out infinite",
                 left: "0px",
-                animationDelay: "0.2s"
-              }} 
+                animationDelay: "0.2s",
+              }}
             />
-            <span 
+            <span
               className="absolute h-0.5 w-0.5 rounded-full bg-gray-400 dark:bg-gray-600"
               style={{
                 animation: "particle3 1s ease-out infinite",
                 left: "4px",
-                animationDelay: "0.4s"
-              }} 
+                animationDelay: "0.4s",
+              }}
             />
           </div>
         )}
       </div>
 
-      {/* Add CSS animations for particles in your global CSS */}
       <style jsx global>{`
         @keyframes particle1 {
-          0% { transform: translateY(0) scale(1); opacity: 1; }
-          100% { transform: translateY(-10px) scale(0.5); opacity: 0; }
+          0% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-10px) scale(0.5);
+            opacity: 0;
+          }
         }
         @keyframes particle2 {
-          0% { transform: translateY(0) scale(1); opacity: 1; }
-          100% { transform: translateY(-8px) scale(0.5); opacity: 0; }
+          0% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-8px) scale(0.5);
+            opacity: 0;
+          }
         }
         @keyframes particle3 {
-          0% { transform: translateY(0) scale(1); opacity: 1; }
-          100% { transform: translateY(-6px) scale(0.5); opacity: 0; }
+          0% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-6px) scale(0.5);
+            opacity: 0;
+          }
         }
       `}</style>
     </button>
