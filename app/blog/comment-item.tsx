@@ -255,7 +255,6 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
                     Reply
                   </Button>
                   <TooltipContent>{status === "unauthenticated" ? "Log in to reply" : "Reply"}</TooltipContent>
-                  <TooltipContent>{status === "unauthenticated" ? "Log in to reply" : "Reply"}</TooltipContent>
                 </TooltipTrigger>
               </Tooltip>
             </div>
@@ -314,6 +313,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
               </>
             )}
             <DropdownMenuItem
+              hidden={comment.isAuthor}
               onClick={handleReport}
               disabled={comment.isAuthor}
               className={comment.isAuthor ? "text-muted-foreground cursor-not-allowed" : ""}
