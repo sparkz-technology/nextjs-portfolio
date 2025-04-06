@@ -7,6 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { addComment, updateComment } from "./comment-actions"
 import type { Comment } from "@/lib/types"
 import { useSession } from "next-auth/react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Loader2, Send, X } from "lucide-react"
+import clsx from "clsx"
 
 interface CommentFormProps {
     blogId: string
@@ -32,14 +35,13 @@ export function CommentForm({
     const [content, setContent] = useState(initialValue)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
-    const { data: session } = useSession()
-
+    const { data: session, status } = useSession()
+console.log("CommentForm rendered with session:", status)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     useEffect(() => {
         if (isEditing && textareaRef.current) {
             textareaRef.current.focus()
-            // Place cursor at the end
             const length = textareaRef.current.value.length
             textareaRef.current.setSelectionRange(length, length)
             setIsFocused(true)
@@ -48,43 +50,39 @@ export function CommentForm({
 
     const handleSubmit = async () => {
         if (!content.trim() || isSubmitting) return
+        if (!session?.user) return
 
         setIsSubmitting(true)
         try {
             let result
 
             if (isEditing && commentId) {
-                // For editing, create an optimistic update
                 const optimisticComment: Comment = {
                     id: commentId,
-                    content: content,
-                    author: { id: session?.user.id ?? "", name: session?.user.name ?? "", image: session?.user.image ?? "" },
-                    blogId: blogId,
+                    content,
+                    author: {
+                        id: session.user.id ?? "",
+                        name: session.user.name ?? "",
+                        image: session.user.image ?? "",
+                    },
+                    blogId,
                     parentId: parentId!,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                     isEdited: true,
                     isAuthor: true,
-                    likeCount: 0, // This will be updated with the actual value from the server
-                    replyCount: 0, // This will be updated with the actual value from the server
+                    likeCount: 0,
+                    replyCount: 0,
                 }
 
-                // Apply optimistic update
                 onCommentAdded(optimisticComment)
-
-                // Then perform the actual update
                 result = await updateComment(commentId, content)
 
                 if (result.success) {
-                    // Update with the actual server response
                     onCommentAdded(result.comment)
                 }
             } else {
-                result = await addComment({
-                    blogId,
-                    parentId,
-                    content,
-                })
+                result = await addComment({ blogId, parentId, content })
 
                 if (result.success) {
                     onCommentAdded(result.comment)
@@ -94,45 +92,80 @@ export function CommentForm({
             }
         } catch (error) {
             console.error("Failed to submit comment:", error)
-            // Could add error handling UI here
         } finally {
             setIsSubmitting(false)
         }
     }
 
+    if (status === "loading") {
+        return (
+            <div className="flex gap-3 animate-pulse">
+                <div className="h-8 w-8 rounded-full bg-muted" />
+                <div className="flex-1 space-y-2">
+                    <div className="h-[60px] bg-muted rounded-md" />
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <div className="flex gap-3">
+        <div className="flex gap-3 relative">
             <Avatar className="h-8 w-8">
-                <AvatarImage src={
-                    session?.user?.image || "./placeholder.svg"
-                } alt={
-                    session?.user?.name || "User"
-                } />
-                <AvatarFallback>{
-                    session?.user?.name?.charAt(0) || "?"
-                }</AvatarFallback>
+                <AvatarImage src={session?.user?.image || "./placeholder.svg"} alt={session?.user?.name || "User"} />
+                <AvatarFallback>{session?.user?.name?.charAt(0) || "?"}</AvatarFallback>
             </Avatar>
 
-            <div className="flex-1 space-y-2">
-                <Textarea
-                    ref={textareaRef}
-                    placeholder={placeholder}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    onFocus={() => setIsFocused(true)}
-                    className="min-h-[60px] resize-none"
-                />
+            <div className="flex-1 relative">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Textarea
+                                ref={textareaRef}
+                                placeholder={placeholder}
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                onFocus={() => setIsFocused(true)}
+                                disabled={!session?.user}
+                                className={clsx(
+                                    "min-h-[60px] resize-none pr-16",
+                                    !session?.user && "cursor-not-allowed opacity-70"
+                                )}
+                            />
+                        </TooltipTrigger>
+                        {!session?.user && (
+                            <TooltipContent side="top" className="text-sm">
+                                You must be logged in to comment.
+                            </TooltipContent>
+                        )}
+                    </Tooltip>
 
                 {(isFocused || isEditing) && (
-                    <div className="flex justify-end gap-2">
+                    <div className="absolute bottom-2 right-2 flex gap-1">
                         {onCancel && (
-                            <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
-                                Cancel
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={onCancel}
+                                disabled={isSubmitting}
+                                className="p-1"
+                            >
+                                <X className="w-4 h-4" />
                             </Button>
                         )}
 
-                        <Button type="button" onClick={handleSubmit} disabled={!content.trim() || isSubmitting}>
-                            {isEditing ? "Save" : "Comment"}
+                        <Button
+                            type="button"
+                            size="icon"
+                            variant="ghost"
+                            onClick={handleSubmit}
+                            disabled={!content.trim() || isSubmitting || !session?.user}
+                            className="p-1"
+                        >
+                            {isSubmitting ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                <Send className="w-4 h-4" />
+                            )}
                         </Button>
                     </div>
                 )}
@@ -140,4 +173,3 @@ export function CommentForm({
         </div>
     )
 }
-
