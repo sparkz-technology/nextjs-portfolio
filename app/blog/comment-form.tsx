@@ -126,7 +126,7 @@ export function CommentForm({
                                 </span>
                             ) : (
                                 <span className="text-sm font-semibold">
-                                    @{author}
+                                  Replying to @{author}
                                 </span>
                             )
                         }
