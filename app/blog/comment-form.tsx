@@ -117,9 +117,19 @@ export function CommentForm({
             </Avatar>
 
             <div className="flex-1 relative">
-                {author && (
-                    <div className="absolute -top-6 left-2 flex items-center gap-2 px-2 py-1 bg-muted rounded-md shadow-sm text-sm text-muted-foreground">
-                        <span>@{author}</span>
+                {(author || isEditing) && (
+                    <div className="flex items-center justify-between gap-2 px-2 py-1 bg-muted rounded-t-md shadow-sm text-sm text-muted-foreground">
+                        {
+                            isEditing ? (
+                                <span className="text-sm font-semibold">
+                                    Editing as {session?.user?.name}
+                                </span>
+                            ) : (
+                                <span className="text-sm font-semibold">
+                                    @{author}
+                                </span>
+                            )
+                        }
                         <Button
                             type="button"
                             variant="ghost"
