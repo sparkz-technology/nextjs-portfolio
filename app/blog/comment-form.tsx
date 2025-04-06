@@ -103,8 +103,14 @@ export function CommentForm({
     return (
         <div className="flex gap-3">
             <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder-user.jpg" alt="Your avatar" />
-                <AvatarFallback>YA</AvatarFallback>
+                <AvatarImage src={
+                    session?.user?.image || "./placeholder.svg"
+                } alt={
+                    session?.user?.name || "User"
+                } />
+                <AvatarFallback>{
+                    session?.user?.name?.charAt(0) || "?"
+                }</AvatarFallback>
             </Avatar>
 
             <div className="flex-1 space-y-2">
