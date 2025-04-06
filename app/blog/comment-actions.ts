@@ -83,14 +83,12 @@ interface GetCommentsParams {
 }
 
 // Update getComments to include user's like status
-export async function getComments({ blogId, limit = 10, cursor, parentId = null }: GetCommentsParams) {
+export async function getComments({ blogId, limit = 10, parentId = null }: GetCommentsParams) {
   try {
     const session = await auth();
 
     // Execute the query
     const comments = await prisma.comment.findMany({
-      cursor: cursor ? { id: cursor } : undefined,
-      skip: cursor ? 1 : undefined,
       where: {
         blogId,
         parentId,
