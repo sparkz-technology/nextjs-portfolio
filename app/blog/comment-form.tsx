@@ -152,6 +152,7 @@ export function CommentForm({
                             onChange={(e) => setContent(e.target.value)}
                             onFocus={() => setIsFocused(true)}
                             disabled={!session?.user}
+                            maxLength={256}
                             className={clsx(
                                 "min-h-[60px] resize-none pr-16",
                                 !session?.user && "cursor-not-allowed opacity-70",
