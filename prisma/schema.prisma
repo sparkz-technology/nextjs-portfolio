@@ -98,6 +98,9 @@ model User {
   Contact         Contact?
   blogs           Blog[] // One-to-Many: A user can have multiple blogs
   likedBlogs      BlogLike[] // Many-to-Many: User can like multiple blogs
+  Comment         Comment[]
+  CommentLike     CommentLike[]
+  CommentReport   CommentReport[]
 }
 
 model GuestSignatureLike {
@@ -265,7 +268,57 @@ model Blog {
   authorId String
   author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade) // Blog belongs to a User
 
-  likes BlogLike[]
+  likes   BlogLike[]
+  Comment Comment[]
+}
+
+model Comment {
+  id         String          @id @default(uuid()) @map("_id")
+  content    String
+  blogId     String
+  author     User            @relation(fields: [authorId], references: [id])
+  authorId   String
+  parent     Comment?        @relation(name: "CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId   String?
+  replies    Comment[]       @relation(name: "CommentToComment")
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  likes      CommentLike[]
+  reports    CommentReport[]
+  replyCount Int             @default(0)
+  Video      Blog            @relation(fields: [blogId], references: [id])
+
+  @@index([blogId])
+  @@index([parentId])
+  @@index([authorId])
+}
+
+model CommentLike {
+  id        String   @id @default(uuid()) @map("_id")
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@unique([commentId, userId])
+  @@index([userId])
+}
+
+model CommentReport {
+  id        String   @id @default(uuid()) @map("_id")
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  reason    String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([commentId, userId])
+  @@index([userId])
+  @@index([status])
 }
 
 model BlogLike {

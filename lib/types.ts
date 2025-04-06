@@ -167,3 +167,24 @@ export interface PaginatedResponse<T> {
   }
 }
 
+export interface Author {
+  id: string
+  name: string | null
+  image: string | null
+}
+
+export interface Comment {
+  id: string
+  content: string
+  author: Author
+  blogId: string
+  parentId: string | null
+  createdAt: string
+  updatedAt: string
+  isEdited: boolean
+  isAuthor: boolean
+  likeCount: number
+  replyCount: number
+  isLiked?: boolean
+}
+
