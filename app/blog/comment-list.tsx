@@ -12,7 +12,7 @@ interface CommentListProps {
   isLoading?: boolean
 }
 
-export function CommentList({ comments, onUpdateComment, onDeleteComment,onSetIsNewComments, isNested = false }: CommentListProps) {
+export function CommentList({ comments, onUpdateComment, onDeleteComment,onSetIsNewComments, isNested = false ,isLoading }: CommentListProps) {
 
     const [mounted, setMounted] = useState(false)
   useEffect(() => {
