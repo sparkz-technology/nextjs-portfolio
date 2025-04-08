@@ -666,7 +666,10 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
               <DropdownMenuTrigger asChild disabled={status !== "authenticated"}>
                 <TooltipTrigger>
                   <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100">
-                    <MoreVertical className="h-4 w-4" />
+{isDeleting || isReporting  ? (
+                        <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                      ) :(
+                    <MoreVertical className="h-4 w-4" />)}
                     <span className="sr-only">More options</span>
                   </Button>
                 </TooltipTrigger>
