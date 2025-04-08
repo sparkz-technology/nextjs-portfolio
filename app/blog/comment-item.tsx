@@ -582,7 +582,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
-                      variant="ghost"
+                      variant="unstyled"
                       size="sm"
                       disabled={status !== "authenticated" || isLikeLoading}
                       className={`h-8 px-2 ${isLiked ? "text-red-500" : "text-primary"}`}
@@ -601,7 +601,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
                 <Tooltip>
                   <TooltipTrigger>
                     <Button
-                      variant="ghost"
+                      variant="unstyled"
                       size="sm"
                       className="h-8 px-2"
                       onClick={handleReply}
@@ -630,7 +630,7 @@ export function CommentItem({ comment, onUpdateComment, onDeleteComment, onSetIs
 
             {repliesCount > 0 && !isReplying && (
               <Button
-                variant="ghost"
+                variant="unstyled"
                 size="sm"
                 className="mt-1 text-primary"
                 onClick={loadReplies}
