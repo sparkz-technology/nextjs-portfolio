@@ -7,7 +7,7 @@ import type { Author, Comment } from "@/lib/types";
 
 export async function addComment({
     blogId,
-  parentId,
+  parentId=null,
   content,
 }: {
     blogId: string;
