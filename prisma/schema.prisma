@@ -279,7 +279,7 @@ model Comment {
   author     User            @relation(fields: [authorId], references: [id])
   authorId   String
   parent     Comment?        @relation(name: "CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  parentId   String?
+  parentId   String?         @default(null)
   replies    Comment[]       @relation(name: "CommentToComment")
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
