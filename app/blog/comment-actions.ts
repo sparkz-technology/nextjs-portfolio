@@ -133,6 +133,7 @@ where: {
     const total = await prisma.comment.count({
       where: {
         blogId,
+        parentId:null
       },
     });
 
