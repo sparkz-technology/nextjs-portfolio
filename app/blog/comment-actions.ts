@@ -133,7 +133,9 @@ where: {
     const total = await prisma.comment.count({
       where: {
         blogId,
-        parentId:null
+        NOT: {
+          parentId: { not: null }, // Exclude ones that *have* a parentId
+        },
       },
     });
 
