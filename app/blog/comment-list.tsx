@@ -13,9 +13,7 @@ interface CommentListProps {
 }
 
 export function CommentList({ comments, onUpdateComment, onDeleteComment,onSetIsNewComments, isNested = false }: CommentListProps) {
-  if (comments.length === 0) {
-    return null
-  }
+
     const [mounted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(true)
@@ -24,8 +22,9 @@ export function CommentList({ comments, onUpdateComment, onDeleteComment,onSetIs
   if (!mounted || isLoading) {
     return <CommentListSkeleton count={comments.length || 3} isNested={isNested} />
   }
-
-
+  if (comments.length === 0) {
+    return null
+  }
   return (
     <div className={`space-y-4 ${isNested ? "ml-12 mt-4" : ""}`}>
       {comments.map((comment) => (
