@@ -89,10 +89,17 @@ export async function getComments({ blogId, limit = 10, parentId = null }: GetCo
 
     // Execute the query
     const comments = await prisma.comment.findMany({
-      where: {
-        blogId,
-        ...(parentId !== null ? { parentId } : { parentId: null }),
-      },
+where: {
+  blogId,
+  ...(parentId !== null
+    ? { parentId }
+    : {
+        NOT: {
+          parentId: { not: null }, // Exclude ones that *have* a parentId
+        },
+      }),
+},
+
       take: limit,
       orderBy: {
         createdAt: "desc",
