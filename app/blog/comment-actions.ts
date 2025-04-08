@@ -11,7 +11,7 @@ export async function addComment({
   content,
 }: {
     blogId: string;
-  parentId?: string;
+  parentId?: string | null;
   content: string;
 }) {
   try {
