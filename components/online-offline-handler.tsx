@@ -58,7 +58,7 @@ export default function OnlineOfflineHandler() {
 
   // Don't render anything during initial load to prevent flashing
   if (initialLoad) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>
+    return null
   }
 
   return (
