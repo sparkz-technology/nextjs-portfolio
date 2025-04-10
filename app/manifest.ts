@@ -6,28 +6,29 @@ export async function getMetadata() {
     where: { role: "SUPER_ADMIN" },
   });
 }
- 
-export default async function manifest(): MetadataRoute.Manifest {
+
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const data = await getMetadata();
   return {
-    name: data.name ?? 'Next.js PWA',
-    short_name: data.name ?? 'NextPWA',
-    description:data.description ?? 'A Progressive Web App built with Next.js',
+    name: data?.name ?? 'Next.js PWA',
+    short_name: data?.name ?? 'NextPWA',
+    description: data?.description ?? 'A Progressive Web App built with Next.js',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#000000',
     icons: [
-      {
-        src: '/icon-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
+     {
+        src: "/vercel_icon_192x192.png",
+        sizes: "192x192",
+        type: "image/png",
       },
       {
-        src: '/icon-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
+        src: "/vercel_icon_512x512.png",
+        sizes: "512x512",
+        type: "image/png",
       },
+
     ],
   }
 }
