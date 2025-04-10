@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
-import { Wifi, WifiOff, CloudOff } from "lucide-react"
+import { Wifi, WifiOff } from "lucide-react"
 
 export default function OnlineOfflineHandler() {
   const [isOnline, setIsOnline] = useState(true)
