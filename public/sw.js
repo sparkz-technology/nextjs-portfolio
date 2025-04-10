@@ -1,73 +1,81 @@
-// Service Worker for offline support
-
-const CACHE_NAME = "offline-app-cache-v1"
+const CACHE_NAME = "offline-app-cache-v1";
 const urlsToCache = [
   "/",
   "/favicon.ico",
-]
+];
 
 // Install event - cache assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("Opened cache")
-      return cache.addAll(urlsToCache)
-    }),
-  )
-})
+      console.log("Opened cache");
+      return cache.addAll(urlsToCache);
+    })
+  );
+});
 
 // Fetch event - serve from cache if offline
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Cache hit - return response
-      if (response) {
-        return response
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
       }
 
-      // Clone the request
-      const fetchRequest = event.request.clone()
-
-      return fetch(fetchRequest)
-        .then((response) => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== "basic") {
-            return response
+      return fetch(event.request)
+        .then((networkResponse) => {
+          // Check if we received a valid response
+          if (
+            !networkResponse ||
+            networkResponse.status !== 200 ||
+            networkResponse.type !== "basic"
+          ) {
+            return networkResponse;
           }
 
-          // Clone the response
-          const responseToCache = response.clone()
+          const responseToCache = networkResponse.clone();
 
-          // Add to cache
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache)
-          })
+            cache.put(event.request, responseToCache);
+          });
 
-          return response
+          return networkResponse;
         })
-        .catch(() => {
-          // If fetch fails (offline), try to return the offline page
+        .catch(async () => {
+          // If offline and the request is for a navigation to a new page
           if (event.request.mode === "navigate") {
-            return caches.match("/")
+            const offlinePage = await caches.match("/");
+            return offlinePage || new Response("Offline page not available", {
+              status: 503,
+              statusText: "Service Unavailable",
+              headers: { "Content-Type": "text/plain" },
+            });
           }
-        })
-    }),
-  )
-})
+
+          // For other failed requests (e.g., images), return a fallback or error
+          return new Response("You are offline", {
+            status: 503,
+            statusText: "Service Unavailable",
+            headers: { "Content-Type": "text/plain" },
+          });
+        });
+    })
+  );
+});
 
 // Activate event - clean up old caches
 self.addEventListener("activate", (event) => {
-  const cacheWhitelist = [CACHE_NAME]
+  const cacheWhitelist = [CACHE_NAME];
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName)
+          if (!cacheWhitelist.includes(cacheName)) {
+            return caches.delete(cacheName);
           }
-        }),
-      )
-    }),
-  )
-})
+        })
+      );
+    })
+  );
+});
