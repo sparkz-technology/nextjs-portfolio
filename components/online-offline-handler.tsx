@@ -62,7 +62,7 @@ export default function OnlineOfflineHandler() {
   }
 
   return (
-    <div className="w-full min-h-screen">
+    <>
       {/* Status indicator - only shown when offline or temporarily when regaining connection */}
       <div
         className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full shadow-md transition-all duration-300 ${
@@ -95,6 +95,6 @@ export default function OnlineOfflineHandler() {
           </div>,
           document.body,
         )}
-    </div>
+    </>
   )
 }
