@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
-import OfflineGame from "./components/offline-game"
-import OnlineContent from "./components/online-content"
 import { Wifi, WifiOff, CloudOff } from "lucide-react"
 
 export default function OnlineOfflineHandler() {
@@ -83,9 +81,6 @@ export default function OnlineOfflineHandler() {
           </>
         )}
       </div>
-
-      {/* Always render the online content */}
-      <OnlineContent />
 
       {/* Use createPortal to overlay the offline experience when offline */}
       {showOfflinePortal &&
