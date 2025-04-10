@@ -6,6 +6,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import SessionProviderClient from "@/components/session-provider-client";
 import { AppBackground } from "@/components/app-background";
+import OnlineOfflineHandler from "@/components/online-offline-handler";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
@@ -123,6 +124,7 @@ export default function RootLayout({
             <ThemeProvider attribute="class" defaultTheme="light">
               <TooltipProvider delayDuration={0}>
                 <AppBackground />
+                <OnlineOfflineHandler/>
                 <Toaster richColors position="top-right" pauseWhenPageIsHidden />
                 {children}
                 <Navbar />
