@@ -12,7 +12,7 @@ export default async function manifest(): MetadataRoute.Manifest {
   return {
     name: data.name ?? 'Next.js PWA',
     short_name: data.name ?? 'NextPWA',
-    description:data.description ?? 'A Progressive Web App built with Next.js,
+    description:data.description ?? 'A Progressive Web App built with Next.js',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
