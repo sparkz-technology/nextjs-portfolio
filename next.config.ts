@@ -46,6 +46,15 @@ const nextConfig: NextConfig = {
         },
       ],
     },
+    {
+        source: '/.well-known/assetlinks.json',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/json',
+          },
+        ],
+      },
     // {
     //   source: "/static/(.*)",
     //   headers: [
