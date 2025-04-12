@@ -1,10 +1,10 @@
 const CACHE_NAME = "offline-app-cache-v1";
 const urlsToCache = [
-  "/",
-  "/favicon.ico",
+  "/",           // Homepage
+  "/favicon.ico" // Favicon
 ];
 
-// Install event - cache assets
+// Install event - cache initial assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -12,10 +12,23 @@ self.addEventListener("install", (event) => {
       return cache.addAll(urlsToCache);
     })
   );
+  self.skipWaiting(); // Activate worker immediately after installation
 });
 
-// Fetch event - serve from cache if offline
+// Fetch event - cache-first for safe requests
 self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
+  // ⛔️ Skip NextAuth & API routes + non-GET requests
+  if (
+    url.pathname.startsWith("/api/auth") ||
+    url.pathname.startsWith("/api/") ||
+    event.request.method !== "GET"
+  ) {
+    return; // Let the browser handle it directly
+  }
+
+  // ✅ Cache-first strategy with fallback
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -24,7 +37,7 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(event.request)
         .then((networkResponse) => {
-          // Check if we received a valid response
+          // Only cache successful basic responses
           if (
             !networkResponse ||
             networkResponse.status !== 200 ||
@@ -42,7 +55,7 @@ self.addEventListener("fetch", (event) => {
           return networkResponse;
         })
         .catch(async () => {
-          // If offline and the request is for a navigation to a new page
+          // Offline fallback for navigation requests
           if (event.request.mode === "navigate") {
             const offlinePage = await caches.match("/");
             return offlinePage || new Response("Offline page not available", {
@@ -52,7 +65,7 @@ self.addEventListener("fetch", (event) => {
             });
           }
 
-          // For other failed requests (e.g., images), return a fallback or error
+          // Offline fallback for other requests
           return new Response("You are offline", {
             status: 503,
             statusText: "Service Unavailable",
@@ -63,7 +76,7 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - cleanup old caches
 self.addEventListener("activate", (event) => {
   const cacheWhitelist = [CACHE_NAME];
 
@@ -78,4 +91,6 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
+
+  self.clients.claim(); // Take control of all open tabs
 });
