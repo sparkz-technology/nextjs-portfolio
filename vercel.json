@@ -10,7 +10,7 @@
         }
       ],
       "destination": "https://sutharsang.tech/$1",
-      "permanent": true
+      "statusCode": 301
     }
   ]
 }
