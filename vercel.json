@@ -1,10 +1,19 @@
 {
     "outputDirectory": "build",
-    "redirects": [
+   {
+  "redirects": [
     {
       "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "sutharsan.vercel.app"
+        }
+      ],
       "destination": "https://sutharsang.tech/$1",
       "permanent": true
     }
   ]
+}
+
 }
