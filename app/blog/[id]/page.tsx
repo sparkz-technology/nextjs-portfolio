@@ -11,7 +11,6 @@ import type { Metadata } from "next/types";
 import BackToTop from "@/components/back-to-top";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BlogShareButton from "../blog-share-button";
-import { CommentSection } from "../comment-section";
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean;
@@ -218,7 +217,6 @@ export default async function BlogPostPage({ params }: Props) {
 
           <MarkdownPreview source={post.content} />
         </article>
-        <CommentSection blogId={post.id} />
         <BackToTop />
       </div>
     </main>
