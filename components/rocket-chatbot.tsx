@@ -221,6 +221,7 @@ export default function RocketChatbot({ webhookUrl }: RocketChatbotProps) {
         throw new Error("Failed to send message")
       }
     } catch (error) {
+      console.warn("Failed to send message:", error)
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content:
