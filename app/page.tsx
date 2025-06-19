@@ -4,6 +4,7 @@ import BlurFadeText from "@/components/motion/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import RocketChatbot from "@/components/rocket-chatbot"
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import Markdown from "react-markdown";
@@ -188,6 +189,7 @@ export default async function Page() {
             </BlurFade>
           </div>
         </section>
+        <RocketChatbot webhookUrl="https://your-webhook-url.com/chat" />
         <section id="message">
           <div className="relative z-40">
            <MessageDialog />
