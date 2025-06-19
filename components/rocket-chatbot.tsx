@@ -83,7 +83,7 @@ export default function RocketChatbot({ webhookUrl }: RocketChatbotProps) {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored)
-        return parsed.map((msg: any) => ({
+        return parsed.map((msg: Message) => ({
           ...msg,
           timestamp: new Date(msg.timestamp),
         }))
