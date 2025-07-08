@@ -77,6 +77,9 @@ export class Point implements PointLike {
     let clientX, clientY;
 
     if (isTouchEvent(event)) {
+      if (event.touches.length === 0) {
+        throw new Error('Touch event has no touches.');
+      }
       clientX = event.touches[0].clientX;
       clientY = event.touches[0].clientY;
     } else {
