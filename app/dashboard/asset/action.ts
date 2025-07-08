@@ -29,7 +29,7 @@ export async function updateFolder(id: string, name: string) {
       data: { name },
     });
 
-    //  revalidatePath("dashboard/assets");
+    //  revalidatePath("/dashboard/assets");
     revalidateTag("folders");
     return { success: true, folder };
   } catch (error) {
@@ -115,7 +115,7 @@ export async function createAsset(data: {
       },
     });
 
-     revalidatePath("dashboard/assets");
+     revalidatePath("/dashboard/assets");
     return { success: true, asset };
   } catch (error) {
     console.error("Error creating asset:", error);
@@ -137,7 +137,7 @@ export async function updateAsset(
       data,
     });
 
-     revalidatePath("dashboard/assets");
+     revalidatePath("/dashboard/assets");
     return { success: true, asset };
   } catch (error) {
     console.error("Error updating asset:", error);
@@ -156,7 +156,7 @@ export async function deleteAsset(id: string) {
     }
     await deleteImage(asset.publicId);
     await prisma.asset.delete({ where: { id } });
-     revalidatePath("dashboard/assets");
+     revalidatePath("/dashboard/assets");
     return { success: true };
   } catch (error) {
     console.error("Error deleting asset:", error);
@@ -274,7 +274,7 @@ export async function toggleFavorite(id: string) {
       data: { favorite: !asset.favorite },
     });
 
-     revalidatePath("dashboard/assets");
+     revalidatePath("/dashboard/assets");
     return { success: true, asset: updatedAsset };
   } catch (error) {
     console.error("Error toggling favorite:", error);
@@ -289,7 +289,7 @@ export async function moveAssets(assetIds: string[], folderId: string | null) {
       data: { folderId },
     });
 
-     revalidatePath("dashboard/assets");
+     revalidatePath("/dashboard/assets");
     return { success: true };
   } catch (error) {
     console.error("Error moving assets:", error);

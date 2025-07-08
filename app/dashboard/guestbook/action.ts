@@ -90,7 +90,7 @@ export async function toggleVisibilityByIdAction(id: string): Promise<ResponseTy
       where: { id },
       data: { visibility: !guestSignature.visibility },
     });
-    revalidatePath("dashboard/guestbook");
+    revalidatePath("/dashboard/guestbook");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Guest signature with id ${id} not found.`;
     return { success: false, message: errorMessage };
@@ -121,7 +121,7 @@ export async function deleteGuestSignatureAction(id: string): Promise<ResponseTy
         isDeleted: true,
       },
     });
-    revalidatePath("dashboard/guestbook");
+    revalidatePath("/dashboard/guestbook");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Failed to soft delete guest signature with id ${id}.`;
     return { success: false, message: errorMessage };

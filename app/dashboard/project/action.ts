@@ -50,7 +50,7 @@ export const addIconAction = async (data: { value: string; label: string }) => {
         value: payload.icon,
       },
     });
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
     return { success: true, message: "Icon created successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Failed to create icon.`;
@@ -82,7 +82,7 @@ export const deleteIconAction = async (id: string) => {
       return { success: false, message: "Icon ID is required." };
     }
     await prisma.icon.delete({ where: { id } });
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
 
     return { success: true, message: "Icon deleted successfully." };
   } catch (error) {
@@ -248,7 +248,7 @@ export async function createProjectAction(data: ProjectInput) {
       .catch(() => {
         return { success: false, message: "Failed to create project.", status: 500 };
       });
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
     return { success: true, data: project, status: 201 };
   } catch {
     return { success: false, message: "Failed to create project.", status: 500 };
@@ -312,7 +312,7 @@ export async function updateProjectAction(data: ProjectInput) {
         },
       },
     });
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
     return { success: true, data: project, status: 200 };
   } catch{
     return { success: false, message: "Failed to update project.", status: 500 };
@@ -367,7 +367,7 @@ export async function deleteProjectAction(projectId: string) {
       });
     });
 
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
 
     return {
       success: true,
@@ -427,7 +427,7 @@ export async function updateProjectSequenceAction({
       });
     });
 
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
     return { success: true, message: "Project sequence updated successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message || "An error occurred while updating sequence.";
@@ -460,7 +460,7 @@ export async function toggleProjectVisibilityAction(id: string): Promise<Respons
       data: { visibility: !education.visibility },
     });
 
-    revalidatePath("dashboard/project");
+    revalidatePath("/dashboard/project");
     return { success: true, message: "Visibility toggled successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message || "An error occurred while toggling visibility.";

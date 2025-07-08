@@ -94,7 +94,7 @@ export async function createSkillAction(name: string): Promise<ResponseType> {
   });
 
   try {
-    revalidatePath("dashboard/skills");
+    revalidatePath("/dashboard/skills");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Skill created skill.`;
     return { success: false, message: errorMessage };
@@ -126,7 +126,7 @@ export async function toggleVisibilityByIdAction(id: string): Promise<ResponseTy
       where: { id },
       data: { visibility: !skill.visibility },
     });
-    revalidatePath("dashboard/skills");
+    revalidatePath("/dashboard/skills");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Skill with id ${id} not found.`;
     return { success: false, message: errorMessage };
@@ -165,7 +165,7 @@ export async function updateSkillAction(data: {
       },
     });
 
-    revalidatePath("dashboard/skills");
+    revalidatePath("/dashboard/skills");
     return { success: true, message: "Skill updated successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Skill with id ${data.id} not found.`;
@@ -196,7 +196,7 @@ export async function deleteSkillAction(id: string): Promise<ResponseType> {
         data: { sequenceValue: { decrement: 1 } },
       });
 
-      revalidatePath("dashboard/skills");
+      revalidatePath("/dashboard/skills");
     });
 
     return { success: true, message: "Skill deleted successfully." };
@@ -247,7 +247,7 @@ export async function updateSequenceAction({
         data: { sequenceValue: to },
       });
     });
-    revalidatePath("dashboard/skills");
+    revalidatePath("/dashboard/skills");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Skill with id ${id} not found.`;
     return { success: false, message: errorMessage };

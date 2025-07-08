@@ -132,7 +132,7 @@ export async function createEducationAction(data: {
       },
     });
 
-    revalidatePath("dashboard/education");
+    revalidatePath("/dashboard/education");
     return { success: true, message: "Education created successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message || "An error occurred while creating education.";
@@ -183,7 +183,7 @@ export async function updateEducationAction(data: {
       },
     });
 
-    revalidatePath("dashboard/education");
+    revalidatePath("/dashboard/education");
     return { success: true, message: "Education updated successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message || "An error occurred while updating education.";
@@ -212,7 +212,7 @@ export async function toggleEducationVisibilityAction(id: string): Promise<Respo
       data: { visibility: !education.visibility },
     });
 
-    revalidatePath("dashboard/education");
+    revalidatePath("/dashboard/education");
     return { success: true, message: "Visibility toggled successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message || "An error occurred while toggling visibility.";
@@ -243,7 +243,7 @@ export async function deleteEducationAction(id: string): Promise<ResponseType> {
         data: { sequenceValue: { decrement: 1 } },
       });
 
-      revalidatePath("dashboard/education");
+      revalidatePath("/dashboard/education");
     });
 
     return { success: true, message: "Education deleted successfully." };
@@ -291,7 +291,7 @@ export async function updateEducationSequenceAction({
       });
     });
 
-    revalidatePath("dashboard/education");
+    revalidatePath("/dashboard/education");
     return { success: true, message: "Education sequence updated successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message || "An error occurred while updating sequence.";

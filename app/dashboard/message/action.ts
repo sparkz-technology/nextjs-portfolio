@@ -54,7 +54,7 @@ export async function toggleReadByIdAction(id: string): Promise<ResponseType> {
       data: { isRead: !message.isRead },
     });
 
-    revalidatePath("dashboard/message");
+    revalidatePath("/dashboard/message");
 
     return {
       success: true,

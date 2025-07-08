@@ -80,7 +80,7 @@ async function validateSchema(schema: yup.AnySchema, data: unknown) {
 
 // Retrieve authenticated session
 async function retrieveAuthenticatedSession() {
-  const session = await auth()
+  const session = await auth();
   return session;
 }
 
@@ -148,7 +148,7 @@ export async function createWorkExperienceAction(data: {
         user: { connect: { id: session.user.id } },
       },
     });
-    revalidatePath("dashboard/experience");
+    revalidatePath("/dashboard/experience");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Work Experience created.`;
     return { success: false, message: errorMessage };
@@ -181,7 +181,7 @@ export async function toggleVisibilityByIdAction(id: string): Promise<ResponseTy
       where: { id },
       data: { visibility: !workExperience.visibility },
     });
-    revalidatePath("dashboard/experience");
+    revalidatePath("/dashboard/experience");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Work Experience with id ${id} not found.`;
     return { success: false, message: errorMessage };
@@ -247,7 +247,7 @@ console.log(data)
       },
     });
 
-    revalidatePath("dashboard/experience");
+    revalidatePath("/dashboard/experience");
     return { success: true, message: "Work Experience updated successfully." };
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Work Experience with id ${data.id} not found.`;
@@ -280,7 +280,7 @@ export async function deleteWorkExperienceAction(id: string): Promise<ResponseTy
         data: { sequenceValue: { decrement: 1 } },
       });
 
-      revalidatePath("dashboard/experience");
+      revalidatePath("/dashboard/experience");
     });
 
     // Return success message after the transaction completes
@@ -332,7 +332,7 @@ export async function updateSequenceAction({
         data: { sequenceValue: to },
       });
     });
-    revalidatePath("dashboard/experience");
+    revalidatePath("/dashboard/experience");
   } catch (error) {
     const errorMessage = (error as Error)?.message ?? `Work Experience with id ${id} not found.`;
     return { success: false, message: errorMessage };

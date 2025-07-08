@@ -43,7 +43,7 @@ export async function deletePostAction(id: string) {
     }
 
     await prisma.blog.delete({ where: { id } });
-    revalidatePath("dashboard/blog");
+    revalidatePath("/dashboard/blog");
     return { success: true, message: "Post deleted " };
   } catch (error) {
     const errorMessage =
@@ -75,7 +75,7 @@ export async function createBlogAction(
         },
       },
     });
-    revalidatePath("dashboard/blog");
+    revalidatePath("/dashboard/blog");
     return { success: true, message: "Blog created successfully" };
   } catch (error) {
     const errorMessage =
@@ -126,7 +126,7 @@ export async function updateBlogAction(
     } catch {
       return { success: false, message: "Error while updating blog " };
     }
-    revalidatePath("dashboard/blog");
+    revalidatePath("/dashboard/blog");
 
     return { success: true, message: "Blog updated successfully" };
   } catch (error) {
