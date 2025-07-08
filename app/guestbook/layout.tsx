@@ -3,6 +3,7 @@ import { AuthButtons } from "@/app/guestbook/auth-buttons";
 import { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { getSiteMetadata } from "../layout";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 
 interface GuestLayoutProps {
   children: React.ReactNode;
@@ -10,19 +11,20 @@ interface GuestLayoutProps {
 
 export async function generateMetadata(): Promise<Metadata> {
   const DATA = await getSiteMetadata();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
 
   if (!DATA) {
     return {
-      metadataBase: new URL("https://example.com"), // Replace with your default URL
-      title: {
-        default: "Next.js Starter",
-        template: "%s | Next.js Starter",
+      metadataBase: new URL(baseUrl || "http://localhost:3000"),
+      title: "Guestbook",
+      description: "Leave a message in my portfolio's guestbook. Share your thoughts, feedback, or just say hello!",
+      alternates: {
+        canonical: `${baseUrl}/guestbook`,
       },
-      description: "Next.js Starter",
       openGraph: {
-        title: "Next.js Starter",
-        description: "Next.js Starter",
-        url: "https://example.com", // Replace with your default URL
+        title: "Guestbook",
+        description: "Leave a message in my portfolio's guestbook. Share your thoughts, feedback, or just say hello!",
+        url: `${baseUrl}/guestbook`,
         siteName: "Next.js Starter",
         locale: "en_US",
         type: "website",
@@ -39,12 +41,8 @@ export async function generateMetadata(): Promise<Metadata> {
         },
       },
       twitter: {
-        title: "Next.js Starter",
+        title: "Guestbook",
         card: "summary_large_image",
-      },
-      verification: {
-        google: "FKMDniF5WlVDC0ppv7xI4TDqbcqLiZjjUH38NJD6B4Q",
-        yandex: "",
       },
     };
   }
@@ -52,6 +50,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Guestbook`,
     description: "Leave a message in my portfolio's guestbook. Share your thoughts, feedback, or just say hello!",
+    alternates: {
+      canonical: `${DATA.url}/guestbook`,
+    },
     openGraph: {
       title: `Guestbook`,
       description: "Leave a message in my portfolio's guestbook. Share your thoughts, feedback, or just say hello!",
@@ -71,16 +72,26 @@ export async function generateMetadata(): Promise<Metadata> {
         "max-snippet": -1,
       },
     },
+    twitter: {
+      title: `Guestbook`,
+      card: "summary_large_image",
+    },
   };
 }
 
 export default async function GuestLayout({ children }: GuestLayoutProps) {
   const session = await auth();
+  
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: 'Guestbook', url: '/guestbook' }
+  ];
 
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
       <FadeIn.Container>
         <FadeIn.Item>
+          <Breadcrumbs items={breadcrumbItems} className="mb-6" />
           <div className="space-y-4">
             <h1 className="font-medium text-2xl tracking-tighter">Sign my guestbook</h1>
             <div className="flex w-full justify-between items-center">
