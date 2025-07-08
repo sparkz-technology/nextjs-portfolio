@@ -13,7 +13,7 @@ export default async function checkProfanity(message: string): Promise<boolean> 
     const filter = new Filter();
     const isProfane = filter.isProfane(message);
     if (isProfane) {
-      return false;
+      return true;
     }
   }
   return false;
@@ -50,6 +50,7 @@ async function validateSchema(schema: yup.AnySchema, data: unknown) {
 interface ResponseType {
   success: boolean;
   message: string;
+  status?: number;
 }
 
 type SendEmailNotification = { name: string; email: string; message: string };
