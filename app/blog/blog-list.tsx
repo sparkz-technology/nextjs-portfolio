@@ -110,9 +110,9 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
           >
             <CardHeader className="p-4 pb-2">
               <div className="flex flex-wrap gap-2 mb-2">
-                {post.tags?.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-xs font-normal">
-                    {tag}
+                {post.tags?.split(',').map((tag: string) => (
+                  <Badge key={tag.trim()} variant="secondary" className="text-xs font-normal">
+                    {tag.trim()}
                   </Badge>
                 ))}
               </div>
@@ -149,7 +149,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogWithLikeS
               />
                 <BlogShareButton
                 postTitle={post.title}
-                postExcerpt={post.excerpt}
+                postExcerpt={post.excerpt || ""}
               />
               </div>
             </CardFooter>

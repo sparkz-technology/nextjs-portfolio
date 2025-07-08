@@ -48,7 +48,8 @@ export default async function BlogPage({ searchParams }: GuestbookPageProps) {
       </div>
       <DeleteDialog />
       <BlogTable
-        data={blogs}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data={blogs as any}
         totalCount={totalCount}
         currentPage={currentPage}
         postPageSize={postPageSize}

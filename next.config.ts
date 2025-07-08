@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  compress: false,
+  compress: true,
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 86400, // 24 hours
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   headers: async () => [
     {
@@ -55,15 +59,24 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-    // {
-    //   source: "/static/(.*)",
-    //   headers: [
-    //     {
-    //       key: "Cache-Control",
-    //       value: "public, max-age=31536000, immutable",
-    //     },
-    //   ],
-    // },
+    {
+      source: "/static/(.*)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+    },
+    {
+      source: "/_next/static/(.*)",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+    },
   ],
   generateBuildId: async () => {
     return process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString();

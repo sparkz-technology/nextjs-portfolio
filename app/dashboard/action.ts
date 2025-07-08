@@ -41,7 +41,8 @@ export async function listVisitLogAction(type: VisitLogFilterType) {
     }),
   ]);
 
-  const formattedVisitLog = visitLog.map((log) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const formattedVisitLog = visitLog.map((log: any) => ({
     mobile: log.mobileVisits,
     desktop: log.desktopVisits,
     date: format(log.date, "yyyy-MM-dd"),

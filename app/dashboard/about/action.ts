@@ -120,11 +120,9 @@ export async function updateAboutAction(data: AdminDataType): Promise<{ success:
   }
 
   try {
-    await prisma.$transaction(async (prisma) => {
-      console.log("Starting transaction...");
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await prisma.$transaction(async (prisma: any) => {
       // Update Contact details
-      console.log("Updating contact...");
       const contactExists = await prisma.contact.findFirst({
         where: { userId: session.user.id },
       });
@@ -168,7 +166,6 @@ export async function updateAboutAction(data: AdminDataType): Promise<{ success:
       });
 
       // Update User details
-      console.log("Updating user...");
       await prisma.user.update({
         where: { id: session.user.id },
         data: {
@@ -182,8 +179,6 @@ export async function updateAboutAction(data: AdminDataType): Promise<{ success:
           avatarUrl: data.avatarUrl,
         },
       });
-
-      console.log("Transaction completed.");
     });
 
     revalidatePath("/dashboard/about");

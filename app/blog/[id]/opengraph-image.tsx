@@ -130,7 +130,7 @@ export default async function Image({ params }: { params: { id: string } }) {
           {/* Tags */}
           {tags.length > 0 && (
             <div style={{ display: "flex", gap: "8px" }}>
-              {tags.map((tag, index) => (
+              {tags.map((tag: string, index: number) => (
                 <div
                   key={index}
                   style={{

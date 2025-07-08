@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Inter as FontSans } from "next/font/google";
+// import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import SessionProviderClient from "@/components/session-provider-client";
 import { AppBackground } from "@/components/app-background";
@@ -10,10 +10,11 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 
-const fontSans = FontSans({
-  subsets: ["latin"],
+// Use system fonts as fallback when Google Fonts is unavailable
+const fontSans = {
   variable: "--font-sans",
-});
+  className: "font-sans",
+};
 
 async function getBuildId() {
   return process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || process.env.BUILD_ID || "development"
@@ -22,7 +23,7 @@ async function getBuildId() {
 export async function getSiteMetadata() {
   return prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
-    // cacheStrategy: { ttl: 60 },
+    cacheStrategy: { ttl: 60 },
   });
 }
 

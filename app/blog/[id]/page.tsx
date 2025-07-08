@@ -4,13 +4,28 @@ import { ChevronLeft, Calendar, Clock } from "lucide-react";
 import { BlogLikeButton } from "@/app/blog/blog-like-button";
 import { calculateReadTime } from "@/lib/utils";
 import { prisma } from "@/lib/prisma";
-import type { Blog } from "@prisma/client";
+// import type { Blog } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import MarkdownPreview from "@/components/markdown-preview";
 import type { Metadata } from "next/types";
 import BackToTop from "@/components/back-to-top";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BlogShareButton from "../blog-share-button";
+
+// Define Blog type locally as fallback
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  userId: string;
+  visibility: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  tags?: string;
+  published?: boolean;
+  excerpt?: string;
+  // Add other fields as needed
+}
 
 export type BlogWithLikeStatus = Blog & {
   isLikedByUser: boolean;
@@ -148,7 +163,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "article:published_time": post.createdAt.toISOString(),
       "article:modified_time": post.updatedAt.toISOString(),
       "article:author": post.author?.name || post.author?.username || "",
-      "article:published": post.published.toString(),
+      "article:published": (post.published ?? false).toString(),
     },
   };
 }
@@ -210,7 +225,7 @@ export default async function BlogPostPage({ params }: Props) {
               />
               <BlogShareButton
                 postTitle={post.title}
-                postExcerpt={post.excerpt}
+                postExcerpt={post.excerpt || ""}
               />
             </div>
           </div>

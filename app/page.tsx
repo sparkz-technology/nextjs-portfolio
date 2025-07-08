@@ -14,6 +14,7 @@ const BLUR_FADE_DELAY = 0.04;
 const getPageData = async () => {
   return await prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
+    cacheStrategy: { ttl: 300 }, // Cache for 5 minutes
     include: {
       Skill: { 
         where: { visibility: true }, 

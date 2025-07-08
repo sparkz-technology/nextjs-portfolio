@@ -136,7 +136,8 @@ export const listProjectsAction = async ({ pageNo, pageSize }: { pageNo: number;
   ]);
 
   // Map the projects to include related icons and any other transformations if needed
-  const project: IProject[] = projects.map((project) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const project: IProject[] = projects.map((project: any) => ({
     ...project,
     projectLinks: project.projectLinks.map((link) => ({
       ...link,

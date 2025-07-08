@@ -205,7 +205,7 @@ export async function updateWorkExperienceAction(data: {
 }): Promise<ResponseType> {
   const validation = await validateSchema(updateWorkExperienceSchema, data);
   if (!validation.success) return validation;
-console.log(data)
+
   const session = await retrieveAuthenticatedSession();
   if (!session?.user.id) {
     return { success: false, message: "User is not authenticated" };
@@ -222,11 +222,10 @@ console.log(data)
   try {
     let imageUrl = null;
     const isValidCloudinaryUrl = await isCloudinaryUrl(data.logoUrl);
-    console.log(isValidCloudinaryUrl,"isValidCloudinaryUrl")
     if (!isValidCloudinaryUrl) {
       const public_id = await prisma.workExperience
         .findUnique({ where: { id: data.id }, select: { logoUrl: true } })
-        .then((workExperience) => (workExperience?.logoUrl ? extractPublicId(workExperience.logoUrl) : ""));
+        .then((workExperience: { logoUrl: string } | null) => (workExperience?.logoUrl ? extractPublicId(workExperience.logoUrl) : ""));
       const { secure_url } = await uploadImage(data.logoUrl);
       imageUrl = secure_url;
       await deleteImage(public_id);
@@ -270,7 +269,8 @@ export async function deleteWorkExperienceAction(id: string): Promise<ResponseTy
   }
 
   try {
-    await prisma.$transaction(async (prisma) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await prisma.$transaction(async (prisma: any) => {
       const workExperience = await prisma.workExperience.delete({ where: { id } });
       const public_id = await extractPublicId(workExperience.logoUrl);
       await deleteImage(public_id);

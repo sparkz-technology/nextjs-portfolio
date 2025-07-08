@@ -163,7 +163,7 @@ export async function updateEducationAction(data: {
   if (!(await isCloudinaryUrl(data.logoUrl))) {
     const public_id = await prisma.education
       .findUnique({ where: { id: data.id }, select: { logoUrl: true } })
-      .then((education) => (education?.logoUrl ? extractPublicId(education.logoUrl) : ""));
+      .then((education: { logoUrl: string } | null) => (education?.logoUrl ? extractPublicId(education.logoUrl) : ""));
     const { secure_url } = await uploadImage(data.logoUrl);
     imageUrl = secure_url;
     await deleteImage(public_id);
@@ -233,7 +233,8 @@ export async function deleteEducationAction(id: string): Promise<ResponseType> {
     return { success: false, message: `Education with id ${id} not found.` };
   }
   try {
-    await prisma.$transaction(async (prisma) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await prisma.$transaction(async (prisma: any) => {
       const education = await prisma.education.delete({ where: { id } });
       const public_id = await extractPublicId(education.logoUrl);
       await deleteImage(public_id);

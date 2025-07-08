@@ -285,7 +285,7 @@ export async function listBlogs({
       where: {
         userId,
         blogId: {
-          in: blogs.map((blog) => blog.id),
+          in: blogs.map((blog: { id: string }) => blog.id),
         },
       },
       select: {
@@ -294,14 +294,15 @@ export async function listBlogs({
     }
   );
 
-    userLikes = likes.reduce((acc, like) => {
+    userLikes = likes.reduce((acc: Record<string, boolean>, like: { blogId: string }) => {
       acc[like.blogId] = true;
       return acc;
     }, {} as Record<string, boolean>);
   }
 
   // Add isLikedByUser flag to each blog
-  const blogsWithLikeStatus = blogs.map((blog) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const blogsWithLikeStatus = blogs.map((blog: any) => ({
     ...blog,
     isLikedByUser: !!userLikes[blog.id],
     isLoggedIn: !!userId,

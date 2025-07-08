@@ -73,11 +73,13 @@ export async function getFolders() {
     });
 
     // Then build the tree structure (only root folders)
-    const rootFolders = allFolders.filter((folder) => folder.parentId === null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rootFolders = allFolders.filter((folder: any) => folder.parentId === null);
 
     // Function to recursively build the folder tree
     const buildFolderTree = (folder: { id: string }): FolderType => {
-      const children = allFolders.filter((f) => f.parentId === folder.id);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const children = allFolders.filter((f: any) => f.parentId === folder.id);
       return {
         ...folder,
         children: children.map(buildFolderTree),
@@ -229,7 +231,8 @@ export async function getAssetsPaginated(
     });
 
     // Format the assets
-    const formattedAssets = assets.map((asset) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formattedAssets = assets.map((asset: any) => ({
       ...asset,
       size: asset.size ?? 0,
       publicId: asset.publicId ?? "",
@@ -307,7 +310,8 @@ export async function getAssets(
       orderBy: { createdAt: "desc" },
     });
 
-    const formattedAssets = assets.map((asset) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formattedAssets = assets.map((asset: any) => ({
       ...asset,
       size: asset.size ?? 0,
       publicId: asset.publicId ?? "",
@@ -335,7 +339,8 @@ export async function searchAssets(
       },
     });
 
-    const formattedAssets = assets.map((asset) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const formattedAssets = assets.map((asset: any) => ({
       ...asset,
       size: asset.size ?? 0,
       publicId: asset.publicId ?? "",

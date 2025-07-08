@@ -140,7 +140,8 @@ where: {
     });
 
     // Transform the data
-    const transformedComments = comments.map((comment) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transformedComments = comments.map((comment: any) => ({
       id: comment.id,
       content: comment.content,
       author: comment.author,
@@ -316,7 +317,7 @@ export async function deleteComment(commentId: string) {
         select: { id: true },
       });
 
-      const replyIds = replies.map((reply) => reply.id);
+      const replyIds = replies.map((reply: { id: string }) => reply.id);
 
       // Delete all replies
       await prisma.comment.deleteMany({

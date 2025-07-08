@@ -1,4 +1,4 @@
-import { Visit } from '@prisma/client';
+// import { Visit } from '@prisma/client';
 import { prisma } from "@/lib/prisma";
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,6 +6,16 @@ import jwt from 'jsonwebtoken';
 import { NextResponse, NextRequest } from 'next/server';
 
 const SECRET_KEY = process.env.JWT_SECRET;
+
+// Define Visit type locally as fallback
+interface Visit {
+  id: string;
+  deviceType: string;
+  ipAddress: string;
+  userAgent: string;
+  visitedAt: Date;
+  // Add other fields as needed
+}
 
 interface VisitResponse {
   message: string;

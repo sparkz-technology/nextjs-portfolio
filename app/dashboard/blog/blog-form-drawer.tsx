@@ -43,7 +43,7 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
   const { type, closeDialog, data } = useBlogDialog()
 
   const [open, setOpen] = useState(false)
-  const isEditing = !!data?.authorId
+  const isEditing = !!data?.author
 
   useEffect(() => {
     if (type === "post") {
@@ -110,7 +110,10 @@ export function BlogFormDrawer({ children }: BlogFormDrawerProps) {
         </SheetHeader>
 
         <Formik
-          initialValues={isEditing ? (data as BlogFormValues) : initialValues}
+          initialValues={isEditing ? {
+            ...data,
+            tags: data?.tags ? data.tags.split(',').map((tag: string) => tag.trim()) : []
+          } as BlogFormValues : initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
           enableReinitialize

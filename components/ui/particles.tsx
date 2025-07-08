@@ -77,6 +77,11 @@ const Particles: React.FC<ParticlesProps> = ({
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1;
   const rafID = useRef<number | null>(null);
+  const isVisible = useRef<boolean>(true);
+
+  // Performance optimization: Use throttled mouse position updates
+  const throttledMousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastMouseUpdate = useRef<number>(0);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -86,17 +91,33 @@ const Particles: React.FC<ParticlesProps> = ({
     animate();
     window.addEventListener("resize", initCanvas);
 
+    // Performance optimization: Pause animation when page is not visible
+    const handleVisibilityChange = () => {
+      isVisible.current = !document.hidden;
+      if (isVisible.current && !rafID.current) {
+        animate();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       if (rafID.current != null) {
         window.cancelAnimationFrame(rafID.current);
       }
       window.removeEventListener("resize", initCanvas);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [color]);
 
   useEffect(() => {
-    onMouseMove();
+    // Throttle mouse position updates for better performance
+    const now = Date.now();
+    if (now - lastMouseUpdate.current > 16) { // ~60fps throttling
+      throttledMousePosition.current = { x: mousePosition.x, y: mousePosition.y };
+      lastMouseUpdate.current = now;
+      onMouseMove();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mousePosition.x, mousePosition.y]);
 
@@ -214,6 +235,12 @@ const Particles: React.FC<ParticlesProps> = ({
   };
 
   const animate = () => {
+    // Performance optimization: Skip animation if page is not visible
+    if (!isVisible.current) {
+      rafID.current = null;
+      return;
+    }
+
     clearContext();
     circles.current.forEach((circle: Circle, i: number) => {
       // Handle the alpha value
