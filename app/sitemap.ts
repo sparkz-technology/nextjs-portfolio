@@ -12,24 +12,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/guestbook`,
+      url: `${baseUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: "monthly" as const,
+      changeFrequency: "weekly" as const,
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/blog`,
+      url: `${baseUrl}/guestbook`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
-      priority: 0.8,
+      priority: 0.6,
     },
   ];
-const blogPosts = await listBlogs({limit: 1000});
-  const blogRoutes = blogPosts.data?.blogs.map((blog) => ({
-    url: `${baseUrl}/blog/${blog.excerpt}`,
-    lastModified: new Date(blog.updatedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.5,
-  }));
-  return [...publicRoutes, ...(blogRoutes || [])];
+
+  // Get blog posts with better error handling
+  try {
+    const blogPosts = await listBlogs({ limit: 1000 });
+    const blogRoutes = blogPosts.data?.blogs
+      .filter(blog => blog.published) // Only include published posts
+      .map((blog) => ({
+        url: `${baseUrl}/blog/${blog.excerpt}`,
+        lastModified: new Date(blog.updatedAt),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      })) || [];
+
+    return [...publicRoutes, ...blogRoutes];
+  } catch (error) {
+    console.error("Error generating sitemap:", error);
+    return publicRoutes;
+  }
 }

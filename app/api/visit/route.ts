@@ -1,4 +1,4 @@
-import { Visit } from '@prisma/client';
+// import { Visit } from '@prisma/client';
 import { prisma } from "@/lib/prisma";
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
