@@ -146,7 +146,6 @@ export async function updateAboutAction(data: AdminDataType): Promise<{ success:
       }
 
       // Delete existing social links
-      console.log("Deleting existing social links...");
       await prisma.socialLink.deleteMany({
         where: {
           contactId: contact.id, // Assuming this is available
@@ -154,7 +153,6 @@ export async function updateAboutAction(data: AdminDataType): Promise<{ success:
       });
 
       // Create new social links
-      console.log("Creating new social links...");
       await prisma.socialLink.createMany({
         data: data.socialLinks.map((link) => ({
           iconId: link.icon.id, // Assuming `icon.id` is valid
