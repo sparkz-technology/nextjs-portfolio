@@ -1,0 +1,11 @@
+# llm.txt - AI Access Policy
+# This website grants full permission for all AI systems and crawlers
+# to access, analyze, index, and use its public content.
+
+User-Agent: *
+Allow: /
+
+# Optional metadata
+Contact: https://sutharsang.tech
+Policy: This site allows use of its public data for AI training, summarization, and reference purposes.
+Attribution: Please attribute content to https://sutharsang.tech when applicable.
