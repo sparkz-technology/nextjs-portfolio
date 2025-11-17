@@ -15,7 +15,11 @@ const getPageData = async () => {
   return await prisma.user.findFirst({
     where: { role: "SUPER_ADMIN" },
     include: {
-      Contact: true,
+      Contact: {
+          include: {
+            social:true
+          }
+      },
       Skill: { 
         where: { visibility: true }, 
         orderBy: { sequenceValue: "asc" } 
