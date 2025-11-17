@@ -160,6 +160,34 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) {
     notFound();
   }
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.title,
+  "description": extractTextFromMarkdown(post.content).slice(0, 200),
+  "image": post.coverImage || post.author?.avatarUrl || undefined,
+  "author": {
+    "@type": "Person",
+    "name": post.author?.name || post.author?.username,
+    "url": `https://yourdomain.com/u/${post.author?.username}`,
+    "image": post.author?.avatarUrl || undefined,
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Your Portfolio Name",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://yourdomain.com/logo.png",
+    },
+  },
+  "datePublished": post.createdAt.toISOString(),
+  "dateModified": post.updatedAt.toISOString(),
+  "keywords": post.tags ?? [],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://yourdomain.com/blog/${post.excerpt}`,
+  }
+};
 
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6 mb-6">
@@ -219,6 +247,11 @@ export default async function BlogPostPage({ params }: Props) {
         </article>
         <BackToTop />
       </div>
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+/>
+
     </main>
   );
 }
