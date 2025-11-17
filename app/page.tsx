@@ -45,6 +45,59 @@ export default async function Page() {
   if (!DATA) {
     return null;
   }
+  const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": DATA.name,
+  "jobTitle": DATA.description,
+  "url": DATA.url,
+  "image": DATA.avatarUrl,
+  "email": DATA.email,
+  "sameAs": DATA.Contact?.social?.map(s => s.url) ?? [],
+  "skills": DATA.Skill.map(skill => skill.name),
+  "worksFor": DATA.WorkExperience.map(work => ({
+    "@type": "Organization",
+    "name": work.company,
+    "url": work.link,
+    "logo": work.logoUrl,
+    "sameAs": work.locationLink,
+    "employee": {
+      "@type": "Person",
+      "name": DATA.name
+    },
+    "description": work.description,
+    "startDate": work.startDate,
+    "endDate": work.endDate
+  })),
+  "alumniOf": DATA.Education.map(edu => ({
+    "@type": "CollegeOrUniversity",
+    "name": edu.school,
+    "degree": edu.degree,
+    "sameAs": edu.link,
+    "logo": edu.logoUrl,
+    "startDate": edu.startDate,
+    "endDate": edu.endDate
+  })),
+  "hasPart": DATA.Project.map(project => ({
+    "@type": "CreativeWork",
+    "name": project.title,
+    "description": project.description,
+    "url": project.href,
+    "image": project.image,
+    "video": project.video,
+    "startDate": project.startDate,
+    "endDate": project.endDate,
+    "skills": project.technologies,
+    "creator": DATA.name,
+    "link": project.projectLinks?.map(l => ({
+      "@type": "LinkRole",
+      "name": l.type,
+      "url": l.href,
+      "icon": l.icon?.value
+    }))
+  }))
+};
+
   return (
     <main className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
       <main className="flex flex-col min-h-[100dvh] space-y-10">
@@ -194,6 +247,10 @@ export default async function Page() {
           </div>
         </section>
       </main>
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+/>
     </main>
   );
 }
