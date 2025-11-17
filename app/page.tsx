@@ -65,7 +65,7 @@ export default async function Page() {
     "name": work.company,
     "url": work.link,
     "logo": work.logoUrl,
-    "sameAs": work.locationLink,
+    "sameAs": work.location,
     "employee": {
       "@type": "Person",
       "name": DATA.name
