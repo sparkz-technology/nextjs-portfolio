@@ -156,7 +156,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { id } = await params;
   const post = await getBlog(id);
-
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
   if (!post) {
     notFound();
   }
@@ -169,7 +169,7 @@ const jsonLd = {
   "author": {
     "@type": "Person",
     "name": post.author?.name || post.author?.username,
-    "url": `https://sutharsang.tech`,
+    "url": `${baseUrl}`,
     "image": post.author?.avatarUrl || undefined,
   },
   "publisher": {
@@ -177,7 +177,7 @@ const jsonLd = {
     "name": "Sutharsan G",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://sutharsang.tech/next.svg",
+      "url": `${baseUrl}/next.svg`,
     },
   },
   "datePublished": post.createdAt.toISOString(),
@@ -185,7 +185,7 @@ const jsonLd = {
   "keywords": post.tags ?? [],
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": `https://sutharsang.tech/blog/${post.excerpt}`,
+    "@id": `${baseUrl}/${post.excerpt}`,
   }
 };
 
