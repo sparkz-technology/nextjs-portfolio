@@ -165,19 +165,19 @@ const jsonLd = {
   "@type": "Article",
   "headline": post.title,
   "description": extractTextFromMarkdown(post.content).slice(0, 200),
-  "image": post.coverImage || post.author?.avatarUrl || undefined,
+  "image":  post.author?.avatarUrl || undefined,
   "author": {
     "@type": "Person",
     "name": post.author?.name || post.author?.username,
-    "url": `https://yourdomain.com/u/${post.author?.username}`,
+    "url": `https://sutharsang.tech`,
     "image": post.author?.avatarUrl || undefined,
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Your Portfolio Name",
+    "name": "Sutharsan G",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://yourdomain.com/logo.png",
+      "url": "https://sutharsang.tech/next.svg",
     },
   },
   "datePublished": post.createdAt.toISOString(),
@@ -185,7 +185,7 @@ const jsonLd = {
   "keywords": post.tags ?? [],
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": `https://yourdomain.com/blog/${post.excerpt}`,
+    "@id": `https://sutharsang.tech/blog/${post.excerpt}`,
   }
 };
 
