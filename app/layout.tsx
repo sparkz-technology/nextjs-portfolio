@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import SessionProviderClient from "@/components/session-provider-client";
-// import { AppBackground } from "@/components/app-background";
+import { AppBackground } from "@/components/app-background";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
-import { Background } from "@/components/background";
+// import { Background } from "@/components/background";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -123,8 +123,8 @@ export default function RootLayout({
           <SessionProviderClient>
             <ThemeProvider attribute="class" defaultTheme="light">
               <TooltipProvider delayDuration={0}>
-                {/* <AppBackground /> */}
-                  <Background src="/alt.mp4" placeholder="/alt-placeholder.png" />
+                 <AppBackground /> 
+                  {/* <Background src="/alt.mp4" placeholder="/alt-placeholder.png" /> */}
                 <Toaster richColors position="top-right" pauseWhenPageIsHidden />
                 {children}
                 <Navbar />
@@ -136,5 +136,6 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
