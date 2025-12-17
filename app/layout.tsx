@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import SessionProviderClient from "@/components/session-provider-client";
-import { AppBackground } from "@/components/app-background";
+// import { AppBackground } from "@/components/app-background";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
@@ -136,4 +136,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
